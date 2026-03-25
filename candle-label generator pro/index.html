@@ -1,0 +1,1595 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candle Label Generator PRO+</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    .font-heading { font-family: 'Cormorant Garamond', serif; }
+    .font-body { font-family: 'Montserrat', sans-serif; }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.06); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.28); }
+
+    .section-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.05);
+      border: 1px solid rgba(212,165,116,0.16);
+    }
+
+    .input-field,
+    .multi-select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #e7dfd5;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #fdfbf8;
+      transition: all 0.2s ease;
+      color: #374151;
+    }
+
+    .input-field:focus,
+    .multi-select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #d4a574;
+      box-shadow: 0 0 0 3px rgba(212,165,116,0.15);
+      background: #fff;
+    }
+
+    .multi-select {
+      min-height: 200px;
+    }
+
+    .multi-select option {
+      padding: 8px 10px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: .2px;
+      transition: all .25s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2d2d2d 0%, #171717 100%);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #d4a574 0%, #c4956a 100%);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(212,165,116,0.25);
+    }
+
+    .btn-soft {
+      background: linear-gradient(135deg, #979797 0%, #707070 100%);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #7d5f45 0%, #5e4632 100%);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(94,70,50,0.18);
+    }
+
+    .helper {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    .badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f4e4cf 0%, #eecf9d 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #9a6728;
+      flex-shrink: 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 20px;
+    }
+
+    .output-card {
+      background: linear-gradient(135deg, #fdfcfb 0%, #f7f2eb 100%);
+      border: 1px solid rgba(212,165,116,0.2);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .output-box {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(212,165,116,0.18);
+      border-radius: 14px;
+      padding: 18px;
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      min-height: 190px;
+      max-height: 420px;
+      overflow-y: auto;
+      color: #374151;
+    }
+
+    .output-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 12px;
+      letter-spacing: .2px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1f1f1f;
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s ease;
+      z-index: 9999;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1000px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .multi-select { min-height: 180px; }
+    }
+  </style>
+</head>
+<body class="h-full font-body" style="background: linear-gradient(180deg, #f8f5f0 0%, #efe8dd 100%);">
+  <div class="h-full overflow-auto custom-scrollbar">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+      <header class="text-center mb-10">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <svg width="42" height="42" viewBox="0 0 40 40" fill="none">
+            <ellipse cx="20" cy="32" rx="12" ry="6" fill="#d4a574" opacity="0.28"></ellipse>
+            <path d="M12 18C12 12 16 8 20 8C24 8 28 12 28 18V30C28 32 26 34 20 34C14 34 12 32 12 30V18Z" fill="url(#candle-grad)" stroke="#c4956a" stroke-width="1.5"></path>
+            <ellipse cx="20" cy="18" rx="8" ry="3" fill="#f5efe8"></ellipse>
+            <path d="M20 4C20 4 22 6 22 8C22 10 20 11 20 11C20 11 18 10 18 8C18 6 20 4 20 4Z" fill="#ff9d4d"></path>
+            <path d="M20 5C20 5 21 6.5 21 7.5C21 8.5 20 9 20 9C20 9 19 8.5 19 7.5C19 6.5 20 5 20 5Z" fill="#ffcc00"></path>
+            <defs>
+              <linearGradient id="candle-grad" x1="12" y1="8" x2="28" y2="34">
+                <stop offset="0%" stop-color="#faf8f5"></stop>
+                <stop offset="100%" stop-color="#efe9e0"></stop>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1 id="page-title" class="font-heading text-4xl md:text-5xl font-bold text-gray-800">Lit Labels PRO+</h1>
+        </div>
+        <p class="text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+          Create luxury candle label prompts for photos and videos with preset scent packs, separate randomizers, and premium prompt output.
+        </p>
+      </header>
+
+      <form id="labelForm" class="space-y-6">
+
+        <!-- Output + Randomizers -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">0</span>
+            Output + Randomizer Controls
+          </h2>
+
+          <div class="grid-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Prompt Output Type</label>
+              <select id="prompt_mode" class="input-field"></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Photo Camera Style</label>
+              <select id="camera_style" class="input-field"></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Video Motion Style</label>
+              <select id="motion_style" class="input-field"></select>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 mt-5">
+            <button type="button" id="randomizeAllBtn" class="btn btn-accent">🎲 Randomize All</button>
+            <button type="button" id="randomizePhotoBtn" class="btn btn-secondary">📸 Randomize Photo</button>
+            <button type="button" id="randomizeVideoBtn" class="btn btn-secondary">🎥 Randomize Video</button>
+          </div>
+        </div>
+
+        <!-- Core Text -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">1</span>
+            Core Text
+          </h2>
+          <div class="grid-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Brand Name</label>
+              <input type="text" id="brand_name" class="input-field" value="YOUR BRAND" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Collection Name</label>
+              <input type="text" id="collection_name" class="input-field" value="Signature Collection" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Scent Name</label>
+              <input type="text" id="scent_name" class="input-field" value="Moonlight Walk" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Tagline / Phrase</label>
+              <input type="text" id="tagline" class="input-field" value="LIGHT ME WHEN YOU NEED TO RESET YOUR SPIRIT." />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Net Weight</label>
+              <select id="net_weight" class="input-field"></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Made In</label>
+              <select id="made_in" class="input-field"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scent Presets -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">2</span>
+            Scent Preset Pack
+          </h2>
+          <div class="grid-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Choose a Scent Preset</label>
+              <select id="preset_pack" class="input-field"></select>
+              <div class="helper">Pick a preset and click Apply Preset to fill the scent notes, vibe, colors, elements, and textures.</div>
+            </div>
+            <div class="flex items-end">
+              <button type="button" id="applyPresetBtn" class="btn btn-accent w-full">✨ Apply Preset Pack</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scent Notes -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">3</span>
+            Scent Notes
+          </h2>
+          <div class="grid-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Top Notes</label>
+              <select id="top_note" class="multi-select custom-scrollbar" multiple></select>
+              <div class="helper">Hold Ctrl on Windows or Command on Mac to select multiple options.</div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Middle Notes</label>
+              <select id="middle_note" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-600 mb-2">Base Notes</label>
+              <select id="base_note" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vessel + Label -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">4</span>
+            Vessel + Label
+          </h2>
+          <div class="grid-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Jar Style</label>
+              <select id="jar_style" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Label Shape</label>
+              <select id="label_shape" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design Direction -->
+        <div class="section-card">
+          <h2 class="font-heading text-xl font-semibold text-gray-800 mb-5 flex items-center gap-3">
+            <span class="badge">5</span>
+            Design Direction
+          </h2>
+          <div class="grid-2">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Aesthetic Style</label>
+              <select id="aesthetic_style" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Color Palette</label>
+              <select id="color_palette" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Typography Style</label>
+              <select id="typography_style" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Design Elements</label>
+              <select id="design_elements" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Finish & Texture</label>
+              <select id="finish_texture" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-2">Background</label>
+              <select id="background" class="multi-select custom-scrollbar" multiple></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generate -->
+        <div class="text-center py-4 flex flex-wrap gap-3 justify-center">
+          <button type="submit" class="btn btn-primary">✨ Generate Prompt</button>
+          <button type="button" id="clearAllBtn" class="btn btn-soft">🔄 Clear All</button>
+        </div>
+      </form>
+
+      <!-- Output -->
+      <div id="outputSection" class="section-card mt-6 hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <h2 class="font-heading text-xl font-semibold text-gray-800">Generated Prompt Output</h2>
+          <button id="copyVisibleBtn" class="btn btn-primary text-sm">📋 Copy Visible Output</button>
+        </div>
+
+        <div id="photoOutputWrap" class="output-card mb-6 hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div class="output-title">PHOTO PROMPT</div>
+            <button type="button" id="copyPhotoBtn" class="btn btn-accent text-sm">📸 Copy Photo Prompt</button>
+          </div>
+          <div id="photoOutput" class="output-box custom-scrollbar"></div>
+        </div>
+
+        <div id="videoOutputWrap" class="output-card hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <div class="output-title">VIDEO PROMPT</div>
+            <button type="button" id="copyVideoBtn" class="btn btn-accent text-sm">🎥 Copy Video Prompt</button>
+          </div>
+          <div id="videoOutput" class="output-box custom-scrollbar"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast" class="toast">✓ Copied to clipboard!</div>
+
+  <script>
+    const defaultConfig = {
+      page_title: 'Candle Label Generator PRO+',
+      primary_color: '#d4a574',
+      secondary_color: '#2c2c2c',
+      background_color: '#f8f5f0',
+      text_color: '#374151',
+      accent_color: '#c4956a'
+    };
+
+    let config = { ...defaultConfig };
+
+    function withNoneFirst(arr) {
+      const filtered = arr.filter(item => item !== 'None');
+      const unique = [...new Set(filtered)];
+      unique.sort((a, b) => a.localeCompare(b));
+      return ['None', ...unique];
+    }
+
+    const dataOptions = {
+      prompt_mode: withNoneFirst([
+        'Both',
+        'Photo Prompt',
+        'Video Prompt'
+      ]),
+
+      net_weight: withNoneFirst([
+        '10 oz / 283g',
+        '11 oz / 312g',
+        '12 oz / 340g',
+        '13 oz / 369g',
+        '14 oz / 397g',
+        '15 oz / 425g',
+        '16 oz / 454g',
+        '17 oz / 482g',
+        '18 oz / 510g',
+        '19 oz / 539g',
+        '2 oz / 57g',
+        '20 oz / 567g',
+        '21 oz / 595g',
+        '22 oz / 624g',
+        '23 oz / 652g',
+        '24 oz / 680g',
+        '25 oz / 709g',
+        '26 oz / 737g',
+        '27 oz / 765g',
+        '28 oz / 794g',
+        '29 oz / 822g',
+        '3 oz / 85g',
+        '30 oz / 850g',
+        '32 oz / 907g',
+        '4 oz / 113g',
+        '5 oz / 142g',
+        '6 oz / 170g',
+        '7 oz / 198g',
+        '8 oz / 226g',
+        '9 oz / 255g'
+      ]),
+
+      made_in: withNoneFirst([
+        'Handmade in USA',
+        'Made in Arizona, USA',
+        'Made in Arkansas, USA',
+        'Made in California, USA',
+        'Made in Colorado, USA',
+        'Made in Florida, USA',
+        'Made in Georgia, USA',
+        'Made in Illinois, USA',
+        'Made in Kansas, USA',
+        'Made in Louisiana, USA',
+        'Made in Michigan, USA',
+        'Made in Mississippi, USA',
+        'Made in Missouri, USA',
+        'Made in Nevada, USA',
+        'Made in New Mexico, USA',
+        'Made in New York, USA',
+        'Made in North Carolina, USA',
+        'Made in Ohio, USA',
+        'Made in Oklahoma, USA',
+        'Made in Oregon, USA',
+        'Made in Pennsylvania, USA',
+        'Made in South Carolina, USA',
+        'Made in Tennessee, USA',
+        'Made in Texas, USA',
+        'Made in USA',
+        'Made in Virginia, USA',
+        'Made in Washington, USA',
+        'Made Locally',
+        'Poured by Hand',
+        'Small Batch USA'
+      ]),
+
+      camera_style: withNoneFirst([
+        'Beauty close-up',
+        'Boutique shelf display',
+        'Burning candle close-up',
+        'Clean ecommerce shot',
+        'Editorial product shot',
+        'Flat lay composition',
+        'Front-facing hero shot',
+        'Glass reflection shot',
+        'High-end boutique display',
+        'Lid-off detail shot',
+        'Lifestyle tabletop shot',
+        'Luxury catalog shot',
+        'Luxury vanity shot',
+        'Macro detail shot',
+        'Magazine ad shot',
+        'Minimal display shot',
+        'Polished commercial shot',
+        'Premium ad campaign shot',
+        'Product-at-angle shot',
+        'Reflective studio shot',
+        'Seasonal styling shot',
+        'Shelf styling shot',
+        'Side profile product shot',
+        'Soft focus beauty shot',
+        'Spa-inspired product shot',
+        'Studio still',
+        'Symmetrical hero shot',
+        'Three-quarter angle shot',
+        'Top-down flat lay',
+        'Window-light product shot'
+      ]),
+
+      motion_style: withNoneFirst([
+        'Atmospheric haze reveal',
+        'Boutique shelf reveal',
+        'Curved arc move',
+        'Flame flicker focus',
+        'Floating dolly move',
+        'Gentle left pan',
+        'Gentle right pan',
+        'Glamour close-up motion',
+        'Hero rotation',
+        'High-end commercial motion',
+        'Label sweep reveal',
+        'Lid lift reveal',
+        'Light streak pass',
+        'Macro reveal',
+        'Moody push-in',
+        'Product spotlight reveal',
+        'Reflective surface glide',
+        'Slow descending move',
+        'Slow orbit',
+        'Slow pull-back',
+        'Slow push-in',
+        'Slow rising move',
+        'Soft rack focus',
+        'Static elegant motion',
+        'Subtle zoom-in',
+        'Subtle zoom-out',
+        'Sweep across vessel',
+        'Tabletop glide',
+        'Top-down drift',
+        'Wax shimmer close-up'
+      ]),
+
+      preset_pack: withNoneFirst([
+        'Black Tie Luxe',
+        'Botanical Spa',
+        'Citrus Glow',
+        'Coastal Breeze',
+        'Dark Romance',
+        'Fall Harvest',
+        'Fresh Laundry',
+        'Gourmand Dessert',
+        'Holiday Cheer',
+        'Masculine Woods',
+        'Midnight Glam',
+        'Soft Floral',
+        'Summer Tropics'
+      ]),
+
+      top_note: withNoneFirst([
+        'Aldehydes',
+        'Apple',
+        'Apricot',
+        'Basil',
+        'Bergamot',
+        'Black Currant',
+        'Blood Orange',
+        'Cardamom',
+        'Champagne',
+        'Cherry',
+        'Coconut Water',
+        'Coriander',
+        'Cucumber',
+        'Eucalyptus',
+        'Fresh Linen',
+        'Ginger',
+        'Grapefruit',
+        'Green Tea',
+        'Lemon Peel',
+        'Lime Zest',
+        'Mandarin',
+        'Marine Air',
+        'Mint',
+        'Neroli',
+        'Orange Blossom',
+        'Peach Nectar',
+        'Pear',
+        'Pink Pepper',
+        'Sea Salt',
+        'Strawberry'
+      ]),
+
+      middle_note: withNoneFirst([
+        'Amber',
+        'Black Tea',
+        'Carnation',
+        'Cashmere',
+        'Chamomile',
+        'Cinnamon',
+        'Clove Bud',
+        'Cocoa Blossom',
+        'Cotton Blossom',
+        'Freesia',
+        'Gardenia',
+        'Geranium',
+        'Hibiscus',
+        'Honey',
+        'Hyacinth',
+        'Iris',
+        'Jasmine',
+        'Lavender',
+        'Lilac',
+        'Marshmallow',
+        'Nutmeg',
+        'Orchid',
+        'Peony',
+        'Rose',
+        'Saffron',
+        'Sandalwood',
+        'Sugar Cookie',
+        'Tuberose',
+        'Vanilla Orchid',
+        'Ylang Ylang'
+      ]),
+
+      base_note: withNoneFirst([
+        'Amber Resin',
+        'Balsam',
+        'Benzoin',
+        'Brown Sugar',
+        'Cacao',
+        'Caramel',
+        'Cashmere Musk',
+        'Cedarwood',
+        'Coffee Bean',
+        'Creamy Vanilla',
+        'Dark Chocolate',
+        'Frankincense',
+        'Leather',
+        'Mahogany',
+        'Maple Woods',
+        'Musk',
+        'Myrrh',
+        'Oakmoss',
+        'Oud',
+        'Patchouli',
+        'Sandalwood',
+        'Smoke',
+        'Suede',
+        'Teakwood',
+        'Tobacco Leaf',
+        'Tonka Bean',
+        'Vanilla Musk',
+        'Vetiver',
+        'Warm Amber',
+        'White Birch'
+      ]),
+
+      jar_style: withNoneFirst([
+        'Amber apothecary jar',
+        'Black matte tumbler',
+        'Blue tinted glass jar',
+        'Ceramic bowl vessel',
+        'Clear glass tumbler',
+        'Clear luxe jar with gold lid',
+        'Copper lid vessel',
+        'Cork lid candle jar',
+        'Cream ceramic vessel',
+        'Crystal-cut glass jar',
+        'Domed lid apothecary jar',
+        'Embossed vintage glass jar',
+        'Frosted blush jar',
+        'Frosted white vessel',
+        'Gold tin candle vessel',
+        'Green tinted glass vessel',
+        'Hexagon candle jar',
+        'Iridescent glass jar',
+        'Large statement jar',
+        'Matte charcoal vessel',
+        'Minimal cylinder jar',
+        'Mosaic glass vessel',
+        'Pedestal base candle jar',
+        'Rose gold lid jar',
+        'Silver lid tumbler',
+        'Square glass vessel',
+        'Straight-sided tumbler',
+        'Textured artisan ceramic jar',
+        'White gloss luxury jar',
+        'Wood lid glass jar'
+      ]),
+
+      label_shape: withNoneFirst([
+        'Arch top label',
+        'Banner label',
+        'Capsule label',
+        'Circle sticker',
+        'Classic oval',
+        'Crest shape',
+        'Curved rectangle',
+        'Diamond label',
+        'Die-cut silhouette',
+        'Double arch label',
+        'Flag label',
+        'Frame-style rectangle',
+        'Half-moon label',
+        'Heart shape',
+        'Hexagon label',
+        'Long strip label',
+        'Mini seal badge',
+        'Octagon label',
+        'Organic blob shape',
+        'Pentagon label',
+        'Rectangle label',
+        'Ribbon label',
+        'Round badge',
+        'Scalloped edge label',
+        'Shield shape',
+        'Square label',
+        'Starburst label',
+        'Tall rectangle',
+        'Teardrop label',
+        'Wrap-around label'
+      ]),
+
+      aesthetic_style: withNoneFirst([
+        'Art deco luxury',
+        'Art nouveau floral',
+        'Boho chic',
+        'Boutique glam',
+        'Celestial mystical',
+        'Clean contemporary',
+        'Coastal calm',
+        'Cottagecore botanical',
+        'Dark academia',
+        'Earthy organic',
+        'Elegant romance',
+        'Farmhouse rustic',
+        'French provincial',
+        'Glam vintage',
+        'Japanese zen',
+        'Maximalist statement',
+        'Minimalist luxury',
+        'Minimalist modern',
+        'Moody gothic',
+        'Modern editorial',
+        'Old world apothecary',
+        'Organic wellness',
+        'Retro 70s',
+        'Romantic floral',
+        'Scandinavian minimal',
+        'Soft feminine luxe',
+        'Spa serenity',
+        'Steampunk opulence',
+        'Tropical paradise',
+        'Witchy ritual'
+      ]),
+
+      color_palette: withNoneFirst([
+        'Amber and cream',
+        'Berry and blush',
+        'Black and gold',
+        'Blush and sage',
+        'Bronze and ivory',
+        'Burgundy and cream',
+        'Charcoal and brass',
+        'Cocoa and champagne',
+        'Cool grey and pearl',
+        'Deep plum and gold',
+        'Dusty rose and mauve',
+        'Emerald and rose gold',
+        'Forest green and gold',
+        'Ivory and bronze',
+        'Jewel tones',
+        'Lavender and white',
+        'Mocha and beige',
+        'Monochrome neutrals',
+        'Navy and copper',
+        'Ocean blue and sand',
+        'Olive and linen',
+        'Peach and vanilla',
+        'Rose quartz and serenity',
+        'Rust and olive',
+        'Sage and tan',
+        'Sapphire and gold',
+        'Terracotta and cream',
+        'Teal and gold',
+        'Warm desert neutrals',
+        'White and silver'
+      ]),
+
+      typography_style: withNoneFirst([
+        'All-caps luxury serif',
+        'Art nouveau display',
+        'Bold condensed sans',
+        'Brush script',
+        'Calligraphy serif mix',
+        'Classic serif',
+        'Contemporary sans',
+        'Decorative serif',
+        'Editorial serif',
+        'Elegant serif',
+        'Feminine script',
+        'Futuristic minimal',
+        'Geometric sans',
+        'Glam modern serif',
+        'Gothic serif',
+        'Handwritten style',
+        'High-fashion serif',
+        'Luxury mixed typography',
+        'Minimal caps',
+        'Minimal lowercase sans',
+        'Modern sans-serif',
+        'Modern script',
+        'Monoline lettering',
+        'Retro display',
+        'Romantic script',
+        'Soft rounded sans',
+        'Stencil type',
+        'Tall fashion sans',
+        'Vintage serif',
+        'Vintage typewriter'
+      ]),
+
+      design_elements: withNoneFirst([
+        'Abstract brush textures',
+        'Art deco lines',
+        'Bee illustrations',
+        'Botanical branches',
+        'Botanical illustrations',
+        'Celestial constellations',
+        'Celestial stars',
+        'Crystal motifs',
+        'Delicate florals',
+        'Feather motifs',
+        'Foil border accents',
+        'Geometric linework',
+        'Gold corner ornaments',
+        'Hand-drawn florals',
+        'Leaf silhouettes',
+        'Line art faces',
+        'Mandala details',
+        'Marble textures',
+        'Minimal icons',
+        'Moon phases',
+        'Mushroom illustrations',
+        'Nature silhouettes',
+        'Pearl accents',
+        'Pressed flower textures',
+        'Sun rays',
+        'Vintage borders',
+        'Watercolor splashes',
+        'Wax seal emblem',
+        'Wild vines',
+        'Zodiac symbols'
+      ]),
+
+      finish_texture: withNoneFirst([
+        'Brushed metallic',
+        'Clear vinyl gloss',
+        'Cotton paper texture',
+        'Debossed finish',
+        'Die-cut embossed finish',
+        'Embossed luxury stock',
+        'Foil stamped details',
+        'Gloss laminate',
+        'Glossy finish',
+        'Hammered paper texture',
+        'Holographic accent',
+        'Iridescent sheen',
+        'Kraft paper',
+        'Letterpress effect',
+        'Linen texture',
+        'Matte paper',
+        'Matte varnish',
+        'Metallic edge detailing',
+        'Metallic foil',
+        'Pearlescent finish',
+        'Recycled paper',
+        'Satin finish',
+        'Silk finish',
+        'Soft-touch matte',
+        'Standard smooth stock',
+        'Textured handmade paper',
+        'UV spot gloss',
+        'Velvet touch',
+        'Vellum overlay look',
+        'Wax seal finish'
+      ]),
+
+      background: withNoneFirst([
+        'Amber glow studio',
+        'Black reflective surface',
+        'Blush silk backdrop',
+        'Botanical shelf styling',
+        'Boutique display shelf',
+        'Champagne satin backdrop',
+        'Clean white studio',
+        'Cozy home interior',
+        'Cream plaster wall',
+        'Dark moody studio',
+        'Dusty rose gradient',
+        'Elegant marble vanity',
+        'Forest-inspired set',
+        'Golden hour window light',
+        'Ivory seamless backdrop',
+        'Luxury bathroom scene',
+        'Luxury bedroom tray scene',
+        'Matte black studio',
+        'Minimal spa setting',
+        'Moody candlelit setting',
+        'Natural linen surface',
+        'Natural wood surface',
+        'Neutral editorial backdrop',
+        'Pearl-toned backdrop',
+        'Rose gold glow set',
+        'Seasonal holiday decor',
+        'Soft beige lifestyle scene',
+        'Stone pedestal display',
+        'Textured paper backdrop',
+        'Warm terracotta wall'
+      ])
+    };
+
+    const presetPacks = {
+      'Black Tie Luxe': {
+        top_note: ['Bergamot', 'Champagne'],
+        middle_note: ['Cashmere', 'Orchid'],
+        base_note: ['Amber Resin', 'Musk'],
+        aesthetic_style: ['Art deco luxury', 'Minimalist luxury'],
+        color_palette: ['Black and gold'],
+        design_elements: ['Foil border accents', 'Gold corner ornaments'],
+        finish_texture: ['Embossed luxury stock', 'Foil stamped details'],
+        background: ['Black reflective surface']
+      },
+      'Botanical Spa': {
+        top_note: ['Eucalyptus', 'Green Tea'],
+        middle_note: ['Chamomile', 'Lavender'],
+        base_note: ['Cashmere Musk', 'Sandalwood'],
+        aesthetic_style: ['Organic wellness', 'Spa serenity'],
+        color_palette: ['Sage and tan'],
+        design_elements: ['Botanical illustrations', 'Leaf silhouettes'],
+        finish_texture: ['Cotton paper texture', 'Matte paper'],
+        background: ['Minimal spa setting']
+      },
+      'Citrus Glow': {
+        top_note: ['Bergamot', 'Grapefruit', 'Mandarin'],
+        middle_note: ['Jasmine', 'Orange Blossom'],
+        base_note: ['Creamy Vanilla', 'Warm Amber'],
+        aesthetic_style: ['Clean contemporary', 'Modern editorial'],
+        color_palette: ['Amber and cream'],
+        design_elements: ['Delicate florals', 'Minimal icons'],
+        finish_texture: ['Glossy finish', 'Pearlescent finish'],
+        background: ['Clean white studio']
+      },
+      'Coastal Breeze': {
+        top_note: ['Marine Air', 'Sea Salt'],
+        middle_note: ['Cotton Blossom', 'Lavender'],
+        base_note: ['Cashmere Musk', 'White Birch'],
+        aesthetic_style: ['Coastal calm', 'Scandinavian minimal'],
+        color_palette: ['Ocean blue and sand'],
+        design_elements: ['Nature silhouettes', 'Watercolor splashes'],
+        finish_texture: ['Matte paper', 'Soft-touch matte'],
+        background: ['Ivory seamless backdrop']
+      },
+      'Dark Romance': {
+        top_note: ['Black Currant', 'Cherry'],
+        middle_note: ['Rose', 'Saffron'],
+        base_note: ['Patchouli', 'Suede'],
+        aesthetic_style: ['Dark academia', 'Moody gothic'],
+        color_palette: ['Deep plum and gold'],
+        design_elements: ['Celestial constellations', 'Vintage borders'],
+        finish_texture: ['Debossed finish', 'Velvet touch'],
+        background: ['Dark moody studio']
+      },
+      'Fall Harvest': {
+        top_note: ['Apple', 'Cardamom'],
+        middle_note: ['Cinnamon', 'Nutmeg'],
+        base_note: ['Brown Sugar', 'Maple Woods'],
+        aesthetic_style: ['Farmhouse rustic', 'Earthy organic'],
+        color_palette: ['Terracotta and cream'],
+        design_elements: ['Botanical branches', 'Pressed flower textures'],
+        finish_texture: ['Kraft paper', 'Textured handmade paper'],
+        background: ['Warm terracotta wall']
+      },
+      'Fresh Laundry': {
+        top_note: ['Aldehydes', 'Fresh Linen'],
+        middle_note: ['Cotton Blossom', 'Hyacinth'],
+        base_note: ['Cashmere Musk', 'White Birch'],
+        aesthetic_style: ['Clean contemporary', 'Minimalist modern'],
+        color_palette: ['White and silver'],
+        design_elements: ['Minimal icons', 'Watercolor splashes'],
+        finish_texture: ['Matte paper', 'Standard smooth stock'],
+        background: ['Clean white studio']
+      },
+      'Gourmand Dessert': {
+        top_note: ['Apricot', 'Strawberry'],
+        middle_note: ['Marshmallow', 'Sugar Cookie'],
+        base_note: ['Caramel', 'Dark Chocolate'],
+        aesthetic_style: ['Boutique glam', 'Soft feminine luxe'],
+        color_palette: ['Peach and vanilla'],
+        design_elements: ['Pearl accents', 'Watercolor splashes'],
+        finish_texture: ['Gloss laminate', 'Silk finish'],
+        background: ['Champagne satin backdrop']
+      },
+      'Holiday Cheer': {
+        top_note: ['Apple', 'Orange Blossom'],
+        middle_note: ['Cinnamon', 'Clove Bud'],
+        base_note: ['Balsam', 'Warm Amber'],
+        aesthetic_style: ['Elegant romance', 'Modern editorial'],
+        color_palette: ['Burgundy and cream'],
+        design_elements: ['Foil border accents', 'Sun rays'],
+        finish_texture: ['Foil stamped details', 'Glossy finish'],
+        background: ['Seasonal holiday decor']
+      },
+      'Masculine Woods': {
+        top_note: ['Black Currant', 'Pink Pepper'],
+        middle_note: ['Black Tea', 'Saffron'],
+        base_note: ['Cedarwood', 'Teakwood', 'Tobacco Leaf'],
+        aesthetic_style: ['Modern editorial', 'Old world apothecary'],
+        color_palette: ['Charcoal and brass'],
+        design_elements: ['Geometric linework', 'Wax seal emblem'],
+        finish_texture: ['Brushed metallic', 'Matte varnish'],
+        background: ['Matte black studio']
+      },
+      'Midnight Glam': {
+        top_note: ['Champagne', 'Pink Pepper'],
+        middle_note: ['Orchid', 'Rose'],
+        base_note: ['Musk', 'Warm Amber'],
+        aesthetic_style: ['Boutique glam', 'Glam vintage'],
+        color_palette: ['Berry and blush'],
+        design_elements: ['Gold corner ornaments', 'Pearl accents'],
+        finish_texture: ['Iridescent sheen', 'Silk finish'],
+        background: ['Rose gold glow set']
+      },
+      'Soft Floral': {
+        top_note: ['Neroli', 'Pear'],
+        middle_note: ['Peony', 'Rose', 'Tuberose'],
+        base_note: ['Creamy Vanilla', 'Musk'],
+        aesthetic_style: ['Elegant romance', 'Romantic floral'],
+        color_palette: ['Blush and sage'],
+        design_elements: ['Delicate florals', 'Hand-drawn florals'],
+        finish_texture: ['Cotton paper texture', 'Vellum overlay look'],
+        background: ['Blush silk backdrop']
+      },
+      'Summer Tropics': {
+        top_note: ['Coconut Water', 'Lime Zest'],
+        middle_note: ['Hibiscus', 'Ylang Ylang'],
+        base_note: ['Creamy Vanilla', 'Sandalwood'],
+        aesthetic_style: ['Tropical paradise', 'Soft feminine luxe'],
+        color_palette: ['Teal and gold'],
+        design_elements: ['Botanical illustrations', 'Watercolor splashes'],
+        finish_texture: ['Glossy finish', 'Pearlescent finish'],
+        background: ['Golden hour window light']
+      }
+    };
+
+    function fillSingleSelect(id, arr, defaultValue = 'None') {
+      const el = document.getElementById(id);
+      el.innerHTML = arr.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+      el.value = arr.includes(defaultValue) ? defaultValue : arr[0];
+    }
+
+    function fillMultiSelect(id, arr) {
+      const el = document.getElementById(id);
+      el.innerHTML = arr.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
+      if (el.options.length) el.options[0].selected = true;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function normalizeMultiSelect(id) {
+      const el = document.getElementById(id);
+      const selected = Array.from(el.selectedOptions).map(opt => opt.value);
+
+      if (selected.includes('None') && selected.length > 1) {
+        Array.from(el.options).forEach(opt => {
+          opt.selected = opt.value !== 'None';
+        });
+      }
+
+      const nowSelected = Array.from(el.selectedOptions).map(opt => opt.value);
+      if (nowSelected.length === 0) {
+        el.options[0].selected = true;
+      }
+    }
+
+    function getMultiValues(id) {
+      const el = document.getElementById(id);
+      const vals = Array.from(el.selectedOptions).map(opt => opt.value).filter(v => v !== 'None');
+      return vals;
+    }
+
+    function setMultiValues(id, values) {
+      const el = document.getElementById(id);
+      Array.from(el.options).forEach(opt => {
+        opt.selected = values.includes(opt.value);
+      });
+      if (!values.length && el.options.length) {
+        el.options[0].selected = true;
+      }
+    }
+
+    function setRandomSingle(id, allowNone = false) {
+      const el = document.getElementById(id);
+      const options = Array.from(el.options).map(o => o.value);
+      const usable = allowNone ? options : options.filter(v => v !== 'None');
+      const choice = usable[Math.floor(Math.random() * usable.length)];
+      el.value = choice;
+    }
+
+    function setRandomMultiple(id, min = 1, max = 3) {
+      const el = document.getElementById(id);
+      const options = Array.from(el.options).map(o => o.value).filter(v => v !== 'None');
+      const count = Math.floor(Math.random() * (max - min + 1)) + min;
+      const shuffled = [...options].sort(() => Math.random() - 0.5).slice(0, count);
+      setMultiValues(id, shuffled);
+    }
+
+    function initializeOptions() {
+      fillSingleSelect('prompt_mode', dataOptions.prompt_mode, 'Photo Prompt');
+      fillSingleSelect('net_weight', dataOptions.net_weight, '12 oz / 340g');
+      fillSingleSelect('made_in', dataOptions.made_in, 'Made in USA');
+      fillSingleSelect('camera_style', dataOptions.camera_style, 'Luxury catalog shot');
+      fillSingleSelect('motion_style', dataOptions.motion_style, 'Slow push-in');
+      fillSingleSelect('preset_pack', dataOptions.preset_pack, 'None');
+
+      fillMultiSelect('top_note', dataOptions.top_note);
+      fillMultiSelect('middle_note', dataOptions.middle_note);
+      fillMultiSelect('base_note', dataOptions.base_note);
+      fillMultiSelect('jar_style', dataOptions.jar_style);
+      fillMultiSelect('label_shape', dataOptions.label_shape);
+      fillMultiSelect('aesthetic_style', dataOptions.aesthetic_style);
+      fillMultiSelect('color_palette', dataOptions.color_palette);
+      fillMultiSelect('typography_style', dataOptions.typography_style);
+      fillMultiSelect('design_elements', dataOptions.design_elements);
+      fillMultiSelect('finish_texture', dataOptions.finish_texture);
+      fillMultiSelect('background', dataOptions.background);
+
+      setMultiValues('top_note', ['Bergamot', 'Sea Salt']);
+      setMultiValues('middle_note', ['Jasmine', 'Vanilla Orchid']);
+      setMultiValues('base_note', ['Creamy Vanilla', 'Warm Amber']);
+      setMultiValues('jar_style', ['Clear luxe jar with gold lid']);
+      setMultiValues('label_shape', ['Arch top label']);
+      setMultiValues('aesthetic_style', ['Minimalist luxury']);
+      setMultiValues('color_palette', ['Black and gold']);
+      setMultiValues('typography_style', ['Elegant serif']);
+      setMultiValues('design_elements', ['Foil border accents', 'Gold corner ornaments']);
+      setMultiValues('finish_texture', ['Embossed luxury stock', 'Foil stamped details']);
+      setMultiValues('background', ['Clean white studio']);
+    }
+
+    function joinValues(arr) {
+      return arr.length ? arr.join(', ') : 'none selected';
+    }
+
+    function buildCommonData() {
+      return {
+        promptMode: document.getElementById('prompt_mode').value,
+        brandName: document.getElementById('brand_name').value.trim() || 'YOUR BRAND',
+        collectionName: document.getElementById('collection_name').value.trim() || 'Signature Collection',
+        scentName: document.getElementById('scent_name').value.trim() || 'Moonlight Walk',
+        tagline: document.getElementById('tagline').value.trim() || 'LIGHT ME WHEN YOU NEED TO RESET YOUR SPIRIT.',
+        netWeight: document.getElementById('net_weight').value === 'None' ? '' : document.getElementById('net_weight').value,
+        madeIn: document.getElementById('made_in').value === 'None' ? '' : document.getElementById('made_in').value,
+        cameraStyle: document.getElementById('camera_style').value === 'None' ? '' : document.getElementById('camera_style').value,
+        motionStyle: document.getElementById('motion_style').value === 'None' ? '' : document.getElementById('motion_style').value,
+        topNote: getMultiValues('top_note'),
+        middleNote: getMultiValues('middle_note'),
+        baseNote: getMultiValues('base_note'),
+        jarStyle: getMultiValues('jar_style'),
+        labelShape: getMultiValues('label_shape'),
+        aestheticStyle: getMultiValues('aesthetic_style'),
+        colorPalette: getMultiValues('color_palette'),
+        typographyStyle: getMultiValues('typography_style'),
+        designElements: getMultiValues('design_elements'),
+        finishTexture: getMultiValues('finish_texture'),
+        background: getMultiValues('background')
+      };
+    }
+
+    function generatePhotoPrompt(data) {
+      return `Create a high-resolution, hyper-realistic luxury candle label product image for premium ecommerce branding.
+
+Brand name: ${data.brandName}
+Collection name: ${data.collectionName}
+Scent name: ${data.scentName}
+Tagline: ${data.tagline}
+Net weight text: ${data.netWeight || 'optional'}
+Made in text: ${data.madeIn || 'optional'}
+
+Fragrance profile:
+Top notes: ${joinValues(data.topNote)}
+Middle notes: ${joinValues(data.middleNote)}
+Base notes: ${joinValues(data.baseNote)}
+
+Packaging and label direction:
+Jar style: ${joinValues(data.jarStyle)}
+Label shape: ${joinValues(data.labelShape)}
+Aesthetic style: ${joinValues(data.aestheticStyle)}
+Color palette: ${joinValues(data.colorPalette)}
+Typography style: ${joinValues(data.typographyStyle)}
+Design elements: ${joinValues(data.designElements)}
+Finish and texture: ${joinValues(data.finishTexture)}
+
+Scene direction:
+Background: ${joinValues(data.background)}
+Camera style: ${data.cameraStyle || 'premium product shot'}
+Lighting: soft luxury studio lighting, refined highlights, clean shadows, premium product styling
+Visual details: realistic candle wax texture, visible wick, crisp label edges, believable reflections, polished materials, elegant composition
+Output: ultra-detailed 8K, magazine-quality candle branding mockup, clean luxury finish, professional ecommerce quality.`;
+    }
+
+    function generateVideoPrompt(data) {
+      return `Create a cinematic luxury product video of a premium scented candle with elegant branding and a refined label.
+
+The candle brand is "${data.brandName}" from the "${data.collectionName}" collection.
+The scent name on the label is "${data.scentName}".
+The tagline on the label reads "${data.tagline}".
+Include "${data.netWeight || 'net weight text if desired'}" and "${data.madeIn || 'origin text if desired'}" on the label.
+
+Fragrance-inspired design notes:
+Top notes: ${joinValues(data.topNote)}
+Middle notes: ${joinValues(data.middleNote)}
+Base notes: ${joinValues(data.baseNote)}
+
+Creative direction:
+Jar style: ${joinValues(data.jarStyle)}
+Label shape: ${joinValues(data.labelShape)}
+Aesthetic style: ${joinValues(data.aestheticStyle)}
+Color palette: ${joinValues(data.colorPalette)}
+Typography style: ${joinValues(data.typographyStyle)}
+Design elements: ${joinValues(data.designElements)}
+Finish and texture: ${joinValues(data.finishTexture)}
+Background: ${joinValues(data.background)}
+
+Video style:
+Camera framing: ${data.cameraStyle || 'premium product shot'}
+Motion style: ${data.motionStyle || 'slow luxury motion'}
+Scene mood: luxurious, polished, atmospheric, high-end boutique candle advertisement
+Lighting: soft diffused highlights, subtle glow, elegant reflections, premium studio ambiance
+Action details: gentle flame flicker, soft shifting reflections on the vessel, graceful reveal of the label, believable depth, expensive ad campaign energy
+Rendering notes: ultra-detailed, cinematic product commercial, smooth motion, luxury ecommerce ad quality, no people, no distortion, clean environment.`;
+    }
+
+    function renderOutputs(photoPrompt, videoPrompt, mode) {
+      const outputSection = document.getElementById('outputSection');
+      const photoWrap = document.getElementById('photoOutputWrap');
+      const videoWrap = document.getElementById('videoOutputWrap');
+      const photoOutput = document.getElementById('photoOutput');
+      const videoOutput = document.getElementById('videoOutput');
+
+      photoWrap.classList.add('hidden');
+      videoWrap.classList.add('hidden');
+
+      if (mode === 'Photo Prompt') {
+        photoWrap.classList.remove('hidden');
+        photoOutput.textContent = photoPrompt;
+      } else if (mode === 'Video Prompt') {
+        videoWrap.classList.remove('hidden');
+        videoOutput.textContent = videoPrompt;
+      } else if (mode === 'Both') {
+        photoWrap.classList.remove('hidden');
+        videoWrap.classList.remove('hidden');
+        photoOutput.textContent = photoPrompt;
+        videoOutput.textContent = videoPrompt;
+      } else {
+        photoWrap.classList.remove('hidden');
+        photoOutput.textContent = photoPrompt;
+      }
+
+      outputSection.classList.remove('hidden');
+      outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function randomizePhotoOnly() {
+      setRandomSingle('camera_style');
+      setRandomMultiple('jar_style', 1, 2);
+      setRandomMultiple('label_shape', 1, 2);
+      setRandomMultiple('aesthetic_style', 1, 2);
+      setRandomMultiple('color_palette', 1, 2);
+      setRandomMultiple('typography_style', 1, 2);
+      setRandomMultiple('design_elements', 2, 4);
+      setRandomMultiple('finish_texture', 1, 2);
+      setRandomMultiple('background', 1, 2);
+      showToast('📸 Photo styling randomized.');
+    }
+
+    function randomizeVideoOnly() {
+      setRandomSingle('motion_style');
+      setRandomSingle('camera_style');
+      setRandomMultiple('background', 1, 2);
+      showToast('🎥 Video styling randomized.');
+    }
+
+    function randomizeAll() {
+      const brandNames = [
+        'Annie Glow House',
+        'Divine Wick Studio',
+        'Golden Ember Collective',
+        'Kee Luxe Candle Co.',
+        'Luxe Melt Society',
+        'Moonlit Aura',
+        'Scent & Soul',
+        'Soft Flame Atelier',
+        'Velvet Flame Studio',
+        'Wick Theory'
+      ];
+
+      const collectionNames = [
+        'After Dark Edit',
+        'Boujee Botanica',
+        'Golden Hour Collection',
+        'Midnight Luxe',
+        'Quiet Luxury Line',
+        'Sacred Scents',
+        'Signature Collection',
+        'Soft Glow Series',
+        'Sunday Calm',
+        'Velvet Ritual'
+      ];
+
+      const scentNames = [
+        'Amber Kiss',
+        'Cashmere Bloom',
+        'Golden Moss',
+        'Honeyed Dusk',
+        'Luxe Linen',
+        'Midnight Silk',
+        'Moonlight Walk',
+        'Plum Ritual',
+        'Quiet Flame',
+        'Velvet Smoke'
+      ];
+
+      const taglines = [
+        'A LITTLE FLAME, A LOT OF ATTITUDE.',
+        'BURN SLOW. STAY EXPENSIVE.',
+        'GLOW DIFFERENT WHEN YOUR PEACE COSTS MORE.',
+        'LIGHT ME WHEN YOU NEED TO RESET YOUR SPIRIT.',
+        'LIT WITH INTENTION.',
+        'MOOD: ELEGANT AND UNBOTHERED.',
+        'PEACE, BUT MAKE IT LUXURY.',
+        'POUR YOURSELF INTO SOFTNESS.',
+        'SET THE MOOD AND MIND YOUR BUSINESS.',
+        'SMELLS LIKE A FRESH START.'
+      ];
+
+      document.getElementById('brand_name').value = brandNames[Math.floor(Math.random() * brandNames.length)];
+      document.getElementById('collection_name').value = collectionNames[Math.floor(Math.random() * collectionNames.length)];
+      document.getElementById('scent_name').value = scentNames[Math.floor(Math.random() * scentNames.length)];
+      document.getElementById('tagline').value = taglines[Math.floor(Math.random() * taglines.length)];
+
+      setRandomSingle('prompt_mode');
+      setRandomSingle('net_weight');
+      setRandomSingle('made_in');
+      setRandomSingle('preset_pack', true);
+
+      setRandomMultiple('top_note', 2, 3);
+      setRandomMultiple('middle_note', 2, 3);
+      setRandomMultiple('base_note', 2, 3);
+
+      randomizePhotoOnly();
+      randomizeVideoOnly();
+      showToast('🎲 Everything randomized.');
+    }
+
+    function applyPresetPack() {
+      const presetName = document.getElementById('preset_pack').value;
+      if (presetName === 'None' || !presetPacks[presetName]) {
+        showToast('Choose a preset pack first.');
+        return;
+      }
+
+      const preset = presetPacks[presetName];
+      setMultiValues('top_note', preset.top_note || []);
+      setMultiValues('middle_note', preset.middle_note || []);
+      setMultiValues('base_note', preset.base_note || []);
+      setMultiValues('aesthetic_style', preset.aesthetic_style || []);
+      setMultiValues('color_palette', preset.color_palette || []);
+      setMultiValues('design_elements', preset.design_elements || []);
+      setMultiValues('finish_texture', preset.finish_texture || []);
+      setMultiValues('background', preset.background || []);
+
+      showToast(`✨ ${presetName} preset applied.`);
+    }
+
+    function clearAll() {
+      document.getElementById('brand_name').value = '';
+      document.getElementById('collection_name').value = '';
+      document.getElementById('scent_name').value = '';
+      document.getElementById('tagline').value = '';
+
+      document.getElementById('prompt_mode').value = 'Photo Prompt';
+      document.getElementById('net_weight').value = 'None';
+      document.getElementById('made_in').value = 'None';
+      document.getElementById('camera_style').value = 'None';
+      document.getElementById('motion_style').value = 'None';
+      document.getElementById('preset_pack').value = 'None';
+
+      [
+        'top_note',
+        'middle_note',
+        'base_note',
+        'jar_style',
+        'label_shape',
+        'aesthetic_style',
+        'color_palette',
+        'typography_style',
+        'design_elements',
+        'finish_texture',
+        'background'
+      ].forEach(id => {
+        setMultiValues(id, []);
+      });
+
+      document.getElementById('photoOutput').textContent = '';
+      document.getElementById('videoOutput').textContent = '';
+      document.getElementById('outputSection').classList.add('hidden');
+      document.getElementById('photoOutputWrap').classList.add('hidden');
+      document.getElementById('videoOutputWrap').classList.add('hidden');
+
+      showToast('🔄 All fields cleared.');
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('✓ Copied to clipboard!');
+      } catch (err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast('✓ Copied to clipboard!');
+      }
+    }
+
+    function getVisibleOutputText() {
+      const photoVisible = !document.getElementById('photoOutputWrap').classList.contains('hidden');
+      const videoVisible = !document.getElementById('videoOutputWrap').classList.contains('hidden');
+
+      let text = '';
+      if (photoVisible) {
+        text += 'PHOTO PROMPT\n\n' + document.getElementById('photoOutput').textContent.trim();
+      }
+      if (photoVisible && videoVisible) {
+        text += '\n\n----------------------------------------\n\n';
+      }
+      if (videoVisible) {
+        text += 'VIDEO PROMPT\n\n' + document.getElementById('videoOutput').textContent.trim();
+      }
+      return text.trim();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    document.getElementById('labelForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = buildCommonData();
+      const photoPrompt = generatePhotoPrompt(data);
+      const videoPrompt = generateVideoPrompt(data);
+      renderOutputs(photoPrompt, videoPrompt, data.promptMode);
+    });
+
+    document.getElementById('randomizeAllBtn').addEventListener('click', randomizeAll);
+    document.getElementById('randomizePhotoBtn').addEventListener('click', randomizePhotoOnly);
+    document.getElementById('randomizeVideoBtn').addEventListener('click', randomizeVideoOnly);
+    document.getElementById('applyPresetBtn').addEventListener('click', applyPresetPack);
+    document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+
+    document.getElementById('copyPhotoBtn').addEventListener('click', function() {
+      copyToClipboard(document.getElementById('photoOutput').textContent);
+    });
+
+    document.getElementById('copyVideoBtn').addEventListener('click', function() {
+      copyToClipboard(document.getElementById('videoOutput').textContent);
+    });
+
+    document.getElementById('copyVisibleBtn').addEventListener('click', function() {
+      const text = getVisibleOutputText();
+      if (text) {
+        copyToClipboard(text);
+      } else {
+        showToast('Nothing to copy yet.');
+      }
+    });
+
+    [
+      'top_note',
+      'middle_note',
+      'base_note',
+      'jar_style',
+      'label_shape',
+      'aesthetic_style',
+      'color_palette',
+      'typography_style',
+      'design_elements',
+      'finish_texture',
+      'background'
+    ].forEach(id => {
+      document.getElementById(id).addEventListener('change', function() {
+        normalizeMultiSelect(id);
+      });
+    });
+
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      const titleEl = document.getElementById('page-title');
+      if (titleEl) titleEl.textContent = config.page_title || defaultConfig.page_title;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+          },
+          {
+            get: () => cfg.primary_color || defaultConfig.primary_color,
+            set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+          },
+          {
+            get: () => cfg.secondary_color || defaultConfig.secondary_color,
+            set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+          },
+          {
+            get: () => cfg.accent_color || defaultConfig.accent_color,
+            set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['page_title', cfg.page_title || defaultConfig.page_title]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    initializeOptions();
+  </script>
+</body>
+</html>
