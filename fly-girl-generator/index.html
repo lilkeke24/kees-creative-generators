@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FLY GIRL Generator PRO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#eceef5;
+      --panel:#f5f7fb;
+      --card:#ffffff;
+      --purple:#7512eb;
+      --purple-dark:#5e12c0;
+      --lav:#6a78f0;
+      --lav-2:#7e5ed6;
+      --pink:#ff5fc0;
+      --gold:#ffbe2e;
+      --ink:#273142;
+      --muted:#657183;
+      --line:#d8dee8;
+      --shadow:0 12px 30px rgba(60,72,88,.10);
+      --shadow-soft:0 10px 24px rgba(62,80,120,.10);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Montserrat',sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+
+    .hero{
+      position:relative;
+      min-height:auto;
+      background:linear-gradient(180deg,#7a12ef 0%, #6d10e1 48%, #7014d8 100%);
+      overflow:hidden;
+      border-bottom:4px solid #a041ff;
+      padding:24px 18px 18px;
+    }
+
+    .hero-banner-wrap{
+      max-width:1240px;
+      margin:0 auto;
+    }
+
+    .hero-banner{
+      width:100%;
+      display:block;
+      border-radius:24px;
+      box-shadow:0 14px 34px rgba(0,0,0,.24);
+    }
+
+    .content-wrap{max-width:1240px; margin:0 auto; padding:14px 18px 40px;}
+    .section-head{text-align:center; margin:8px 0 26px;}
+    .section-head h2{
+      margin:0;
+      font-size:clamp(2rem,4vw,3.05rem);
+      font-weight:800;
+      letter-spacing:-.04em;
+      color:#273040;
+    }
+    .section-head p{margin:12px 0 0; color:#5f6977; font-size:1.05rem; font-weight:500;}
+
+    .layout{display:grid; grid-template-columns:1.04fr .96fr; gap:22px; align-items:start;}
+
+    .generator-card{
+      background:linear-gradient(180deg,var(--lav) 0%, var(--lav-2) 100%);
+      border-radius:22px;
+      min-height:1320px;
+      padding:28px;
+      box-shadow:var(--shadow-soft);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .generator-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -70px -90px auto;
+      width:240px;
+      height:240px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 72%);
+    }
+
+    .output-box{
+      background:#fff;
+      min-height:230px;
+      border-radius:16px;
+      padding:28px 24px;
+      border:1px solid rgba(98,115,216,.25);
+      box-shadow:0 12px 24px rgba(35,43,75,.10);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+
+    .output-box h3{margin:0; font-size:2rem; font-weight:800; letter-spacing:-.04em; color:#334055;}
+    .output-box p{margin:14px 0 0; font-size:1rem; line-height:1.7; color:#6b7686; max-width:560px;}
+    .output-box .emoji{font-size:1.9rem; margin-bottom:6px}
+
+    .mode-switch{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:18px;
+      width:100%;
+      max-width:520px;
+    }
+
+    .mode-chip{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border-radius:14px;
+      padding:14px 16px;
+      background:#f4f7ff;
+      border:2px solid #dde4fb;
+      font-weight:800;
+      color:#45516b;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .mode-chip input{accent-color:#6c58eb; width:16px; height:16px;}
+    .mode-chip.active{background:#fff3ff; border-color:#d067ff; color:#6a16cc; box-shadow:0 8px 18px rgba(120,30,220,.12);}
+
+    .generated-output{
+      width:100%;
+      margin-top:22px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.24);
+      border-radius:18px;
+      padding:20px;
+      color:#fff;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+    }
+
+    .generated-output h4{margin:0 0 12px; font-size:1.08rem; letter-spacing:.04em; text-transform:uppercase; color:#eef2ff;}
+    .output-stack{display:grid; gap:18px;}
+
+    .output-panel{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .output-panel h5{margin:0 0 10px; font-size:.94rem; letter-spacing:.06em; text-transform:uppercase; color:#f7f8ff;}
+
+    textarea.output-text{
+      width:100%;
+      min-height:250px;
+      resize:vertical;
+      border:none;
+      outline:none;
+      background:rgba(255,255,255,.96);
+      color:#263246;
+      border-radius:14px;
+      padding:16px;
+      font:500 15px/1.7 'Montserrat',sans-serif;
+      box-shadow:inset 0 1px 2px rgba(0,0,0,.06);
+    }
+
+    .button-row{display:flex; flex-wrap:wrap; gap:12px; margin-top:16px;}
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:14px 18px;
+      font:800 14px/1 'Montserrat',sans-serif;
+      letter-spacing:.02em;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:0 10px 18px rgba(41,51,84,.15);
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background:#fff; color:#4c38c6;}
+    .btn-secondary{background:rgba(255,255,255,.2); color:#fff; border:1px solid rgba(255,255,255,.25)}
+    .btn-accent{background:var(--gold); color:#312700;}
+    .btn-pink{background:#ff7ccf; color:#5a1040;}
+
+    .form-panel{background:#eef2f7; border-radius:22px; padding:20px; box-shadow:var(--shadow);}
+    .form-panel h3{margin:4px 4px 18px; font-size:1.15rem; font-weight:800; letter-spacing:-.03em; color:#263042;}
+
+    .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    .field-card{
+      background:#f9fbfd;
+      border-radius:14px;
+      padding:14px;
+      box-shadow:0 5px 14px rgba(53,74,110,.06);
+      border:1px solid #edf1f6;
+      margin-bottom:12px;
+    }
+
+    .span-2{grid-column:span 2;}
+
+    .field-card label,
+    .field-card .group-label{
+      display:block;
+      font-size:.93rem;
+      font-weight:800;
+      color:#4e5969;
+      margin:0 0 9px;
+      text-transform:uppercase;
+      letter-spacing:-.02em;
+    }
+
+    select{
+      width:100%;
+      border:1px solid #ccd5e2;
+      border-radius:10px;
+      background:#fff;
+      min-height:48px;
+      padding:0 14px;
+      font:600 14px 'Montserrat',sans-serif;
+      color:#2a3444;
+      outline:none;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+
+    select:focus{border-color:#7b62ef; box-shadow:0 0 0 4px rgba(123,98,239,.12);}
+
+    .check-grid{display:grid; grid-template-columns:1fr; gap:8px; max-height:230px; overflow:auto; padding-right:4px;}
+    .check-item{display:flex; align-items:flex-start; gap:10px; color:#3e4857; font-size:.94rem; line-height:1.35; padding:2px 0;}
+    .check-item input{margin-top:3px; accent-color:#6c58eb; width:16px; height:16px; flex:0 0 auto;}
+
+    .helper{font-size:.85rem; color:#6b7585; margin-top:8px; line-height:1.45;}
+    .footer-note{margin-top:16px; font-size:.87rem; color:#677282; text-align:center;}
+
+    @media (max-width: 1080px){
+      .layout{grid-template-columns:1fr}
+      .generator-card{min-height:unset}
+    }
+
+    @media (max-width: 760px){
+      .content-wrap{padding:12px 14px 30px}
+      .generator-card,.form-panel{padding:16px}
+      .output-box{padding:24px 16px}
+      .button-row{flex-direction:column}
+      .btn{width:100%}
+      .field-grid{grid-template-columns:1fr}
+      .span-2{grid-column:span 1;}
+      .mode-switch{grid-template-columns:1fr}
+      .hero{padding:16px 12px 12px}
+      .hero-banner{border-radius:18px}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-banner-wrap">
+      <img src="./fly-girl-banner.png" alt="Fly Girl Generator Banner" class="hero-banner">
+    </div>
+  </header>
+
+  <main class="content-wrap">
+    <section class="section-head">
+      <h2>✨ Attitude Character Generator</h2>
+      <p>Build image prompts and video prompts for a bold, stylish Fly Girl character with rich beauty, fashion, and attitude details.</p>
+    </section>
+
+    <section class="layout">
+      <div class="generator-card">
+        <div class="output-box">
+          <div class="emoji">✨</div>
+          <h3>Character Generator</h3>
+          <p>Choose your character details, randomize the look, then generate either an image prompt or a motion-ready video prompt.</p>
+
+          <div class="mode-switch">
+            <label class="mode-chip active" id="chipImage">
+              <input type="radio" name="promptMode" value="image" checked>
+              <span>Image Prompt Mode</span>
+            </label>
+            <label class="mode-chip" id="chipVideo">
+              <input type="radio" name="promptMode" value="video">
+              <span>Video Prompt Mode</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="generated-output">
+          <h4>Generated Prompt Output</h4>
+          <div class="output-stack">
+            <div class="output-panel">
+              <h5>Image Prompt</h5>
+              <textarea id="imageOutput" class="output-text"></textarea>
+            </div>
+
+            <div class="output-panel">
+              <h5>Video Prompt</h5>
+              <textarea id="videoOutput" class="output-text"></textarea>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="generateBtn">Generate Selected Prompt</button>
+            <button class="btn btn-secondary" id="copyBtn">Copy Selected Prompt</button>
+            <button class="btn btn-pink" id="randomBtn">Randomize All</button>
+            <button class="btn btn-accent" id="resetBtn">Reset Form</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="form-panel">
+        <h3>Customize Your Character</h3>
+
+        <div class="field-grid">
+          <div class="field-card">
+            <label for="skinTone">Skin Tone</label>
+            <select id="skinTone"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="hairstyle">Hairstyle</label>
+            <select id="hairstyle"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="eyebrows">Eyebrows</label>
+            <select id="eyebrows"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="eyesExpression">Eyes &amp; Expression</label>
+            <select id="eyesExpression"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="eyelashes">Eyelashes</label>
+            <select id="eyelashes"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="lips">Lips</label>
+            <select id="lips"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="handGesture">Hand Gesture</label>
+            <select id="handGesture"></select>
+          </div>
+
+          <div class="field-card">
+            <label for="nails">Nails</label>
+            <select id="nails"></select>
+          </div>
+
+          <div class="field-card span-2">
+            <div class="group-label">Accessories (Select Multiple)</div>
+            <div class="check-grid" id="accessoriesWrap"></div>
+            <div class="helper">Pick a few accessories or use randomize for a full styled-up look.</div>
+          </div>
+
+          <div class="field-card span-2">
+            <label for="background">Background</label>
+            <select id="background"></select>
+          </div>
+        </div>
+
+        <p class="footer-note">Each dropdown includes 30 real options, no placeholder entries. Image and video prompts are both included.</p>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const options = {
+      skinTone: [
+        'Almond brown','Amber brown','Bronze glow','Butterscotch beige','Cafe au lait','Caramel cocoa','Chestnut brown','Chocolate bronze','Cinnamon bronze','Copper brown','Deep almond','Deep espresso','Deep mahogany','Golden bronze','Golden caramel','Golden honey','Honey brown','Maple brown','Mocha brown','Nutmeg glow','Pecan tan','Praline brown','Rich cocoa','Rich mocha','Sable brown','Soft amber','Toffee bronze','Warm beige brown','Warm sienna','Walnut brown'
+      ],
+      hairstyle: [
+        'Asymmetrical bob','Bantu knots','Barrel curl bob','Big curly afro','Blunt cut bob','Braided bun','Braided ponytail','Butterfly locs','Chin-length curls','Classic finger waves','Cornrow ponytail','Curly pixie cut','Defined twist out','Extra long box braids','Flat twist updo','Fulani braids','Half-up half-down curls','High puff','Hollywood waves','Layered silk press','Loc bun','Long goddess braids','Loose body wave','Pinned victory rolls','Sculpted pixie','Side part quick weave','Sleek high ponytail','Soft wand curls','Tapered coils','Waist-length twists'
+      ],
+      eyebrows: [
+        'Airbrushed glam brows','Angled soft brows','Arched and defined brows','Bold carved brows','Bold glam brows','Clean sculpted brows','Classic soft arch brows','Feathered natural brows','Fluffy lifted brows','Full face-framing brows','Full natural brows','Glossy editorial brows','Gradient ombre brows','High dramatic arches','Long tapered brows','Micro-defined brows','Polished beauty brows','Rounded soft brows','Sharp snatched brows','Short structured brows','Sleek straight brows','Soft angled brows','Soft ombre brows','Statement arched brows','Straight sleek brows','Thick statement brows','Ultra clean brows','Ultra lifted brows','Velvet finish brows','Wispy feather brows'
+      ],
+      eyesExpression: [
+        'Bold runway stare','Bossed-up calm stare','Camera-ready poise gaze','Confident direct gaze','Confident laughing eyes','Confident side-eye','Cool aloof stare','Coy smile eyes','Dreamy glam gaze','Fearless smirk expression','Fierce direct stare','Flirty wink','Glossy doll eyes','Happy bright-eyed grin','High-fashion detached stare','Look-back over shoulder gaze','Mischievous grin eyes','Playful smirk with bright eyes','Power pose stare','Raised brow attitude','Seductive half-smile gaze','Sharp editorial glare','Soft glam confidence','Soft innocent sparkle eyes','Strong chin-up confidence','Sultry bedroom eyes','Sweet but sassy gaze','Unbothered queen energy','Wide-eyed sass','Witty knowing look'
+      ],
+      eyelashes: [
+        'Baby doll lashes','Bold cluster lashes','Bold wispy lashes','Bottom lash emphasis','Cat-eye volume lashes','Clean natural glam lashes','Curled fluffy lashes','Dense dramatic lashes','Doll-like dramatic lashes','Extra fluffy volume lashes','Extra long flutter lashes','Fine separated lashes','Full glam stacked lashes','Heavy winged lashes','Long curled glam lashes','Mega mink lashes','Natural flutter lashes','Open-eye lifted lashes','Outer-corner flare lashes','Rounded doll lashes','Sharp cat-eye lashes','Short chic lashes','Soft bridal lashes','Soft flutter lashes','Spiky editorial lashes','Textured strip lashes','Thin elegant lashes','Ultra black volume lashes','Wispy layered lashes','Wispy natural glamour lashes'
+      ],
+      lips: [
+        'Berry gloss lips','Brick red satin lips','Candy pink gloss lips','Chestnut nude lips','Chocolate gloss lips','Cinnamon brown lips','Classic red glossy lips','Cocoa shimmer lips','Deep plum pout','Glossy caramel lips','Glossy rosewood lips','High-shine coral lips','High-shine rose lips','Honey nude lips','Juicy pink pout','Lavender gloss lips','Mauve velvet lips','Mocha ombre lips','Nude peach lips','Ombré lined lips','Plum wine lips','Rosy nude gloss lips','Soft matte cocoa lips','Soft matte mauve lips','Soft pink satin lips','Strawberry gloss lips','Toffee nude lips','Ultra glossy nude lips','Velvet berry lips','Warm chestnut pout'
+      ],
+      handGesture: [
+        'Arms crossed pose','Blowing a kiss','Chin pose','Double peace signs','Finger point attitude','Finger snap motion','Hair touch pose','Hand on hip pose','Hand under chin pose','Heart hands','Hold purse over shoulder','Holding sunglasses pose','Laughing hand-to-mouth pose','Looking back over shoulder','One hand wave','Peace sign','Phone pose','Pointing upward pose','Power stance pose','Resting hand on cheek','Salute pose','Sassy snap pose','Shoulder pop pose','Soft hand stretch pose','Strutting walk pose','Thumbs on hips','Touching necklace pose','Two-finger cheek pose','Walking with swing pose','Wrist flick pose'
+      ],
+      nails: [
+        'Abstract art nails','Baby pink gloss nails','Black chrome nails','Classic French tips','Clear jelly nails','Coffin ombre nude nails','Color block nails','Crystal glam nails','Deep burgundy nails','Diamond dust nails','Emerald shimmer nails','Extra long stiletto nails','Floral accent nails','Glossy square nude nails','Gold foil nails','Hot pink coffin nails','Icy silver nails','Leopard accent nails','Long coffin nude nails','Long stiletto pink nails','Marble swirl nails','Metallic chrome nails','Milky white nails','Nude rhinestone nails','Peach shimmer nails','Purple glitter nails','Red patent nails','Rhinestone accent nails','Short glossy square nails','Velvet cat-eye nails'
+      ],
+      background: [
+        '80s neon glam backdrop','Abstract lavender smoke','Bold comic pop art wall','Candy glam backdrop','Chrome studio room','City lights at night','Colorful beauty mural','Cotton candy gradient studio','Dreamy lilac clouds','Editorial pink spotlight set','Elegant rose gold studio','Fashion runway glow','Glossy magazine studio','Graffiti fashion wall','High-rise city penthouse','Hot pink neon wall','Luxury beauty room','Luxury closet interior','Mirror room sparkle set','Monochrome purple studio','Pastel swirl backdrop','Pink velvet lounge','Purple bokeh lights','Retro beauty poster wall','Rooftop sunset city scene','Soft pastel gradient','Sparkle glam dressing room','Streetwear mural wall','VIP club lights','Y2K digital heart backdrop'
+      ]
+    };
+
+    const accessories = [
+      'Anklet','Bangle bracelets','Belly chain','Body glitter','Charm bracelet','Choker','Crossbody mini bag','Cuff bracelet','Designer belt','Designer shades','Diamond studs','Drop earrings','Ear cuffs','Gemstone rings','Gold hoops','Gold necklace','Hair jewels','Head scarf','Layered chains','Luxury watch','Nameplate necklace','Nose ring','Oversized hoops','Pearl earrings','Phone case accessory','Rhinestone hair clips','Septum ring','Stacked rings','Statement earrings','Tinted sunglasses'
+    ];
+
+    const fieldIds = Object.keys(options);
+    const imageOutput = document.getElementById('imageOutput');
+    const videoOutput = document.getElementById('videoOutput');
+    const generateBtn = document.getElementById('generateBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const randomBtn = document.getElementById('randomBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const modeInputs = [...document.querySelectorAll('input[name="promptMode"]')];
+    const chipImage = document.getElementById('chipImage');
+    const chipVideo = document.getElementById('chipVideo');
+
+    function populateSelect(id, values){
+      const select = document.getElementById(id);
+      values.forEach((value) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+      });
+      select.selectedIndex = 0;
+    }
+
+    fieldIds.forEach(id => populateSelect(id, options[id]));
+
+    const accessoriesWrap = document.getElementById('accessoriesWrap');
+    accessories.forEach((item, index) => {
+      const label = document.createElement('label');
+      label.className = 'check-item';
+      label.innerHTML = `<input type="checkbox" value="${item}" id="acc_${index}"><span>${item}</span>`;
+      accessoriesWrap.appendChild(label);
+    });
+
+    function selectedAccessories(){
+      return [...document.querySelectorAll('#accessoriesWrap input:checked')].map(input => input.value);
+    }
+
+    function selectedValue(id){
+      const el = document.getElementById(id);
+      return el.options[el.selectedIndex]?.value || '';
+    }
+
+    function oxfordJoin(items){
+      if (items.length === 0) return '';
+      if (items.length === 1) return items[0];
+      if (items.length === 2) return `${items[0]} and ${items[1]}`;
+      return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+    }
+
+    function getDetails(){
+      return {
+        skinTone: selectedValue('skinTone'),
+        hairstyle: selectedValue('hairstyle'),
+        eyebrows: selectedValue('eyebrows'),
+        eyesExpression: selectedValue('eyesExpression'),
+        eyelashes: selectedValue('eyelashes'),
+        lips: selectedValue('lips'),
+        handGesture: selectedValue('handGesture'),
+        nails: selectedValue('nails'),
+        background: selectedValue('background'),
+        accessories: selectedAccessories()
+      };
+    }
+
+    function buildImagePrompt(){
+      const d = getDetails();
+      const accessoryLine = d.accessories.length ? `She is accessorized with ${oxfordJoin(d.accessories)}.` : '';
+      return `Semi-3D cartoon portrait of a stylish African American woman with bold Fly Girl attitude, glamorous beauty styling, polished ${d.skinTone} skin, confident feminine energy, oversized expressive features, premium digital art finish, magazine-quality detail, rich color, smooth shading, glossy highlights. She has ${d.hairstyle}, ${d.eyebrows}, ${d.eyesExpression}, ${d.eyelashes}, ${d.lips}, and ${d.nails}. Her pose includes ${d.handGesture.toLowerCase()}. ${accessoryLine} Background: ${d.background}. Fashion-forward, playful, polished, eye-catching, luxury cartoon character aesthetic, high detail, clean lighting, crisp rendering.`.replace(/\s+/g,' ').trim();
+    }
+
+    function buildVideoPrompt(){
+      const d = getDetails();
+      const accessoryLine = d.accessories.length ? `She is accessorized with ${oxfordJoin(d.accessories)}.` : '';
+      return `Create a stylish animated video of a semi-3D cartoon African American Fly Girl character with ${d.skinTone} skin, ${d.hairstyle}, ${d.eyebrows}, ${d.eyesExpression}, ${d.eyelashes}, ${d.lips}, and ${d.nails}. She begins in a confident pose featuring ${d.handGesture.toLowerCase()}, then adds subtle body sway, head movement, blinking, lip attitude, and fashionable camera-ready energy. ${accessoryLine} Place her in a ${d.background}. Use glossy lighting, rich colors, soft camera motion, a polished editorial cartoon look, expressive face animation, and stylish feminine confidence. Include gentle zoom-ins, attitude-driven motion, beauty-shot framing, and a premium social-media-ready finish.`.replace(/\s+/g,' ').trim();
+    }
+
+    function currentMode(){
+      return document.querySelector('input[name="promptMode"]:checked').value;
+    }
+
+    function updateModeUI(){
+      const mode = currentMode();
+      chipImage.classList.toggle('active', mode === 'image');
+      chipVideo.classList.toggle('active', mode === 'video');
+      imageOutput.parentElement.style.boxShadow = mode === 'image' ? '0 0 0 2px rgba(255,255,255,.45)' : 'none';
+      videoOutput.parentElement.style.boxShadow = mode === 'video' ? '0 0 0 2px rgba(255,255,255,.45)' : 'none';
+    }
+
+    modeInputs.forEach(input => input.addEventListener('change', updateModeUI));
+    updateModeUI();
+
+    function generateSelectedPrompt(){
+      const imagePrompt = buildImagePrompt();
+      const videoPrompt = buildVideoPrompt();
+      imageOutput.value = imagePrompt;
+      videoOutput.value = videoPrompt;
+
+      if (currentMode() === 'image') {
+        imageOutput.focus();
+        imageOutput.select();
+      } else {
+        videoOutput.focus();
+        videoOutput.select();
+      }
+    }
+
+    function randomFrom(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomizeSelections(){
+      fieldIds.forEach(id => {
+        const select = document.getElementById(id);
+        select.value = randomFrom(options[id]);
+      });
+
+      const checks = [...document.querySelectorAll('#accessoriesWrap input')];
+      checks.forEach(box => box.checked = false);
+
+      const count = Math.floor(Math.random() * 5) + 2;
+      const shuffled = [...checks].sort(() => Math.random() - 0.5);
+      shuffled.slice(0, count).forEach(box => box.checked = true);
+
+      generateSelectedPrompt();
+    }
+
+    function resetForm(){
+      fieldIds.forEach(id => {
+        const select = document.getElementById(id);
+        select.selectedIndex = 0;
+      });
+
+      [...document.querySelectorAll('#accessoriesWrap input')].forEach(box => box.checked = false);
+      imageOutput.value = '';
+      videoOutput.value = '';
+      document.querySelector('input[name="promptMode"][value="image"]').checked = true;
+      updateModeUI();
+    }
+
+    async function copySelectedPrompt(){
+      const mode = currentMode();
+      const text = mode === 'image' ? imageOutput.value : videoOutput.value;
+      if (!text.trim()) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy Selected Prompt';
+        }, 1400);
+      } catch (err) {
+        alert('Copy failed. Please copy manually.');
+      }
+    }
+
+    generateBtn.addEventListener('click', generateSelectedPrompt);
+    copyBtn.addEventListener('click', copySelectedPrompt);
+    randomBtn.addEventListener('click', randomizeSelections);
+    resetBtn.addEventListener('click', resetForm);
+
+    generateSelectedPrompt();
+  </script>
+</body>
+</html>
