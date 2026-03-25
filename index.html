@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annie's Cutique Generators</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#050814;
+      --bg2:#0f1530;
+      --bg3:#121f45;
+      --line:rgba(255,255,255,.10);
+      --text:#f6f7ff;
+      --muted:#c8d0ea;
+      --gold:#f5cc74;
+      --shadow:0 12px 40px rgba(0,0,0,.45);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(245,204,116,.10), transparent 20%),
+        radial-gradient(circle at top right, rgba(135,199,255,.10), transparent 24%),
+        radial-gradient(circle at bottom center, rgba(167,139,250,.10), transparent 22%),
+        linear-gradient(160deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    }
+
+    .font-display{font-family:'Cinzel',serif}
+
+    .glass{
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--line);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .hero-title{
+      background:linear-gradient(135deg,#fff4d2,#f5cc74,#95cbff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted);
+      font-size:.8rem;
+      font-weight:600;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 18px;
+      border:none;
+      border-radius:16px;
+      font-weight:700;
+      text-decoration:none;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:var(--shadow);
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.08);
+    }
+
+    .btn-gold{
+      background:linear-gradient(135deg,#f2c35f,#c68b2a);
+      color:#1a1a1a;
+    }
+
+    .btn-dark{
+      background:linear-gradient(135deg,#1c2648,#0e1732);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .card-tag{
+      display:inline-block;
+      font-size:.72rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--gold);
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .sparkle{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.32;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.85) 0 1px, transparent 2px),
+        radial-gradient(circle at 80% 30%, rgba(135,199,255,.8) 0 1px, transparent 2px),
+        radial-gradient(circle at 45% 80%, rgba(245,204,116,.7) 0 1px, transparent 2px);
+      background-size:240px 240px;
+      z-index:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="sparkle"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 py-8 md:px-6 md:py-10">
+    <section class="glass p-6 md:p-10 mb-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="max-w-3xl">
+          <div class="chip mb-4">
+            <span class="w-2 h-2 rounded-full bg-yellow-300 inline-block"></span>
+            Premium Prompt Tools • Annie's Cutique
+          </div>
+          <h1 class="font-display hero-title text-4xl md:text-6xl font-extrabold leading-tight">
+            Annie’s Cutique<br />Generator Suite
+          </h1>
+          <p class="text-white/80 mt-4 text-sm md:text-base leading-7 max-w-2xl">
+            Welcome to your luxury generator hub. Choose a tool below to create premium prompts,
+            billboard concepts, graduation visuals, surreal art concepts, and more.
+          </p>
+        </div>
+
+        <div class="glass p-5 w-full lg:w-[340px]">
+          <p class="text-xs uppercase tracking-[0.2em] text-yellow-300 font-bold mb-2">How it works</p>
+          <div class="space-y-3 text-sm text-white/80 leading-6">
+            <p>1. Open your generator</p>
+            <p>2. Fill in the options</p>
+            <p>3. Copy your prompt</p>
+            <p>4. Paste it into your favorite AI image or video tool</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-4">
+      <h2 class="font-display text-2xl md:text-3xl font-bold mb-2">Choose Your Generator</h2>
+      <p class="text-white/70 text-sm md:text-base">Add, remove, or rename these cards anytime as your product line grows.</p>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div class="glass p-6">
+        <span class="card-tag">Luxury Billboard</span>
+        <h3 class="text-2xl font-bold mb-3">Billboard AI Art Creator PRO</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Build high-fashion billboard prompts with cinematic locations, bold styling,
+          luxury lighting, and 3D pop-out effects.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./billboard-pro/">Open Generator</a>
+        </div>
+      </div>
+
+      <div class="glass p-6">
+        <span class="card-tag">Graduation</span>
+        <h3 class="text-2xl font-bold mb-3">Grad Prompt Builder PRO</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Create premium graduation prompts for yard signs, tumblers, shirts, canvases,
+          photo pins, and luxe portrait scenes.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./grad-pro/">Open Generator</a>
+        </div>
+      </div>
+
+      <div class="glass p-6">
+        <span class="card-tag">Product Branding</span>
+        <h3 class="text-2xl font-bold mb-3">Candle Label Generator</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Build candle branding and packaging prompts with scent mood, luxury aesthetics,
+          typography direction, and visual styling.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./candle-label-pro/">Open Generator</a>
+        </div>
+      </div>
+
+      <div class="glass p-6">
+        <span class="card-tag">Fonts + Objects</span>
+        <h3 class="text-2xl font-bold mb-3">DOUBLE TROUBLE</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Combine object styling and font prompt building in one premium tool for digital
+          products, branding, and creative mockup ideas.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./double-trouble/">Open Generator</a>
+        </div>
+      </div>
+
+      <div class="glass p-6">
+        <span class="card-tag">Portrait Art</span>
+        <h3 class="text-2xl font-bold mb-3">Afro-Lux Portrait Generator</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Design rich portrait prompts with fashion, skin glow, luxury styling,
+          surreal energy, and editorial beauty direction.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./afro-lux-portrait/">Open Generator</a>
+        </div>
+      </div>
+
+      <div class="glass p-6">
+        <span class="card-tag">Surreal Concepts</span>
+        <h3 class="text-2xl font-bold mb-3">Surreal Future Art Builder</h3>
+        <p class="text-white/75 text-sm leading-6 mb-6">
+          Create futuristic surreal prompts with dreamlike concepts, dramatic scenery,
+          and polished visual storytelling for standout art.
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a class="btn btn-gold" href="./surreal-future-art/">Open Generator</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass p-6 md:p-8 mt-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h3 class="font-display text-2xl font-bold mb-2">Need More Generators?</h3>
+          <p class="text-white/75 text-sm leading-6 max-w-2xl">
+            Duplicate a folder, drop in a new <strong>index.html</strong>, update the button link,
+            and your next generator is ready to go.
+          </p>
+        </div>
+        <a class="btn btn-dark" href="#">Annie’s Cutique</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
