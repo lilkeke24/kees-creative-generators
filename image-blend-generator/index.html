@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portrait Surreal Art Generator PRO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#050814;
+      --bg2:#0d1630;
+      --bg3:#111b3f;
+      --panel:rgba(10,16,35,.86);
+      --panel2:rgba(15,25,52,.9);
+      --line:rgba(255,255,255,.10);
+      --text:#f5f7ff;
+      --muted:#b7c4ea;
+      --accent:#7ea8ff;
+      --accent2:#b68dff;
+      --gold:#d9b76d;
+      --shadow:0 18px 45px rgba(0,0,0,.35);
+
+      /* DARKER FORM COLORS */
+      --field-bg:#0e1730;
+      --field-bg-2:#111d3a;
+      --field-border:rgba(255,255,255,.12);
+      --field-text:#f7f9ff;
+      --field-placeholder:#aab9df;
+      --field-focus:#7ea8ff;
+      --selection-bg:#1f3d73;
+      --selection-text:#ffffff;
+      --option-bg:#0e1730;
+      --option-text:#f7f9ff;
+      --option-hover:#1c2f57;
+      --output-bg:#0a1328;
+    }
+
+    *{box-sizing:border-box}
+    html,body{min-height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:'Inter',sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(126,168,255,.18), transparent 22%),
+        radial-gradient(circle at 80% 10%, rgba(182,141,255,.14), transparent 20%),
+        radial-gradient(circle at 50% 80%, rgba(217,183,109,.10), transparent 24%),
+        linear-gradient(135deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+      overflow-x:hidden;
+    }
+
+    .stars::before,
+    .stars::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.75) 1px, transparent 1.4px),
+        radial-gradient(circle, rgba(126,168,255,.5) 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(182,141,255,.35) 1px, transparent 1.6px);
+      background-size: 180px 180px, 240px 240px, 320px 320px;
+      background-position: 0 0, 40px 70px, 100px 140px;
+      opacity:.35;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      max-width:1650px;
+      margin:0 auto;
+      padding:28px;
+    }
+
+    .hero{
+      border:1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        rgba(6,11,24,.72);
+      box-shadow:var(--shadow);
+      border-radius:28px;
+      padding:28px;
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:28px;
+      pointer-events:none;
+      background:
+        linear-gradient(120deg, rgba(126,168,255,.18), transparent 28%, transparent 70%, rgba(182,141,255,.16));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      padding:1px;
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+    }
+
+    .title{
+      font-family:'Cinzel',serif;
+      letter-spacing:.06em;
+    }
+
+    .badge{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:#dbe6ff;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .panel{
+      background:linear-gradient(180deg, rgba(16,25,49,.92), rgba(9,14,30,.95));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+
+    .section-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .section-title{
+      font-family:'Cinzel',serif;
+      font-size:15px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:#eef3ff;
+      margin-bottom:14px;
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#d6e0ff;
+      margin:0 0 8px;
+    }
+
+    /* DARKER FIELDS */
+    select, textarea, input{
+      width:100%;
+      border-radius:16px;
+      border:1px solid var(--field-border);
+      background:linear-gradient(180deg,var(--field-bg),var(--field-bg-2));
+      color:var(--field-text);
+      padding:13px 14px;
+      outline:none;
+      font-size:14px;
+      transition:.2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      caret-color:#ffffff;
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+      color:var(--field-placeholder);
+    }
+
+    textarea{
+      min-height:240px;
+      resize:vertical;
+      line-height:1.55;
+      background:linear-gradient(180deg, var(--output-bg), #0d1934);
+      color:#f8fbff;
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-image:
+        linear-gradient(180deg,var(--field-bg),var(--field-bg-2)),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23f5f7ff' d='M5.5 7.5 10 12l4.5-4.5'/></svg>");
+      background-repeat:no-repeat,no-repeat;
+      background-position:center right 14px, center right 14px;
+      background-size:auto, 16px;
+      padding-right:44px;
+    }
+
+    select:focus, textarea:focus, input:focus{
+      border-color:rgba(126,168,255,.75);
+      box-shadow:0 0 0 4px rgba(126,168,255,.18);
+    }
+
+    /* DARK TEXT SELECTION HIGHLIGHT */
+    ::selection{
+      background:var(--selection-bg);
+      color:var(--selection-text);
+    }
+
+    ::-moz-selection{
+      background:var(--selection-bg);
+      color:var(--selection-text);
+    }
+
+    input::selection,
+    textarea::selection{
+      background:var(--selection-bg);
+      color:var(--selection-text);
+    }
+
+    input::-moz-selection,
+    textarea::-moz-selection{
+      background:var(--selection-bg);
+      color:var(--selection-text);
+    }
+
+    /* OPTION COLORS */
+    option{
+      background:var(--option-bg);
+      color:var(--option-text);
+    }
+
+    /* Some browsers honor this for hovered/selected options */
+    option:checked,
+    option:hover,
+    option:focus{
+      background:var(--option-hover);
+      color:#ffffff;
+    }
+
+    .btn{
+      border:none;
+      border-radius:16px;
+      padding:14px 18px;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .16s ease, opacity .16s ease, box-shadow .16s ease;
+      font-size:14px;
+      letter-spacing:.02em;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{
+      color:#071121;
+      background:linear-gradient(135deg, #d9b76d, #f2db9d);
+      box-shadow:0 12px 25px rgba(217,183,109,.25);
+    }
+    .btn-secondary{
+      color:#fff;
+      background:linear-gradient(135deg, #5278d4, #7ea8ff);
+      box-shadow:0 12px 25px rgba(126,168,255,.22);
+    }
+    .btn-tertiary{
+      color:#fff;
+      background:linear-gradient(135deg, #6d4cc7, #9d83ea);
+      box-shadow:0 12px 25px rgba(157,131,234,.20);
+    }
+    .btn-ghost{
+      color:#eef3ff;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .output-wrap{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .output-box{
+      background:linear-gradient(180deg, rgba(5,9,19,.88), rgba(13,19,39,.95));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .tiny{
+      font-size:12px;
+      color:#afbddf;
+    }
+
+    .grid-auto{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:18px;
+    }
+
+    .sticky-actions{
+      position:sticky;
+      bottom:14px;
+      z-index:3;
+      backdrop-filter:blur(10px);
+    }
+
+    @media (max-width:900px){
+      .wrap{padding:16px}
+      .hero{padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <div class="wrap">
+    <section class="hero mb-6">
+      <div class="flex flex-wrap gap-3 items-center mb-4">
+        <span class="badge">Portrait Orientation</span>
+        <span class="badge">Surreal Art</span>
+        <span class="badge">Photo + Video Prompt</span>
+        <span class="badge">Gothic Fantasy</span>
+      </div>
+
+      <h1 class="title text-3xl md:text-5xl font-extrabold mb-4">
+        Portrait Surreal Art Generator PRO
+      </h1>
+
+      <p class="hint max-w-5xl">
+        Build ultra-luxurious surreal portrait prompts inspired by gothic fantasy couture, moonlit magic, enchanted forests, crystal instruments, glowing particles, castle fog, sapphire florals, and cinematic dark-fairytale beauty. Every dropdown starts with <strong>None</strong>, and the rest are alphabetized.
+      </p>
+    </section>
+
+    <div class="grid-3">
+      <!-- LEFT SIDE CONTROLS -->
+      <section class="panel p-5 md:p-6">
+        <div class="space-y-5">
+
+          <div class="section-card">
+            <div class="section-title">Subject Identity</div>
+            <div class="grid-auto">
+              <div>
+                <label for="subjectType">Subject Type</label>
+                <select id="subjectType"></select>
+              </div>
+              <div>
+                <label for="age">Model Age</label>
+                <select id="age"></select>
+              </div>
+              <div>
+                <label for="race">Race / Ethnicity</label>
+                <select id="race"></select>
+              </div>
+              <div>
+                <label for="bodyType">Body Type</label>
+                <select id="bodyType"></select>
+              </div>
+              <div>
+                <label for="skinTone">Skin Tone</label>
+                <select id="skinTone"></select>
+              </div>
+              <div>
+                <label for="expression">Expression</label>
+                <select id="expression"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Beauty & Hair</div>
+            <div class="grid-auto">
+              <div>
+                <label for="hairStyle">Hair Style</label>
+                <select id="hairStyle"></select>
+              </div>
+              <div>
+                <label for="hairColor">Hair Color</label>
+                <select id="hairColor"></select>
+              </div>
+              <div>
+                <label for="eyeColor">Eye Color</label>
+                <select id="eyeColor"></select>
+              </div>
+              <div>
+                <label for="makeupStyle">Makeup Style</label>
+                <select id="makeupStyle"></select>
+              </div>
+              <div>
+                <label for="hatStyle">Hat / Headwear</label>
+                <select id="hatStyle"></select>
+              </div>
+              <div>
+                <label for="jewelry">Jewelry</label>
+                <select id="jewelry"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Fashion Styling</div>
+            <div class="grid-auto">
+              <div>
+                <label for="top">Top</label>
+                <select id="top"></select>
+              </div>
+              <div>
+                <label for="bottom">Bottom</label>
+                <select id="bottom"></select>
+              </div>
+              <div>
+                <label for="dress">Dress / Gown</label>
+                <select id="dress"></select>
+              </div>
+              <div>
+                <label for="outerwear">Outerwear</label>
+                <select id="outerwear"></select>
+              </div>
+              <div>
+                <label for="shoe">Shoes</label>
+                <select id="shoe"></select>
+              </div>
+              <div>
+                <label for="material">Material Focus</label>
+                <select id="material"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Fantasy Objects & Props</div>
+            <div class="grid-auto">
+              <div>
+                <label for="instrument">Musical Instrument</label>
+                <select id="instrument"></select>
+              </div>
+              <div>
+                <label for="object1">Secondary Object</label>
+                <select id="object1"></select>
+              </div>
+              <div>
+                <label for="object2">Tertiary Object</label>
+                <select id="object2"></select>
+              </div>
+              <div>
+                <label for="flowerType">Flower Type</label>
+                <select id="flowerType"></select>
+              </div>
+              <div>
+                <label for="particleEffect">Particle Effect</label>
+                <select id="particleEffect"></select>
+              </div>
+              <div>
+                <label for="musicEffect">Music Effect</label>
+                <select id="musicEffect"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Setting & Background</div>
+            <div class="grid-auto">
+              <div>
+                <label for="location">Location</label>
+                <select id="location"></select>
+              </div>
+              <div>
+                <label for="background">Background Style</label>
+                <select id="background"></select>
+              </div>
+              <div>
+                <label for="moonStyle">Moon Style</label>
+                <select id="moonStyle"></select>
+              </div>
+              <div>
+                <label for="castleStyle">Castle / Architecture</label>
+                <select id="castleStyle"></select>
+              </div>
+              <div>
+                <label for="atmosphere">Atmosphere</label>
+                <select id="atmosphere"></select>
+              </div>
+              <div>
+                <label for="colorPalette">Color Palette</label>
+                <select id="colorPalette"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Composition & Rendering</div>
+            <div class="grid-auto">
+              <div>
+                <label for="pose">Pose</label>
+                <select id="pose"></select>
+              </div>
+              <div>
+                <label for="cameraAngle">Camera Angle</label>
+                <select id="cameraAngle"></select>
+              </div>
+              <div>
+                <label for="lighting">Lighting</label>
+                <select id="lighting"></select>
+              </div>
+              <div>
+                <label for="artStyle">Art Style</label>
+                <select id="artStyle"></select>
+              </div>
+              <div>
+                <label for="detailLevel">Detail Level</label>
+                <select id="detailLevel"></select>
+              </div>
+              <div>
+                <label for="motion">Cinematic Motion</label>
+                <select id="motion"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">Custom Add-ons</div>
+            <div class="grid-auto">
+              <div class="md:col-span-2">
+                <label for="customPrompt">Custom Details</label>
+                <input id="customPrompt" type="text" value="portrait orientation, elegant silhouette, mysterious cosmic sparkle, enchanted fairytale mood" />
+              </div>
+            </div>
+            <p class="tiny mt-3">
+              Add any extra detail you want included in both the photo prompt and video script.
+            </p>
+          </div>
+
+          <div class="sticky-actions">
+            <div class="panel p-4">
+              <div class="grid-auto">
+                <button class="btn btn-primary" id="generateBothBtn">Generate Both</button>
+                <button class="btn btn-secondary" id="generatePhotoBtn">Generate Photo Prompt</button>
+                <button class="btn btn-tertiary" id="generateVideoBtn">Generate Video Script</button>
+                <button class="btn btn-ghost" id="randomizeBtn">Randomize</button>
+                <button class="btn btn-ghost" id="copyPhotoBtn">Copy Photo Prompt</button>
+                <button class="btn btn-ghost" id="copyVideoBtn">Copy Video Script</button>
+                <button class="btn btn-ghost" id="resetBtn">Reset</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT SIDE OUTPUTS -->
+      <section class="space-y-5">
+        <div class="output-box">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h2 class="title text-xl font-bold">Photo Prompt Output</h2>
+            <span class="badge">Image Prompt</span>
+          </div>
+          <textarea id="photoOutput"></textarea>
+        </div>
+
+        <div class="output-box">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h2 class="title text-xl font-bold">Video Script Output</h2>
+            <span class="badge">Video Prompt</span>
+          </div>
+          <textarea id="videoOutput"></textarea>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const dropdownData = {
+      subjectType: [
+        "None",
+        "Celestial empress",
+        "Couture violinist",
+        "Dark enchantress",
+        "Elegant aristocrat",
+        "Enchanted muse",
+        "Ethereal queen",
+        "Fantasy ballerina",
+        "Fog-born siren",
+        "Gilded sorceress",
+        "Gothic baroness",
+        "Gothic bride",
+        "Gothic duchess",
+        "Gothic fashion muse",
+        "Haunted songstress",
+        "High-fantasy noblewoman",
+        "Lunar oracle",
+        "Midnight violin goddess",
+        "Moonlit countess",
+        "Mystic huntress",
+        "Mystical composer",
+        "Nocturnal angel",
+        "Phantom princess",
+        "Royal dreamwalker",
+        "Runway enchantress",
+        "Sapphire fae queen",
+        "Shadow empress",
+        "Silver spellcaster",
+        "Surreal couture icon",
+        "Velvet night muse"
+      ],
+
+      race: [
+        "None",
+        "Afro-Caribbean",
+        "African American",
+        "Arab",
+        "Biracial",
+        "Black British",
+        "Brazilian",
+        "Caribbean",
+        "Central Asian",
+        "East African",
+        "East Asian",
+        "Ethiopian",
+        "Filipina",
+        "French African",
+        "Greek",
+        "Haitian",
+        "Indian",
+        "Indigenous American",
+        "Italian",
+        "Latina",
+        "Mediterranean",
+        "Middle Eastern",
+        "Mixed heritage",
+        "Native American",
+        "North African",
+        "Pakistani",
+        "Persian",
+        "South Asian",
+        "South Indian",
+        "West African"
+      ],
+
+      bodyType: [
+        "None",
+        "Athletic",
+        "Broad-shouldered",
+        "Curvy",
+        "Delicate",
+        "Elongated",
+        "Elegant hourglass",
+        "Full-figured",
+        "Graceful",
+        "Lean",
+        "Long-limbed",
+        "Lush",
+        "Petite",
+        "Powerful",
+        "Regal",
+        "Rounded",
+        "Sculpted",
+        "Slender",
+        "Soft curvy",
+        "Statuesque",
+        "Streamlined",
+        "Strong",
+        "Tall",
+        "Toned",
+        "Voluptuous",
+        "Waiflike",
+        "Willowy",
+        "Womanly",
+        "Youthful elegant",
+        "Z-shaped fashion pose"
+      ],
+
+      skinTone: [
+        "None",
+        "Alabaster",
+        "Amber",
+        "Bronze",
+        "Caramel",
+        "Chestnut",
+        "Cocoa",
+        "Copper",
+        "Cream",
+        "Deep bronze",
+        "Deep mahogany",
+        "Ebony",
+        "Espresso",
+        "Golden beige",
+        "Golden brown",
+        "Honey",
+        "Ivory",
+        "Light almond",
+        "Light beige",
+        "Maple",
+        "Mahogany",
+        "Mocha",
+        "Olive",
+        "Porcelain",
+        "Rich sienna",
+        "Rose beige",
+        "Soft brown",
+        "Tan",
+        "Toffee",
+        "Warm umber"
+      ],
+
+      expression: [
+        "None",
+        "Alluring",
+        "Calm",
+        "Coldly elegant",
+        "Confident",
+        "Dreamlike",
+        "Enchanting",
+        "Ethereal",
+        "Fierce",
+        "Graceful",
+        "Haunting",
+        "Hypnotic",
+        "Imperious",
+        "Intense",
+        "Lonely",
+        "Majestic",
+        "Melancholic",
+        "Mysterious",
+        "Poised",
+        "Powerful",
+        "Regal",
+        "Reserved",
+        "Seductive",
+        "Serene",
+        "Shadowed",
+        "Softly smiling",
+        "Stoic",
+        "Sultry",
+        "Timeless",
+        "Watchful"
+      ],
+
+      hairStyle: [
+        "None",
+        "Afro puff updo",
+        "Bantu knots",
+        "Blunt bob",
+        "Body wave curls",
+        "Braided crown",
+        "Classic chignon",
+        "Coiled afro",
+        "Curly ponytail",
+        "Finger waves",
+        "French twist",
+        "Glam waves",
+        "Halo braid",
+        "High bun",
+        "Hollywood curls",
+        "Knotless braids",
+        "Loc updo",
+        "Loose curls",
+        "Long straight silk press",
+        "Marcel waves",
+        "Messy romantic bun",
+        "Micro braids",
+        "Pixie cut",
+        "Pinned victory rolls",
+        "Sculpted updo",
+        "Short curls",
+        "Side-swept waves",
+        "Sleek low bun",
+        "Soft layered waves",
+        "Voluminous curls"
+      ],
+
+      hairColor: [
+        "None",
+        "Ash black",
+        "Blue-black",
+        "Bronze brown",
+        "Champagne blonde",
+        "Chestnut brown",
+        "Copper auburn",
+        "Deep black",
+        "Deep blue",
+        "Eggplant plum",
+        "Espresso brown",
+        "Golden brown",
+        "Honey blonde",
+        "Icy silver",
+        "Jet black",
+        "Lavender black",
+        "Mahogany",
+        "Midnight blue",
+        "Mocha brown",
+        "Moonlit silver",
+        "Onyx",
+        "Platinum blonde",
+        "Rich auburn",
+        "Rose brown",
+        "Sapphire blue",
+        "Silver gray",
+        "Soft black",
+        "Starry violet",
+        "Warm brunette",
+        "Wine red"
+      ],
+
+      eyeColor: [
+        "None",
+        "Amber",
+        "Amethyst",
+        "Aquamarine",
+        "Black",
+        "Blue",
+        "Bronze",
+        "Caramel",
+        "Crystal gray",
+        "Deep brown",
+        "Emerald",
+        "Golden hazel",
+        "Gray",
+        "Honey",
+        "Ice blue",
+        "Jade",
+        "Lavender",
+        "Light brown",
+        "Midnight blue",
+        "Moss green",
+        "Obsidian",
+        "Olive",
+        "Onyx",
+        "Sapphire",
+        "Silver",
+        "Smoky gray",
+        "Steel blue",
+        "Topaz",
+        "Violet",
+        "Warm hazel"
+      ],
+
+      makeupStyle: [
+        "None",
+        "Bare luminous skin",
+        "Blue gemstone glam",
+        "Classic red lip",
+        "Crystal-highlighted glam",
+        "Dark romantic glam",
+        "Dewy editorial skin",
+        "Glossy nude glam",
+        "Gothic smoky eyes",
+        "Graphic liner",
+        "High-fashion contour",
+        "Holographic highlight",
+        "Icy silver glam",
+        "Jewel-toned shimmer",
+        "Minimalist luxury makeup",
+        "Monochrome sapphire glam",
+        "Moonlit glow",
+        "Mystic celestial glam",
+        "Noir beauty look",
+        "Pearl-lit radiance",
+        "Rose gold glam",
+        "Sculpted couture makeup",
+        "Soft glam",
+        "Soft smoky eye",
+        "Star-dusted highlight",
+        "Subtle nude glam",
+        "Velvet matte lips",
+        "Wet-look editorial skin",
+        "Winged eyeliner glam",
+        "Witchy glamour"
+      ],
+
+      hatStyle: [
+        "None",
+        "Asymmetrical fascinator",
+        "Black cathedral veil",
+        "Crystal halo crown",
+        "Dramatic wide-brim couture hat",
+        "Edwardian feather hat",
+        "Embroidered hood",
+        "Gilded laurel crown",
+        "Gothic bridal veil",
+        "Jeweled circlet",
+        "Lace mourning hat",
+        "Lace-trim hood",
+        "Layered tulle halo",
+        "Leather crown band",
+        "Metallic sculptural headpiece",
+        "Mini top hat",
+        "Moon halo crown",
+        "Ornate fascinator",
+        "Pearl-encrusted headband",
+        "Raven feather crown",
+        "Rose crown",
+        "Sapphire tiara",
+        "Shadow hood",
+        "Silk turban",
+        "Sleek beret",
+        "Structured couture headwrap",
+        "Velvet bonnet",
+        "Velvet halo band",
+        "Victorian riding hat",
+        "Wide-brim eclipse hat"
+      ],
+
+      jewelry: [
+        "None",
+        "Art deco earrings",
+        "Beaded collar",
+        "Black diamond earrings",
+        "Celestial cuff bracelets",
+        "Chain harness jewelry",
+        "Chandelier earrings",
+        "Crystal drop earrings",
+        "Emerald ring set",
+        "Gem-encrusted cuffs",
+        "Gold filigree earrings",
+        "Gothic cameo necklace",
+        "Layered chains",
+        "Luminous sapphire earrings",
+        "Moonstone choker",
+        "Obsidian pendant",
+        "Onyx earrings",
+        "Pearl cascade earrings",
+        "Raven brooch",
+        "Rose quartz earrings",
+        "Sapphire chandelier earrings",
+        "Silver filigree cuffs",
+        "Silver lariat necklace",
+        "Stacked bangles",
+        "Starburst earrings",
+        "Statement crystal necklace",
+        "Victorian cameo earrings",
+        "Vintage jeweled brooch",
+        "Wrist armor cuffs",
+        "Zircon halo earrings"
+      ],
+
+      top: [
+        "None",
+        "Armor-inspired corset",
+        "Asymmetrical blouse",
+        "Beaded bodice",
+        "Brocade corset top",
+        "Chain-draped top",
+        "Cropped velvet jacket top",
+        "Crystal mesh top",
+        "Draped silk blouse",
+        "Embellished bustier",
+        "Embroidered lace blouse",
+        "Feathered shoulder top",
+        "Fitted turtleneck",
+        "Gold filigree bodice",
+        "High-neck gothic blouse",
+        "Holographic corset",
+        "Illusion neckline bodice",
+        "Jeweled harness top",
+        "Metallic sculpted bodice",
+        "Off-shoulder satin blouse",
+        "One-shoulder draped top",
+        "Organza sleeve blouse",
+        "Pearl-embellished top",
+        "Ruffled high-collar blouse",
+        "Satin corset top",
+        "Sequin long-sleeve top",
+        "Structured peplum top",
+        "Velvet bodice",
+        "Victorian lace blouse",
+        "Wrapped silk top"
+      ],
+
+      bottom: [
+        "None",
+        "Asymmetrical layered skirt",
+        "Beaded mermaid skirt",
+        "Brocade fitted skirt",
+        "Crystal fringe skirt",
+        "Draped satin skirt",
+        "Embellished trousers",
+        "Feather-trimmed skirt",
+        "Flowing chiffon skirt",
+        "Gold-thread palazzo pants",
+        "High-waisted satin pants",
+        "Lace mermaid skirt",
+        "Leather fitted pants",
+        "Liquid metallic pants",
+        "Long velvet skirt",
+        "Mesh overlay skirt",
+        "Organza layered skirt",
+        "Pleated silk skirt",
+        "Ruffled dramatic skirt",
+        "Satin column skirt",
+        "Sequined wide-leg pants",
+        "Sheer overlay skirt",
+        "Slim tailored trousers",
+        "Structured mini skirt",
+        "Tapered velvet pants",
+        "Tiered tulle skirt",
+        "Velvet trumpet skirt",
+        "Victorian bustle skirt",
+        "Wide-leg brocade pants",
+        "Wrapped draped skirt"
+      ],
+
+      dress: [
+        "None",
+        "Avant-garde sphere gown",
+        "Balloon-sculpted couture dress",
+        "Beaded column gown",
+        "Black velvet cathedral gown",
+        "Cape-sleeve evening gown",
+        "Chain-draped gothic gown",
+        "Corseted mermaid gown",
+        "Crystal illusion gown",
+        "Draped satin goddess gown",
+        "Embroidered lace gown",
+        "Feathered wing gown",
+        "Filigree ribbon gown",
+        "Floral appliqué gown",
+        "Gold-thread couture gown",
+        "High-slit editorial gown",
+        "Holographic fantasy gown",
+        "Layered organza gown",
+        "Liquid metallic gown",
+        "Luminous sapphire gown",
+        "Moonlit velvet gown",
+        "Off-shoulder couture gown",
+        "One-sleeve sculptural gown",
+        "Pearl-encrusted gown",
+        "Ruffled dramatic ball gown",
+        "Sequin noir gown",
+        "Structured armor gown",
+        "Tulle cathedral gown",
+        "Victorian mourning gown",
+        "Winged feather gown"
+      ],
+
+      outerwear: [
+        "None",
+        "Beaded cape",
+        "Brocade tailcoat",
+        "Crystal shoulder cape",
+        "Draped velvet shawl",
+        "Embroidered opera coat",
+        "Feather cape",
+        "Floor-length velvet cloak",
+        "Fur-trimmed mantle",
+        "Gold filigree cape",
+        "Gothic riding coat",
+        "High-collar cape",
+        "Hooded moon cloak",
+        "Jeweled bolero",
+        "Lace opera cape",
+        "Leather corset jacket",
+        "Long brocade coat",
+        "Metallic shoulder armor wrap",
+        "Midnight satin cape",
+        "Organza duster",
+        "Pearl-trimmed capelet",
+        "Raven-feather mantle",
+        "Sapphire feather shawl",
+        "Sheer embroidered cape",
+        "Silk robe coat",
+        "Structured cape jacket",
+        "Tailored tuxedo coat",
+        "Velvet opera coat",
+        "Victorian frock coat",
+        "Winged shoulder cape"
+      ],
+
+      shoe: [
+        "None",
+        "Ankle-strap heels",
+        "Architectural platform heels",
+        "Beaded stiletto boots",
+        "Block-heel boots",
+        "Bow-detail pumps",
+        "Crystal ankle boots",
+        "Crystal stilettos",
+        "Embroidered boots",
+        "Feather heels",
+        "Gold-caged heels",
+        "Heeled lace-up boots",
+        "High-heeled sandals",
+        "Jeweled mules",
+        "Knee-high velvet boots",
+        "Lace boots",
+        "Metallic pointed pumps",
+        "Moonlit satin heels",
+        "Ornate opera boots",
+        "Pearl heels",
+        "Pointed ankle boots",
+        "Sapphire stilettos",
+        "Sculptural couture heels",
+        "Silver heeled boots",
+        "Sky-high platform boots",
+        "Strappy crystal sandals",
+        "Suede thigh-high boots",
+        "Velvet pumps",
+        "Victorian lace-up boots",
+        "Witchy pointed boots"
+      ],
+
+      material: [
+        "None",
+        "Beaded crystal glass",
+        "Black lacquer",
+        "Blue chrome metal",
+        "Brushed silver",
+        "Burnished gold",
+        "Carved obsidian",
+        "Crystal mesh",
+        "Dark velvet",
+        "Embroidered satin",
+        "Filigree gold metal",
+        "Floating glass",
+        "Glossy latex shine",
+        "Glossy metallic spheres",
+        "Holographic foil",
+        "Iridescent organza",
+        "Lacquered enamel",
+        "Liquid metal",
+        "Mirror chrome",
+        "Moonlit satin",
+        "Obsidian sheen",
+        "Pearl lacquer",
+        "Polished onyx",
+        "Reflective vinyl",
+        "Sapphire crystal",
+        "Shimmering feathers",
+        "Silk jacquard",
+        "Silver filigree",
+        "Star-dusted tulle",
+        "Translucent crystal"
+      ],
+
+      instrument: [
+        "None",
+        "Ancient harp",
+        "Baroque violin",
+        "Black grand piano",
+        "Carved cello",
+        "Celestial flute",
+        "Clockwork violin",
+        "Crystal cello",
+        "Crystal violin",
+        "Double bass",
+        "Ebony harp",
+        "Electric violin",
+        "Enchanted lyre",
+        "Glass harp",
+        "Ghostly organ",
+        "Golden violin",
+        "Jeweled mandolin",
+        "Luminous harp",
+        "Midnight violin",
+        "Moonlit cello",
+        "Mystic viola",
+        "Obsidian violin",
+        "Ornate violin",
+        "Pearl violin",
+        "Phantom harp",
+        "Rose-carved violin",
+        "Sapphire violin",
+        "Shadow violin",
+        "Silver flute",
+        "Silver violin"
+      ],
+
+      object1: [
+        "None",
+        "Antique pocket watch",
+        "Blue fire lantern",
+        "Butterfly swarm",
+        "Castle silhouette",
+        "Celestial orb",
+        "Crescent mirror",
+        "Crystal roses",
+        "Enchanted book",
+        "Feather fan",
+        "Floating candles",
+        "Floating crown",
+        "Glass mask",
+        "Glowing butterflies",
+        "Glowing roses",
+        "Gothic key",
+        "Jeweled scepter",
+        "Lace parasol",
+        "Magic wand",
+        "Moon pendant",
+        "Ornate candelabra",
+        "Pearl rosary",
+        "Raven companion",
+        "Rose bouquet",
+        "Sapphire orb",
+        "Silver goblet",
+        "Silver mirror",
+        "Smoke veil",
+        "Star lantern",
+        "Velvet fan"
+      ],
+
+      object2: [
+        "None",
+        "Arcane scroll",
+        "Blue crystal shards",
+        "Cascading feathers",
+        "Celestial halo",
+        "Cosmic ribbon trails",
+        "Crystal hourglass",
+        "Drifting petals",
+        "Eclipse halo",
+        "Enchanted mist ribbons",
+        "Floating gemstones",
+        "Fog-lit lanterns",
+        "Glass butterflies",
+        "Glowing runes",
+        "Gold filigree vines",
+        "Ice-like smoke swirls",
+        "Luminous staircase",
+        "Magic sigil ring",
+        "Moonlit veil train",
+        "Mystic smoke",
+        "Nocturnal moths",
+        "Ornate frame portal",
+        "Phantom roses",
+        "Rose petals",
+        "Sapphire feathers",
+        "Silver branches",
+        "Spell circle",
+        "Starfield ribbon",
+        "Translucent veil",
+        "Twisted silver vines"
+      ],
+
+      flowerType: [
+        "None",
+        "Anemones",
+        "Black dahlias",
+        "Black orchids",
+        "Blue irises",
+        "Blue lotus",
+        "Blue peonies",
+        "Blue roses",
+        "Camellias",
+        "Crystal lilies",
+        "Dark tulips",
+        "Enchanted violets",
+        "Foxglove",
+        "Gardenias",
+        "Glowing lilies",
+        "Hellebores",
+        "Hydrangeas",
+        "Jasmine",
+        "Lotus blossoms",
+        "Magnolias",
+        "Moon roses",
+        "Night-blooming jasmine",
+        "Orchids",
+        "Peonies",
+        "Ranunculus",
+        "Roses",
+        "Sapphire lilies",
+        "Silver-blue blooms",
+        "Star flowers",
+        "White lilies"
+      ],
+
+      particleEffect: [
+        "None",
+        "Aurora dust",
+        "Blue embers",
+        "Blue fire sparks",
+        "Celestial glitter",
+        "Cosmic dust",
+        "Crystal dust",
+        "Diamond sparkles",
+        "Dream particles",
+        "Electric shimmer",
+        "Enchanted light flecks",
+        "Fairy dust",
+        "Floating blue lights",
+        "Frost sparkles",
+        "Galaxy shimmer",
+        "Glittering silver dust",
+        "Glowing dust",
+        "Golden dust motes",
+        "Holographic shimmer",
+        "Ice particles",
+        "Luminous motes",
+        "Magical sparkles",
+        "Moon dust",
+        "Mystic glow particles",
+        "Nebula particles",
+        "Prismatic glitter",
+        "Sapphire stardust",
+        "Silver embers",
+        "Soft glowing specks",
+        "Starlight particles"
+      ],
+
+      musicEffect: [
+        "None",
+        "Arc-shaped note trails",
+        "Blue glowing music notes",
+        "Celestial melody swirls",
+        "Clockwork note symbols",
+        "Cosmic song ribbons",
+        "Crystal sound ripples",
+        "Drifting silver notes",
+        "Echo waves",
+        "Electric note symbols",
+        "Ethereal note streams",
+        "Floating composition lines",
+        "Ghostly note patterns",
+        "Glowing staff lines",
+        "Golden note sparks",
+        "Halo sound rings",
+        "Illuminated music staves",
+        "Luminous clef trails",
+        "Magic symphony swirls",
+        "Melodic mist ribbons",
+        "Moonlit note clusters",
+        "Mystic note particles",
+        "Ornate note trails",
+        "Phantom melody shapes",
+        "Radiant music waves",
+        "Ribbon-like song trails",
+        "Silver glowing notes",
+        "Soft sound circles",
+        "Spiraling note currents",
+        "Violin-song aura"
+      ],
+
+      location: [
+        "None",
+        "Ancient cathedral ruins",
+        "Blue-lit castle garden",
+        "Celestial observatory",
+        "Cliffside moon garden",
+        "Cursed royal courtyard",
+        "Dark enchanted forest",
+        "Dreamlike woodland path",
+        "Foggy gothic cemetery",
+        "Frozen moon valley",
+        "Gilded palace balcony",
+        "Haunted woodland clearing",
+        "Lakeside moon shrine",
+        "Moonlit castle grounds",
+        "Moonlit enchanted forest",
+        "Mystic rose garden",
+        "Nocturnal flower field",
+        "Obsidian throne room",
+        "Old-world stone bridge",
+        "Phantom ballroom ruins",
+        "Ruined abbey garden",
+        "Sapphire forest glade",
+        "Shadowy lakeshore",
+        "Silver birch grove",
+        "Starlit mountain pass",
+        "Twilight hedge maze",
+        "Victorian manor grounds",
+        "Whispering forest clearing",
+        "Winter moon courtyard",
+        "Witching woods"
+      ],
+
+      background: [
+        "None",
+        "Ancient stone arches",
+        "Blue fog layers",
+        "Castle in the distance",
+        "Celestial sky glow",
+        "Crystal mist forest",
+        "Dark tree silhouettes",
+        "Drifting silver fog",
+        "Enchanted florals",
+        "Floating candlelight",
+        "Floating feathers",
+        "Glimmering blue bokeh",
+        "Glowing flower bed",
+        "Gothic stone path",
+        "Heavy moon mist",
+        "Hidden castle towers",
+        "Luminous blue haze",
+        "Magic forest floor",
+        "Midnight cloudscape",
+        "Moonlit branches",
+        "Mystic particle field",
+        "Nebula-like sky",
+        "Ornate ruins",
+        "Shadowy woodland depth",
+        "Silver fog bank",
+        "Star-filled night sky",
+        "Twisted dark branches",
+        "Velvet night gradient",
+        "Whispering fog",
+        "Winding woodland trail"
+      ],
+
+      moonStyle: [
+        "None",
+        "Blue moon halo",
+        "Bright celestial moon",
+        "Cold silver moon",
+        "Crescent eclipse moon",
+        "Crystal moon glow",
+        "Dream haze moon",
+        "Eclipse moon",
+        "Enlarged fantasy moon",
+        "Fog-wrapped moon",
+        "Full moon",
+        "Golden eclipse moon",
+        "Haloed moon",
+        "Ice-blue moon",
+        "Luminous pearl moon",
+        "Mist-diffused moon",
+        "Moon behind clouds",
+        "Moon with star halo",
+        "Oversized fairytale moon",
+        "Pale winter moon",
+        "Radiant sapphire moon",
+        "Ringed moon",
+        "Shadowed full moon",
+        "Silvery harvest moon",
+        "Soft blue moon",
+        "Soft glowing full moon",
+        "Starlit moon disc",
+        "Translucent moon",
+        "Veiled moon",
+        "White moon glow"
+      ],
+
+      castleStyle: [
+        "None",
+        "Ancient abbey silhouette",
+        "Baroque palace towers",
+        "Black stone fortress",
+        "Castle spires in fog",
+        "Cathedral silhouette",
+        "Cliffside gothic castle",
+        "Dark fairytale castle",
+        "Fog-lost citadel",
+        "Ghostly manor silhouette",
+        "Gilded gothic palace",
+        "Glass tower castle",
+        "Haunted castle spires",
+        "Ivy-covered manor",
+        "Moonlit cathedral towers",
+        "Ornate gothic abbey",
+        "Phantom castle",
+        "Pointed black towers",
+        "Ruined castle silhouette",
+        "Sapphire-lit citadel",
+        "Shadowy fortress",
+        "Silver tower palace",
+        "Spired cathedral ruins",
+        "Stained-glass castle",
+        "Stone gothic castle",
+        "Storybook palace silhouette",
+        "Twilight manor silhouette",
+        "Victorian gothic mansion",
+        "Witching hour castle",
+        "Wrought-iron tower estate"
+      ],
+
+      atmosphere: [
+        "None",
+        "Arcane",
+        "Brooding",
+        "Celestial",
+        "Cold and luminous",
+        "Cosmic",
+        "Dark fairytale",
+        "Dreamlike",
+        "Elegant and ominous",
+        "Enchanted",
+        "Ethereal",
+        "Fog-drenched",
+        "Ghostly",
+        "Glamorous gothic",
+        "Hauntingly beautiful",
+        "Hypnotic",
+        "Intense",
+        "Luxurious",
+        "Magical",
+        "Melancholic",
+        "Midnight surreal",
+        "Mysterious",
+        "Nocturnal",
+        "Otherworldly",
+        "Regal",
+        "Romantic gothic",
+        "Shadowy",
+        "Spellbound",
+        "Theatrical",
+        "Whimsically dark"
+      ],
+
+      colorPalette: [
+        "None",
+        "Amethyst and silver",
+        "Black and sapphire",
+        "Blue and obsidian",
+        "Blue silver and gold",
+        "Bronze and midnight blue",
+        "Celestial blue and pearl",
+        "Cobalt and black",
+        "Cosmic navy and silver",
+        "Dark sapphire and chrome",
+        "Electric blue and gold",
+        "Frost blue and silver",
+        "Gold and midnight",
+        "Gunmetal and sapphire",
+        "Ice blue and obsidian",
+        "Indigo and moon silver",
+        "Jewel blue and black",
+        "Midnight blue and gold",
+        "Moonlit silver and blue",
+        "Navy and crystal white",
+        "Noir blue and silver",
+        "Obsidian and gold",
+        "Pearl blue and chrome",
+        "Royal blue and gold",
+        "Sapphire and silver",
+        "Silver black and blue",
+        "Smoky blue and pewter",
+        "Steel blue and silver",
+        "Twilight blue and black",
+        "Violet-blue and silver"
+      ],
+
+      pose: [
+        "None",
+        "Back turned over shoulder",
+        "Bowing the violin softly",
+        "Catwalk stride",
+        "Centered regal stance",
+        "Dramatic contrapposto",
+        "Elegant side profile",
+        "Floating pose",
+        "Full-body standing pose",
+        "Graceful violin performance",
+        "Hands clasped at waist",
+        "Holding instrument at side",
+        "Looking toward the moon",
+        "Lyrical movement pose",
+        "One foot forward stance",
+        "Poised like a queen",
+        "Profile with trailing gown",
+        "Reaching toward light",
+        "Regal upright posture",
+        "Resting one hand on violin",
+        "Shoulders turned in silhouette",
+        "Soft step through mist",
+        "Standing in moonbeam",
+        "Still editorial pose",
+        "Theatrical gown reveal",
+        "Three-quarter pose",
+        "Turning into feathers",
+        "Violin held behind back",
+        "Walking through fog",
+        "Wind-swept stance"
+      ],
+
+      cameraAngle: [
+        "None",
+        "Back view portrait",
+        "Centered full-body shot",
+        "Cinematic mid-long shot",
+        "Dramatic low angle",
+        "Elegant profile view",
+        "Eye-level fashion shot",
+        "Far editorial full shot",
+        "Full-body portrait shot",
+        "Heroic low-angle portrait",
+        "Long shot with scenery",
+        "Medium full-body shot",
+        "Moonlit silhouette angle",
+        "Over-the-shoulder portrait",
+        "Portrait from behind",
+        "Regal centered framing",
+        "Side profile full-body view",
+        "Slight high angle",
+        "Slight low angle",
+        "Soft telephoto feel",
+        "Symmetrical runway framing",
+        "Three-quarter angle",
+        "Top-lit profile angle",
+        "Vertical editorial framing",
+        "Wide cinematic portrait",
+        "Wide fashion composition",
+        "Wide full-body shot",
+        "Worm's-eye fantasy angle",
+        "Zoomed-out atmospheric shot",
+        "Zoomed-in full portrait"
+      ],
+
+      lighting: [
+        "None",
+        "Backlit moon glow",
+        "Blue bioluminescent lighting",
+        "Blue rim light",
+        "Candlelit shimmer",
+        "Celestial halo lighting",
+        "Cold moonlight",
+        "Contrasty spotlight",
+        "Couture runway lighting",
+        "Crystal glow lighting",
+        "Dark cinematic lighting",
+        "Diffused nocturnal glow",
+        "Dream haze illumination",
+        "Dramatic blue lighting",
+        "Dramatic chiaroscuro",
+        "Ethereal particle glow",
+        "Fog-filtered moonlight",
+        "Gilded edge lighting",
+        "Glowing mist light",
+        "High contrast shadows",
+        "Icy silver light",
+        "Luminous full moon lighting",
+        "Moody gothic lighting",
+        "Mystic blue radiance",
+        "Shadow-sculpted lighting",
+        "Silver-edged moonlight",
+        "Soft editorial glow",
+        "Soft spotlight through fog",
+        "Star-lit ambience",
+        "Theatrical fantasy lighting"
+      ],
+
+      artStyle: [
+        "None",
+        "8K luxury fantasy illustration",
+        "Avant-garde couture fantasy",
+        "Baroque surrealism",
+        "Cinematic editorial fantasy art",
+        "Concept art realism",
+        "Dark fantasy couture",
+        "Dark glamour illustration",
+        "Dreamlike surreal realism",
+        "Ethereal fashion painting",
+        "Fine art fantasy realism",
+        "Gilded gothic illustration",
+        "Glam editorial surrealism",
+        "Glossy fantasy fashion art",
+        "Gothic fairytale realism",
+        "High-fashion fantasy portraiture",
+        "Hyper-detailed fantasy realism",
+        "Illustrative couture realism",
+        "Luxury dark editorial art",
+        "Magical realism couture",
+        "Midnight surreal illustration",
+        "Mystical editorial fashion art",
+        "Noir fantasy portraiture",
+        "Ornate couture concept art",
+        "Painterly dark fantasy",
+        "Photoreal fantasy illustration",
+        "Runway-meets-fairytale art",
+        "Surreal editorial fashion art",
+        "Ultra-detailed gothic fantasy",
+        "Velvet noir fantasy art"
+      ],
+
+      detailLevel: [
+        "None",
+        "Award-winning render quality",
+        "Crisp ultra-fine detailing",
+        "Detailed cinematic finish",
+        "Editorial-grade polish",
+        "Extremely high detail",
+        "Fine-art luxury finish",
+        "Hyper-detailed textures",
+        "Illustration-quality refinement",
+        "Intricate couture detail",
+        "Intricate filigree rendering",
+        "Intricate object realism",
+        "Lush environmental detail",
+        "Maximum atmospheric richness",
+        "Maximum surface realism",
+        "Museum-quality finish",
+        "Opulent visual depth",
+        "Photoreal detail treatment",
+        "Polished high-end finish",
+        "Premium fantasy detailing",
+        "Rich ornamental detail",
+        "Sharp luxury rendering",
+        "Silky texture realism",
+        "Super crisp edges",
+        "Ultra clean rendering",
+        "Ultra-detailed finish",
+        "Ultra-luxury visual treatment",
+        "Vivid cinematic clarity",
+        "Volumetric atmosphere detail",
+        "Wonderfully ornate detail"
+      ],
+
+      motion: [
+        "None",
+        "Camera slowly circles subject",
+        "Cinematic slow push-in",
+        "Cloth ripples in moon breeze",
+        "Crystal particles drift upward",
+        "Elegant turn toward moonlight",
+        "Feathers flutter softly",
+        "Fog rolls across the ground",
+        "Gown train glides through mist",
+        "Hair moves in a gentle breeze",
+        "Light sparkles pulse softly",
+        "Magic particles swirl around violin",
+        "Moonlight flickers through trees",
+        "Musical notes spiral outward",
+        "Ribbons curl through the air",
+        "Slow dramatic reveal",
+        "Slow elegant walk forward",
+        "Slow floating motion",
+        "Slow head turn in silhouette",
+        "Soft violin bow movement",
+        "Sparkles trail behind the gown",
+        "Subtle zoom through particles",
+        "Subject stands still as atmosphere moves",
+        "The camera rises from flowers to face",
+        "The gown blooms outward",
+        "The mist parts around her",
+        "The violin glows brighter over time",
+        "Trees sway gently in background",
+        "Wing-like feathers fan outward",
+        "Zoom out to reveal castle"
+      ]
+    };
+
+    const ids = Object.keys(dropdownData);
+
+    function sortKeepNoneFirst(arr){
+      const rest = arr.slice(1).sort((a,b)=>a.localeCompare(b));
+      return ["None", ...rest];
+    }
+
+    function populateSelect(id, options){
+      const select = document.getElementById(id);
+      select.innerHTML = "";
+      sortKeepNoneFirst(options).forEach(value => {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = value;
+        select.appendChild(opt);
+      });
+    }
+
+    function populateAge(){
+      const select = document.getElementById("age");
+      select.innerHTML = "";
+      for(let i=21;i<=99;i++){
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = String(i);
+        select.appendChild(opt);
+      }
+      select.value = "32";
+    }
+
+    function getVal(id){
+      return document.getElementById(id).value.trim();
+    }
+
+    function sentence(parts, end = "."){
+      const txt = parts.filter(Boolean).join(", ");
+      return txt ? txt + end : "";
+    }
+
+    function buildPhotoPrompt(){
+      const subjectType = getVal("subjectType");
+      const age = getVal("age");
+      const race = getVal("race");
+      const bodyType = getVal("bodyType");
+      const skinTone = getVal("skinTone");
+      const expression = getVal("expression");
+      const hairStyle = getVal("hairStyle");
+      const hairColor = getVal("hairColor");
+      const eyeColor = getVal("eyeColor");
+      const makeupStyle = getVal("makeupStyle");
+      const hatStyle = getVal("hatStyle");
+      const jewelry = getVal("jewelry");
+
+      const top = getVal("top");
+      const bottom = getVal("bottom");
+      const dress = getVal("dress");
+      const outerwear = getVal("outerwear");
+      const shoe = getVal("shoe");
+      const material = getVal("material");
+
+      const instrument = getVal("instrument");
+      const object1 = getVal("object1");
+      const object2 = getVal("object2");
+      const flowerType = getVal("flowerType");
+      const particleEffect = getVal("particleEffect");
+      const musicEffect = getVal("musicEffect");
+
+      const location = getVal("location");
+      const background = getVal("background");
+      const moonStyle = getVal("moonStyle");
+      const castleStyle = getVal("castleStyle");
+      const atmosphere = getVal("atmosphere");
+      const colorPalette = getVal("colorPalette");
+
+      const pose = getVal("pose");
+      const cameraAngle = getVal("cameraAngle");
+      const lighting = getVal("lighting");
+      const artStyle = getVal("artStyle");
+      const detailLevel = getVal("detailLevel");
+      const motion = getVal("motion");
+
+      const custom = document.getElementById("customPrompt").value.trim();
+
+      const wardrobeParts = [top !== "None" ? top : "", bottom !== "None" ? bottom : "", dress !== "None" ? dress : "", outerwear !== "None" ? outerwear : "", shoe !== "None" ? shoe : ""].filter(Boolean);
+
+      const intro = `Ultra-luxurious portrait orientation surreal art of ${subjectType !== "None" ? "a " + subjectType.toLowerCase() : "an elegant mysterious woman"}, age ${age}, ${race !== "None" ? race.toLowerCase() + " " : ""}beauty, ${bodyType !== "None" ? bodyType.toLowerCase() + " physique, " : ""}${skinTone !== "None" ? skinTone.toLowerCase() + " skin, " : ""}${expression !== "None" ? expression.toLowerCase() + " expression" : "mysterious expression"}.`;
+
+      const beauty = sentence([
+        hairStyle !== "None" ? `hair styled in ${hairStyle.toLowerCase()}` : "",
+        hairColor !== "None" ? `hair color ${hairColor.toLowerCase()}` : "",
+        eyeColor !== "None" ? `eye color ${eyeColor.toLowerCase()}` : "",
+        makeupStyle !== "None" ? `${makeupStyle.toLowerCase()}` : "",
+        hatStyle !== "None" ? `wearing ${hatStyle.toLowerCase()}` : "",
+        jewelry !== "None" ? `adorned with ${jewelry.toLowerCase()}` : ""
+      ]);
+
+      const fashion = sentence([
+        wardrobeParts.length ? `styled in ${wardrobeParts.join(", ").toLowerCase()}` : "",
+        material !== "None" ? `made with ${material.toLowerCase()} textures` : ""
+      ]);
+
+      const props = sentence([
+        instrument !== "None" ? `holding an ornate ${instrument.toLowerCase()}` : "",
+        object1 !== "None" ? `featuring ${object1.toLowerCase()}` : "",
+        object2 !== "None" ? `enhanced with ${object2.toLowerCase()}` : "",
+        musicEffect !== "None" ? `${musicEffect.toLowerCase()} drifting through the air` : ""
+      ]);
+
+      const setting = sentence([
+        location !== "None" ? `set in ${location.toLowerCase()}` : "",
+        background !== "None" ? `background includes ${background.toLowerCase()}` : "",
+        moonStyle !== "None" ? `with ${moonStyle.toLowerCase()}` : "",
+        castleStyle !== "None" ? `with ${castleStyle.toLowerCase()} in the distance` : "",
+        flowerType !== "None" ? `glowing ${flowerType.toLowerCase()} blooming at the base` : "",
+        particleEffect !== "None" ? `${particleEffect.toLowerCase()} throughout the scene` : "",
+        atmosphere !== "None" ? `${atmosphere.toLowerCase()} atmosphere` : "",
+        colorPalette !== "None" ? `${colorPalette.toLowerCase()} palette` : ""
+      ]);
+
+      const render = sentence([
+        pose !== "None" ? pose.toLowerCase() : "",
+        cameraAngle !== "None" ? cameraAngle.toLowerCase() : "",
+        lighting !== "None" ? lighting.toLowerCase() : "",
+        artStyle !== "None" ? artStyle.toLowerCase() : "",
+        detailLevel !== "None" ? detailLevel.toLowerCase() : "",
+        motion !== "None" ? `suggested motion: ${motion.toLowerCase()}` : "",
+        custom ? custom : ""
+      ]);
+
+      return [
+        intro,
+        beauty,
+        fashion,
+        props,
+        setting,
+        render
+      ].filter(Boolean).join(" ");
+    }
+
+    function buildVideoPrompt(){
+      const subjectType = getVal("subjectType");
+      const age = getVal("age");
+      const race = getVal("race");
+      const bodyType = getVal("bodyType");
+      const skinTone = getVal("skinTone");
+      const expression = getVal("expression");
+      const hairStyle = getVal("hairStyle");
+      const hairColor = getVal("hairColor");
+      const eyeColor = getVal("eyeColor");
+      const makeupStyle = getVal("makeupStyle");
+      const hatStyle = getVal("hatStyle");
+      const jewelry = getVal("jewelry");
+
+      const top = getVal("top");
+      const bottom = getVal("bottom");
+      const dress = getVal("dress");
+      const outerwear = getVal("outerwear");
+      const shoe = getVal("shoe");
+      const material = getVal("material");
+
+      const instrument = getVal("instrument");
+      const object1 = getVal("object1");
+      const object2 = getVal("object2");
+      const flowerType = getVal("flowerType");
+      const particleEffect = getVal("particleEffect");
+      const musicEffect = getVal("musicEffect");
+
+      const location = getVal("location");
+      const background = getVal("background");
+      const moonStyle = getVal("moonStyle");
+      const castleStyle = getVal("castleStyle");
+      const atmosphere = getVal("atmosphere");
+      const colorPalette = getVal("colorPalette");
+
+      const pose = getVal("pose");
+      const cameraAngle = getVal("cameraAngle");
+      const lighting = getVal("lighting");
+      const artStyle = getVal("artStyle");
+      const detailLevel = getVal("detailLevel");
+      const motion = getVal("motion");
+
+      const custom = document.getElementById("customPrompt").value.trim();
+
+      const wardrobe = [top, bottom, dress, outerwear, shoe].filter(v => v !== "None").join(", ").toLowerCase();
+
+      return `Create a portrait-oriented cinematic surreal fantasy video. The main subject is ${subjectType !== "None" ? "a " + subjectType.toLowerCase() : "an elegant mysterious woman"}, age ${age}${race !== "None" ? ", " + race.toLowerCase() : ""}${bodyType !== "None" ? ", " + bodyType.toLowerCase() + " physique" : ""}${skinTone !== "None" ? ", " + skinTone.toLowerCase() + " skin" : ""}${expression !== "None" ? ", " + expression.toLowerCase() + " expression" : ""}. 
+Beauty styling includes ${[
+        hairStyle !== "None" ? hairStyle.toLowerCase() : "",
+        hairColor !== "None" ? hairColor.toLowerCase() : "",
+        eyeColor !== "None" ? eyeColor.toLowerCase() + " eyes" : "",
+        makeupStyle !== "None" ? makeupStyle.toLowerCase() : "",
+        hatStyle !== "None" ? hatStyle.toLowerCase() : "",
+        jewelry !== "None" ? jewelry.toLowerCase() : ""
+      ].filter(Boolean).join(", ")}. 
+Wardrobe includes ${wardrobe || "luxury gothic fantasy couture"}${material !== "None" ? ", featuring " + material.toLowerCase() + " textures" : ""}. 
+The scene takes place in ${location !== "None" ? location.toLowerCase() : "a moonlit enchanted forest"}, with ${background !== "None" ? background.toLowerCase() : "mystical nighttime depth"}, ${moonStyle !== "None" ? moonStyle.toLowerCase() : "a glowing full moon"}, and ${castleStyle !== "None" ? castleStyle.toLowerCase() : "a distant gothic castle"}. The mood is ${atmosphere !== "None" ? atmosphere.toLowerCase() : "mysterious and luxurious"}, with a ${colorPalette !== "None" ? colorPalette.toLowerCase() : "deep blue and silver"} palette.
+The subject ${pose !== "None" ? pose.toLowerCase() : "stands in a regal full-body portrait pose"}${instrument !== "None" ? ", holding an ornate " + instrument.toLowerCase() : ""}${object1 !== "None" ? ", accompanied by " + object1.toLowerCase() : ""}${object2 !== "None" ? ", enhanced by " + object2.toLowerCase() : ""}. ${flowerType !== "None" ? "At the base of the scene, glowing " + flowerType.toLowerCase() + " bloom through the mist. " : ""}${particleEffect !== "None" ? particleEffect + " drift through the air. " : ""}${musicEffect !== "None" ? musicEffect + " swirl around the subject. " : ""} 
+Camera direction: ${cameraAngle !== "None" ? cameraAngle.toLowerCase() : "vertical editorial full-body framing"}, ${lighting !== "None" ? lighting.toLowerCase() : "cinematic moonlit lighting"}, ${motion !== "None" ? motion.toLowerCase() : "slow cinematic push-in with atmospheric movement"}. 
+Style direction: ${artStyle !== "None" ? artStyle.toLowerCase() : "surreal editorial fashion art"}, ${detailLevel !== "None" ? detailLevel.toLowerCase() : "ultra-detailed high-end finish"}, dark fantasy couture, glowing particles, dramatic shadows, mystical atmosphere, polished luxury rendering, smooth elegant motion, premium fantasy illustration quality${custom ? ", " + custom : ""}.`;
+    }
+
+    function updatePhoto(){
+      document.getElementById("photoOutput").value = buildPhotoPrompt();
+    }
+
+    function updateVideo(){
+      document.getElementById("videoOutput").value = buildVideoPrompt();
+    }
+
+    function updateBoth(){
+      updatePhoto();
+      updateVideo();
+    }
+
+    function randomFrom(select){
+      const options = Array.from(select.options);
+      if(options.length <= 1) return;
+      const index = Math.floor(Math.random() * options.length);
+      select.selectedIndex = index;
+    }
+
+    function randomizeAll(){
+      ids.forEach(id => randomFrom(document.getElementById(id)));
+      const ageSelect = document.getElementById("age");
+      ageSelect.selectedIndex = Math.floor(Math.random() * ageSelect.options.length);
+      const customs = [
+        "portrait orientation, magical sapphire glow, couture drama, editorial luxury finish",
+        "high contrast moonlight, enchanted blue sparkle field, mysterious regal beauty",
+        "ornate dark fantasy styling, surreal elegance, luminous details, cinematic atmosphere",
+        "gothic couture energy, polished textures, dreamlike moon haze, premium render quality",
+        "cosmic shimmer, sapphire floral glow, dramatic silhouette, fairytale darkness"
+      ];
+      document.getElementById("customPrompt").value = customs[Math.floor(Math.random() * customs.length)];
+      updateBoth();
+    }
+
+    function copyText(id){
+      const el = document.getElementById(id);
+      el.select();
+      el.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(el.value);
+    }
+
+    function resetAll(){
+      ids.forEach(id => {
+        document.getElementById(id).selectedIndex = 0;
+      });
+      document.getElementById("age").value = "32";
+      document.getElementById("customPrompt").value = "portrait orientation, elegant silhouette, mysterious cosmic sparkle, enchanted fairytale mood";
+      updateBoth();
+    }
+
+    ids.forEach(id => populateSelect(id, dropdownData[id]));
+    populateAge();
+
+    document.getElementById("generatePhotoBtn").addEventListener("click", updatePhoto);
+    document.getElementById("generateVideoBtn").addEventListener("click", updateVideo);
+    document.getElementById("generateBothBtn").addEventListener("click", updateBoth);
+    document.getElementById("randomizeBtn").addEventListener("click", randomizeAll);
+    document.getElementById("copyPhotoBtn").addEventListener("click", () => copyText("photoOutput"));
+    document.getElementById("copyVideoBtn").addEventListener("click", () => copyText("videoOutput"));
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+    updateBoth();
+  </script>
+</body>
+</html>
