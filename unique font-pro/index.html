@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Standout Letter Style Generator PRO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#220c38;
+      --bg3:#0e3945;
+      --panel:rgba(12,18,34,.78);
+      --panel-border:rgba(255,255,255,.12);
+      --text:#f8fafc;
+      --muted:#b8c4d4;
+      --pink:#ff4fd8;
+      --blue:#61dafb;
+      --gold:#ffd166;
+      --violet:#8b5cf6;
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      min-height:100%;
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,79,216,.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(97,218,251,.16), transparent 28%),
+        radial-gradient(circle at 70% 80%, rgba(255,209,102,.12), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+    }
+
+    .title-font{font-family:'Orbitron',sans-serif}
+    .accent-font{font-family:'Anton',sans-serif; letter-spacing:.06em}
+
+    .glass{
+      background:var(--panel);
+      border:1px solid var(--panel-border);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .shine{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .shine::before{
+      content:"";
+      position:absolute;
+      top:-120%;
+      left:-25%;
+      width:35%;
+      height:300%;
+      transform:rotate(24deg);
+      background:linear-gradient(to right, transparent, rgba(255,255,255,.10), transparent);
+      pointer-events:none;
+    }
+
+    .label{
+      display:block;
+      margin-bottom:.45rem;
+      font-size:.78rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#deebf9;
+    }
+
+    .field,
+    select,
+    textarea,
+    input[type="text"]{
+      width:100%;
+      border-radius:1rem;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:.95rem 1rem;
+      outline:none;
+      transition:.2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .field:focus,
+    select:focus,
+    textarea:focus,
+    input[type="text"]:focus{
+      border-color:rgba(97,218,251,.55);
+      box-shadow:0 0 0 3px rgba(97,218,251,.16);
+    }
+
+    select option{
+      color:#111827;
+      background:#ffffff;
+    }
+
+    .btn{
+      border:none;
+      border-radius:1rem;
+      padding:.95rem 1rem;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+      width:100%;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--pink),var(--violet));
+      box-shadow:0 12px 28px rgba(255,79,216,.22);
+    }
+
+    .btn-secondary{
+      color:#fff;
+      background:linear-gradient(135deg,#06b6d4,#3b82f6);
+      box-shadow:0 12px 28px rgba(59,130,246,.22);
+    }
+
+    .btn-warm{
+      color:#111827;
+      background:linear-gradient(135deg,var(--gold),#ff9f1c);
+      box-shadow:0 12px 28px rgba(255,209,102,.22);
+    }
+
+    .btn-dark{
+      color:#fff;
+      background:linear-gradient(135deg,#334155,#475569);
+      box-shadow:0 12px 28px rgba(51,65,85,.22);
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.6rem 1rem;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      font-size:.88rem;
+      font-weight:700;
+      color:#edf4ff;
+      user-select:none;
+    }
+
+    .hero{
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+        radial-gradient(circle at top right, rgba(255,79,216,.15), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(97,218,251,.12), transparent 24%);
+    }
+
+    .section-title{
+      font-size:1rem;
+      font-weight:800;
+      letter-spacing:.04em;
+      color:#f8fbff;
+    }
+
+    .mini-note{
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .output-box{
+      min-height:220px;
+      resize:vertical;
+      line-height:1.7;
+    }
+
+    .small{
+      font-size:.8rem;
+      color:#aab7c7;
+    }
+
+    .divider{
+      height:1px;
+      background:linear-gradient(to right, transparent, rgba(255,255,255,.18), transparent);
+      margin:1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-7xl mx-auto px-4 py-8 md:px-6 md:py-10">
+    <div class="glass shine hero rounded-[2rem] p-6 md:p-8 mb-8">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div>
+          <div class="accent-font text-pink-300 text-sm uppercase mb-2">Typography Prompt Builder</div>
+          <h1 class="title-font text-3xl md:text-5xl font-black leading-tight">Standout Letter Style Generator PRO</h1>
+          <p class="mt-3 max-w-3xl text-slate-200/90">
+            Create unforgettable lettering prompts for logos, posters, merch, thumbnails, packaging, digital products, covers, and cinematic motion text.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="chip">None First</span>
+          <span class="chip">Alphabetized</span>
+          <span class="chip">30 Options Each</span>
+          <span class="chip">Image + Video</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-[1.25fr_.95fr] gap-8">
+      <div class="glass rounded-[2rem] p-5 md:p-6">
+        <div class="section-title mb-4">Generator Controls</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="md:col-span-2">
+            <label class="label" for="textSubject">Main Text / Word / Phrase</label>
+            <input id="textSubject" type="text" class="field" value="LUXE" placeholder="Enter the word or phrase to style">
+          </div>
+
+          <div>
+            <label class="label" for="fontStyle">Font Style</label>
+            <select id="fontStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="letterMood">Letter Mood</label>
+            <select id="letterMood" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="materialStyle">Material / Texture</label>
+            <select id="materialStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="surfaceDetail">Surface Detail</label>
+            <select id="surfaceDetail" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="colorPalette">Color Palette</label>
+            <select id="colorPalette" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="outlineStyle">Outline / Edge Style</label>
+            <select id="outlineStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="lightingStyle">Lighting Style</label>
+            <select id="lightingStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="effectStyle">Extra Effect</label>
+            <select id="effectStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="eraVibe">Era / Vibe</label>
+            <select id="eraVibe" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="backgroundStyle">Background Style</label>
+            <select id="backgroundStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="layoutStyle">Composition / Layout</label>
+            <select id="layoutStyle" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="useCase">Use Case</label>
+            <select id="useCase" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="cameraMotion">Camera Motion (Video)</label>
+            <select id="cameraMotion" class="field"></select>
+          </div>
+
+          <div>
+            <label class="label" for="animationStyle">Animation Style (Video)</label>
+            <select id="animationStyle" class="field"></select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="label" for="extraNotes">Extra Notes</label>
+            <textarea id="extraNotes" rows="4" class="field" placeholder="Add more creative direction">Make the lettering feel premium, eye-catching, polished, custom-designed, and unforgettable.</textarea>
+          </div>
+
+          <div class="md:col-span-2">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button id="generateBtn" class="btn btn-primary" type="button">Generate</button>
+              <button id="randomBtn" class="btn btn-secondary" type="button">Randomize</button>
+              <button id="resetBtn" class="btn btn-dark" type="button">Reset</button>
+              <button id="fillDemoBtn" class="btn btn-warm" type="button">Demo Setup</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="glass rounded-[2rem] p-5 md:p-6">
+          <div class="flex items-center justify-between gap-4 mb-3">
+            <div>
+              <div class="section-title">Image Prompt</div>
+              <p class="mini-note">For image generators, covers, posters, packaging, thumbnails, and static lettering artwork.</p>
+            </div>
+            <span class="chip">Static</span>
+          </div>
+          <textarea id="imageOutput" class="field output-box" spellcheck="false"></textarea>
+          <div class="mt-3">
+            <button id="copyImageBtn" class="btn btn-warm" type="button">Copy Image Prompt</button>
+          </div>
+        </div>
+
+        <div class="glass rounded-[2rem] p-5 md:p-6">
+          <div class="flex items-center justify-between gap-4 mb-3">
+            <div>
+              <div class="section-title">Video Prompt</div>
+              <p class="mini-note">For motion typography, animated title reveals, cinematic logo intros, and dynamic social content.</p>
+            </div>
+            <span class="chip">Motion</span>
+          </div>
+          <textarea id="videoOutput" class="field output-box" spellcheck="false"></textarea>
+          <div class="mt-3">
+            <button id="copyVideoBtn" class="btn btn-secondary" type="button">Copy Video Prompt</button>
+          </div>
+        </div>
+
+        <div class="glass rounded-[2rem] p-5 md:p-6">
+          <div class="section-title mb-2">Prompt Formula</div>
+          <p class="small">
+            Subject + font style + mood + material + surface detail + color palette + outline + lighting + effect + era + background + layout + use case + video motion settings.
+          </p>
+          <div class="divider"></div>
+          <p class="small">
+            All dropdowns are built with <strong>None first</strong> and the remaining options <strong>alphabetized</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dropdownData = {
+      animationStyle: [
+        "None",
+        "Breathing Glow Animation",
+        "Burst Reveal",
+        "Cracking Into Place",
+        "Dripping Formation",
+        "Electric Pulse",
+        "Explosive Pop-In",
+        "Fading Smoke Reveal",
+        "Fire Ignition",
+        "Floating Bob Motion",
+        "Frost Growth Animation",
+        "Glitch Flicker",
+        "Golden Shine Sweep",
+        "Holographic Shift",
+        "Ice Crystallizing Effect",
+        "Inflating Balloon Motion",
+        "Light Sweep Pass",
+        "Liquid Morphing",
+        "Looping Sparkle Animation",
+        "Magnetic Pull Together",
+        "Melting Drip Motion",
+        "Neon Flicker",
+        "Paint Splash Reveal",
+        "Particle Assembly",
+        "Ribbon Wrap Reveal",
+        "Rotating 3D Spin",
+        "Shattering Entrance",
+        "Smoke Swirl Build",
+        "Soft Pulse Animation",
+        "Stretch and Snap Motion",
+        "Type-On Letter Reveal"
+      ],
+      backgroundStyle: [
+        "None",
+        "Beach Sunset",
+        "Black Velvet Studio",
+        "Brick Graffiti Wall",
+        "Candy Clouds",
+        "Chrome Tunnel",
+        "City Rooftop Night",
+        "Crushed Velvet Drapes",
+        "Dark Smoke Backdrop",
+        "Diamond Stage",
+        "Dreamy Gradient Sky",
+        "Frozen Cave",
+        "Galaxy Sky",
+        "Glossy Checkerboard",
+        "Gold Foil Backdrop",
+        "Graffiti Alley",
+        "Icy Frozen Cave",
+        "Luxury Boutique Display",
+        "Marble Hall",
+        "Marble Pedestal Scene",
+        "Mirror Room",
+        "Neon City Night",
+        "Pastel Dream Room",
+        "Retro Arcade Room",
+        "Runway Stage",
+        "Silk Drape Set",
+        "Sparkling Stage",
+        "Tropical Glow",
+        "Urban Concrete Studio",
+        "Water Reflection Room",
+        "White Seamless Studio"
+      ],
+      cameraMotion: [
+        "None",
+        "Arc Around the Letters",
+        "Boom Down Reveal",
+        "Close Push-In",
+        "Crane Up Reveal",
+        "Dolly Forward",
+        "Dolly Out",
+        "Fast Punch-In",
+        "Floating Hover Motion",
+        "Glide Left",
+        "Glide Right",
+        "Handheld Energy",
+        "Hero Push Through",
+        "Low Angle Rise",
+        "Macro Detail Sweep",
+        "Orbital Rotation",
+        "Overhead Drop-In",
+        "Parallax Drift",
+        "Quick Tilt Up",
+        "Rotating Sweep",
+        "Slow Cinematic Push",
+        "Slow Zoom In",
+        "Smooth Tracking Shot",
+        "Spiral Move",
+        "Static Camera with Motion Text",
+        "Steady Center Hold",
+        "Tilt Down Reveal",
+        "Tilt Up Reveal",
+        "Top Down Float",
+        "Vertical Rise",
+        "Wide Establishing Sweep"
+      ],
+      colorPalette: [
+        "None",
+        "Black and Gold",
+        "Blue Flame",
+        "Candy Rainbow",
+        "Cherry Red and Silver",
+        "Copper and Charcoal",
+        "Cotton Candy Pastels",
+        "Crimson and Black",
+        "Electric Lime and Blue",
+        "Emerald and Gold",
+        "Fire Orange and Crimson",
+        "Frozen Blue and White",
+        "Fuchsia and Violet",
+        "Gold and Ivory",
+        "Hot Pink and Purple",
+        "Iridescent Rainbow",
+        "Lavender and Silver",
+        "Midnight Black and Neon",
+        "Mint and Peach",
+        "Neon Green and Black",
+        "Peach and Rose Gold",
+        "Purple and Teal",
+        "Red White and Blue",
+        "Rose Pink and Cream",
+        "Royal Purple and Gold",
+        "Silver and Ice Blue",
+        "Sunset Gradient",
+        "Teal and Magenta",
+        "Turquoise and Coral",
+        "White and Platinum",
+        "Yellow and Aqua"
+      ],
+      effectStyle: [
+        "None",
+        "Confetti Burst",
+        "Crystal Sparks",
+        "Electric Sparks",
+        "Falling Petals",
+        "Fire Embers",
+        "Floating Diamonds",
+        "Floating Hearts",
+        "Fog Burst",
+        "Glow Aura",
+        "Glowing Dust",
+        "Graffiti Splash",
+        "Ice Mist",
+        "Lens Flares",
+        "Light Leaks",
+        "Liquid Splashes",
+        "Magic Particles",
+        "Neon Trails",
+        "Paint Splashes",
+        "Pixel Glitch Trails",
+        "Rain Droplets",
+        "Ribbon Swirls",
+        "Shimmer Trails",
+        "Smoke Swirls",
+        "Snow Flurries",
+        "Spark Showers",
+        "Starbursts",
+        "Steam Haze",
+        "Storm Energy",
+        "Water Splashes",
+        "Wind Streaks"
+      ],
+      eraVibe: [
+        "None",
+        "70s Disco",
+        "80s Arcade",
+        "80s Glam Rock",
+        "90s Hip-Hop",
+        "90s R&B",
+        "90s Streetwear",
+        "Art Nouveau",
+        "Cyberpunk Future",
+        "Editorial Luxury",
+        "Fantasy Kingdom",
+        "Futuristic Minimalism",
+        "Gothic Romance",
+        "High Fashion Editorial",
+        "Hollywood Glam",
+        "Luxury Y2K",
+        "Maximalist Pop",
+        "Modern Luxe",
+        "Old Hollywood",
+        "Retro Comic Book",
+        "Retro Futurism",
+        "Streetwear Hype",
+        "Surreal Fantasy",
+        "Techwear Vibe",
+        "Tropical Pop",
+        "Urban Nightlife",
+        "Victorian Drama",
+        "Vintage Circus",
+        "Vintage Luxury",
+        "Y2K Pop Star",
+        "Zen Minimal"
+      ],
+      fontStyle: [
+        "None",
+        "3D Liquid Glass",
+        "Art Deco Glam",
+        "Balloon Letters",
+        "Barbed Wire Letters",
+        "Candy Drip",
+        "Chain Link Letters",
+        "Chrome Racer",
+        "Cloud Puff Letters",
+        "Comic Pop",
+        "Crystal Prism",
+        "Cyber Glitch",
+        "Diamond Encrusted",
+        "Embroidered Patch",
+        "Fire Letters",
+        "Frosted Ice",
+        "Fur Letters",
+        "Galaxy Nebula",
+        "Garden Bloom Letters",
+        "Gel Bubble Letters",
+        "Ghost Smoke Letters",
+        "Gold Drip",
+        "Gothic Calligraphy",
+        "Graffiti Bubble",
+        "Graffiti Tag",
+        "Holographic Neon",
+        "Ink Splash Letters",
+        "Jelly Pop Letters",
+        "Luxury Serif Engraved",
+        "Marble Stone Letters",
+        "Metal Studded"
+      ],
+      layoutStyle: [
+        "None",
+        "Angled Hero Layout",
+        "Billboard Composition",
+        "Centered Poster Composition",
+        "Close-Up Hero Shot",
+        "Collage Style Layout",
+        "Corner-to-Corner Spread",
+        "Diagonal Dynamic Layout",
+        "Floating 3D Text",
+        "Front Facing Symmetry",
+        "Full Frame Title Layout",
+        "Grid-Based Poster Layout",
+        "Hero Banner Composition",
+        "Layered Collage Composition",
+        "Magazine Cover Layout",
+        "Minimal Luxury Layout",
+        "Mirrored Composition",
+        "Offset Editorial Layout",
+        "Overhead Display",
+        "Panoramic Wide Layout",
+        "Poster Wall Composition",
+        "Product Mockup Style",
+        "Runway Billboard Layout",
+        "Scene-Integrated Typography",
+        "Split Layout Composition",
+        "Stacked Title Treatment",
+        "Text Across the Scene",
+        "Title Above Product Layout",
+        "Vertical Social Cover Layout",
+        "Wide Cinematic Layout",
+        "Wrapped Around Object Layout"
+      ],
+      letterMood: [
+        "None",
+        "Bold",
+        "Chaotic",
+        "Confident",
+        "Cute",
+        "Dark",
+        "Dramatic",
+        "Dreamy",
+        "Edgy",
+        "Elegant",
+        "Energetic",
+        "Epic",
+        "Feminine",
+        "Fierce",
+        "Fresh",
+        "Futuristic",
+        "Glamorous",
+        "Luxurious",
+        "Magical",
+        "Mysterious",
+        "Nostalgic",
+        "Playful",
+        "Powerful",
+        "Romantic",
+        "Sharp",
+        "Soft",
+        "Street",
+        "Surreal",
+        "Vintage",
+        "Whimsical",
+        "Youthful"
+      ],
+      lightingStyle: [
+        "None",
+        "Backlit Glow",
+        "Beauty Lighting",
+        "Cinematic Spotlights",
+        "Color Gel Lighting",
+        "Disco Reflections",
+        "Dreamy Soft Glow",
+        "Electric Neon Glow",
+        "Fire Glow",
+        "Glossy Studio Lighting",
+        "Golden Hour Shine",
+        "Hard Flash Lighting",
+        "Holographic Reflections",
+        "Laser Light Reflections",
+        "Lightbox Illumination",
+        "Luminous Bloom",
+        "Metallic Shine Lighting",
+        "Moody Rim Light",
+        "Nightclub Glow",
+        "Prismatic Lighting",
+        "Radiant Halo",
+        "Rainbow Reflections",
+        "Soft Beauty Lighting",
+        "Sparkling Highlights",
+        "Stage Spotlight",
+        "Sunset Backlight",
+        "Underlight Drama",
+        "Velvet Shadow Lighting",
+        "Warm Luxe Lighting",
+        "Wet Shine Reflection",
+        "Window Light Glow"
+      ],
+      materialStyle: [
+        "None",
+        "Brushed Metal",
+        "Buttercream Frosting",
+        "Carbon Fiber",
+        "Carved Stone",
+        "Cracked Ice",
+        "Crystal Glass",
+        "Denim Texture",
+        "Diamond Dust",
+        "Embossed Leather",
+        "Fluffy Plush",
+        "Glossy Acrylic",
+        "Gold Foil",
+        "Holographic Film",
+        "Iridescent Shell",
+        "Liquid Chrome",
+        "Matte Velvet",
+        "Mirror Steel",
+        "Molten Lava",
+        "Neon Plastic",
+        "Oil Slick Finish",
+        "Pearlescent Plastic",
+        "Polished Marble",
+        "Rubberized Surface",
+        "Satin Silk",
+        "Shattered Glass",
+        "Spray Paint Texture",
+        "Translucent Gel",
+        "Velour Texture",
+        "Vinyl Shine",
+        "Wet Lacquer"
+      ],
+      outlineStyle: [
+        "None",
+        "Bold Black Outline",
+        "Cartoon Outline",
+        "Chain Border",
+        "Chrome Rim",
+        "Cloud Edge",
+        "Cutout Silhouette",
+        "Double Outline",
+        "Electric Glow Edge",
+        "Embossed Edge",
+        "Engraved Border",
+        "Flame Outline",
+        "Frosted Edge",
+        "Gel Edge",
+        "Gold Trim",
+        "Graffiti Stroke",
+        "Halo Edge",
+        "High Contrast Outline",
+        "Ink Brush Border",
+        "Laser Edge",
+        "Metal Frame",
+        "Neon Tube Outline",
+        "Painted Rim",
+        "Rhinestone Border",
+        "Shadow Cut Edge",
+        "Soft Airbrush Edge",
+        "Spark Edge",
+        "Sticker Cutline",
+        "Thick White Stroke",
+        "Velvet Edge",
+        "Wet Gloss Edge"
+      ],
+      surfaceDetail: [
+        "None",
+        "Beaded Details",
+        "Bubble Highlights",
+        "Burn Marks",
+        "Carved Lines",
+        "Cracked Texture",
+        "Crystal Flecks",
+        "Dripping Edges",
+        "Embedded Gems",
+        "Embossed Patterns",
+        "Engraved Lines",
+        "Feathered Texture",
+        "Glitter Speckles",
+        "Gloss Streaks",
+        "Graffiti Splatters",
+        "Icy Frosting",
+        "Ink Smears",
+        "Marbled Swirls",
+        "Metal Scratches",
+        "Paint Splatter",
+        "Pearl Dusting",
+        "Rhinestone Trim",
+        "Scorched Finish",
+        "Scratched Surface",
+        "Smoky Trails",
+        "Soft Fuzzy Fibers",
+        "Sparkle Dust",
+        "Studded Accents",
+        "Textured Ridges",
+        "Wet Look Finish",
+        "Wrapped Ribbon Detail"
+      ],
+      useCase: [
+        "None",
+        "Album Cover Title",
+        "App Icon Typography",
+        "Apparel Design",
+        "Beauty Brand Logo",
+        "Book Cover Title",
+        "Business Name Logo",
+        "Canva Template Cover",
+        "Collection Title",
+        "Digital Product Cover",
+        "Event Flyer Title",
+        "Gaming Banner Text",
+        "Greeting Card Typography",
+        "Home Decor Wall Art",
+        "Instagram Post Title",
+        "Luxury Packaging Text",
+        "Magazine Cover Text",
+        "Merch Drop Title",
+        "Movie Poster Title",
+        "Music Visualizer Title",
+        "Podcast Cover Title",
+        "Poster Title",
+        "Product Label Design",
+        "Product Packaging Text",
+        "Social Media Thumbnail",
+        "Sticker Design",
+        "TikTok Cover Text",
+        "Tote Bag Design",
+        "Website Hero Title",
+        "YouTube Channel Art Title",
+        "YouTube Thumbnail Text"
+      ]
+    };
+
+    const defaultValues = {
+      textSubject: "LUXE",
+      fontStyle: "Gold Drip",
+      letterMood: "Luxurious",
+      materialStyle: "Gold Foil",
+      surfaceDetail: "Gloss Streaks",
+      colorPalette: "Black and Gold",
+      outlineStyle: "Gold Trim",
+      lightingStyle: "Glossy Studio Lighting",
+      effectStyle: "Floating Diamonds",
+      eraVibe: "High Fashion Editorial",
+      backgroundStyle: "Black Velvet Studio",
+      layoutStyle: "Centered Poster Composition",
+      useCase: "Business Name Logo",
+      cameraMotion: "Slow Cinematic Push",
+      animationStyle: "Golden Shine Sweep",
+      extraNotes: "Make the lettering feel premium, eye-catching, polished, custom-designed, and unforgettable."
+    };
+
+    const dropdownIds = Object.keys(dropdownData);
+
+    function populateDropdown(id, options) {
+      const select = document.getElementById(id);
+      select.innerHTML = "";
+      options.forEach(optionText => {
+        const option = document.createElement("option");
+        option.value = optionText;
+        option.textContent = optionText;
+        select.appendChild(option);
+      });
+    }
+
+    function alphabetizeWithNoneFirst(arr) {
+      const cleaned = [...new Set(arr.filter(Boolean))];
+      const withoutNone = cleaned.filter(item => item !== "None").sort((a, b) => a.localeCompare(b));
+      return ["None", ...withoutNone];
+    }
+
+    dropdownIds.forEach(id => {
+      dropdownData[id] = alphabetizeWithNoneFirst(dropdownData[id]);
+      populateDropdown(id, dropdownData[id]);
+    });
+
+    function getVal(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function formatPhrase(value, fallback = "") {
+      return value === "None" ? fallback : value;
+    }
+
+    function buildImagePrompt() {
+      const textSubject = getVal("textSubject") || "LUXE";
+      const fontStyle = formatPhrase(getVal("fontStyle"), "custom standout typography");
+      const letterMood = formatPhrase(getVal("letterMood"));
+      const materialStyle = formatPhrase(getVal("materialStyle"));
+      const surfaceDetail = formatPhrase(getVal("surfaceDetail"));
+      const colorPalette = formatPhrase(getVal("colorPalette"));
+      const outlineStyle = formatPhrase(getVal("outlineStyle"));
+      const lightingStyle = formatPhrase(getVal("lightingStyle"));
+      const effectStyle = formatPhrase(getVal("effectStyle"));
+      const eraVibe = formatPhrase(getVal("eraVibe"));
+      const backgroundStyle = formatPhrase(getVal("backgroundStyle"), "clean premium background");
+      const layoutStyle = formatPhrase(getVal("layoutStyle"), "strong centered composition");
+      const useCase = formatPhrase(getVal("useCase"), "a standout design piece");
+      const extraNotes = getVal("extraNotes");
+
+      const descriptors = [
+        fontStyle !== "custom standout typography" ? `The lettering should use a ${fontStyle} style` : `The lettering should use ${fontStyle}`,
+        letterMood ? `with a ${letterMood.toLowerCase()} visual personality` : "",
+        materialStyle ? `made from ${materialStyle.toLowerCase()}` : "",
+        surfaceDetail ? `with ${surfaceDetail.toLowerCase()}` : "",
+        colorPalette ? `Use a ${colorPalette.toLowerCase()} palette` : "",
+        outlineStyle ? `with ${outlineStyle.toLowerCase()}` : "",
+        lightingStyle ? `and ${lightingStyle.toLowerCase()}` : "",
+        effectStyle ? `Add ${effectStyle.toLowerCase()} for extra impact` : "",
+        eraVibe ? `The overall vibe should feel inspired by ${eraVibe.toLowerCase()}` : ""
+      ].filter(Boolean).join(". ");
+
+      return `Create a high-impact typography artwork featuring the word "${textSubject}". ${descriptors}. Place the text in a ${backgroundStyle.toLowerCase()} setting using a ${layoutStyle.toLowerCase()}. Design it as if it were created for ${useCase.toLowerCase()}, with premium craftsmanship, crisp detail, dimensional depth, polished finish, memorable presence, and a visually addictive luxury-quality result. ${extraNotes}`.replace(/\s+/g, " ").trim();
+    }
+
+    function buildVideoPrompt() {
+      const textSubject = getVal("textSubject") || "LUXE";
+      const fontStyle = formatPhrase(getVal("fontStyle"), "custom standout typography");
+      const letterMood = formatPhrase(getVal("letterMood"));
+      const materialStyle = formatPhrase(getVal("materialStyle"));
+      const surfaceDetail = formatPhrase(getVal("surfaceDetail"));
+      const colorPalette = formatPhrase(getVal("colorPalette"));
+      const outlineStyle = formatPhrase(getVal("outlineStyle"));
+      const lightingStyle = formatPhrase(getVal("lightingStyle"));
+      const effectStyle = formatPhrase(getVal("effectStyle"));
+      const eraVibe = formatPhrase(getVal("eraVibe"));
+      const backgroundStyle = formatPhrase(getVal("backgroundStyle"), "clean premium environment");
+      const layoutStyle = formatPhrase(getVal("layoutStyle"), "strong centered composition");
+      const useCase = formatPhrase(getVal("useCase"), "a standout design piece");
+      const cameraMotion = formatPhrase(getVal("cameraMotion"), "smooth cinematic movement");
+      const animationStyle = formatPhrase(getVal("animationStyle"), "polished motion behavior");
+      const extraNotes = getVal("extraNotes");
+
+      const descriptors = [
+        `The letters should appear in a ${fontStyle} style`,
+        letterMood ? `with a ${letterMood.toLowerCase()} mood` : "",
+        materialStyle ? `formed from ${materialStyle.toLowerCase()}` : "",
+        surfaceDetail ? `with ${surfaceDetail.toLowerCase()}` : "",
+        colorPalette ? `Use a ${colorPalette.toLowerCase()} palette` : "",
+        outlineStyle ? `${outlineStyle.toLowerCase()}` : "",
+        lightingStyle ? `and ${lightingStyle.toLowerCase()}` : "",
+        effectStyle ? `Add ${effectStyle.toLowerCase()} for atmosphere and motion energy` : "",
+        eraVibe ? `The overall vibe should be inspired by ${eraVibe.toLowerCase()}` : ""
+      ].filter(Boolean).join(". ");
+
+      return `Create a cinematic motion typography scene featuring the word "${textSubject}". ${descriptors}. Set the text inside a ${backgroundStyle.toLowerCase()} environment with a ${layoutStyle.toLowerCase()}. Use ${cameraMotion.toLowerCase()} camera movement and ${animationStyle.toLowerCase()} motion behavior. The final result should feel ideal for ${useCase.toLowerCase()}, with cinematic depth, dramatic reveals, luxurious detail, polished motion graphics, and unforgettable visual impact. ${extraNotes}`.replace(/\s+/g, " ").trim();
+    }
+
+    function generatePrompts() {
+      document.getElementById("imageOutput").value = buildImagePrompt();
+      document.getElementById("videoOutput").value = buildVideoPrompt();
+    }
+
+    function randomFrom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function randomizeAll() {
+      dropdownIds.forEach(id => {
+        document.getElementById(id).value = randomFrom(dropdownData[id]);
+      });
+
+      const sampleWords = [
+        "AURA", "BLAZE", "BOSS", "CANDY", "CROWN", "DRIP", "DREAM", "FLASH",
+        "FLAME", "FROST", "GLOW", "ICON", "JUICY", "LUSH", "LUXE", "MAGIC",
+        "MOTION", "NOVA", "PRISM", "QUEEN", "ROYAL", "SHINE", "SLAY", "SPARK",
+        "STYLE", "SWERVE", "VIBES", "WAVE", "WOW", "ZENITH"
+      ];
+
+      const sampleNotes = [
+        "Give it bold social-media-stopping presence with high-end visual detail.",
+        "Make it feel custom-crafted, iconic, eye-catching, and luxury-coded.",
+        "Make the final result look expensive, polished, and highly memorable.",
+        "Make the lettering feel rich, dramatic, polished, and instantly unforgettable.",
+        "Push the shine, texture, and dimension so it feels premium and collectible.",
+        "Blend strong texture, vibrant finish, and premium visual storytelling."
+      ];
+
+      document.getElementById("textSubject").value = randomFrom(sampleWords);
+      document.getElementById("extraNotes").value = randomFrom(sampleNotes);
+      generatePrompts();
+    }
+
+    function resetAll() {
+      document.getElementById("textSubject").value = defaultValues.textSubject;
+      document.getElementById("extraNotes").value = defaultValues.extraNotes;
+
+      dropdownIds.forEach(id => {
+        document.getElementById(id).value = defaultValues[id] || "None";
+      });
+
+      generatePrompts();
+    }
+
+    function loadDemoSetup() {
+      document.getElementById("textSubject").value = "ROYAL";
+      document.getElementById("fontStyle").value = "Diamond Encrusted";
+      document.getElementById("letterMood").value = "Glamorous";
+      document.getElementById("materialStyle").value = "Crystal Glass";
+      document.getElementById("surfaceDetail").value = "Embedded Gems";
+      document.getElementById("colorPalette").value = "Royal Purple and Gold";
+      document.getElementById("outlineStyle").value = "Rhinestone Border";
+      document.getElementById("lightingStyle").value = "Sparkling Highlights";
+      document.getElementById("effectStyle").value = "Crystal Sparks";
+      document.getElementById("eraVibe").value = "Luxury Y2K";
+      document.getElementById("backgroundStyle").value = "Diamond Stage";
+      document.getElementById("layoutStyle").value = "Magazine Cover Layout";
+      document.getElementById("useCase").value = "Merch Drop Title";
+      document.getElementById("cameraMotion").value = "Arc Around the Letters";
+      document.getElementById("animationStyle").value = "Looping Sparkle Animation";
+      document.getElementById("extraNotes").value = "Make the typography feel lavish, premium, glossy, dimensional, and made for a luxury fashion campaign.";
+      generatePrompts();
+    }
+
+    async function copyText(textareaId, buttonId, successText) {
+      const textarea = document.getElementById(textareaId);
+      const button = document.getElementById(buttonId);
+      const original = button.textContent;
+
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+      } catch (err) {
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+      }
+
+      button.textContent = successText;
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1400);
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", generatePrompts);
+    document.getElementById("randomBtn").addEventListener("click", randomizeAll);
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+    document.getElementById("fillDemoBtn").addEventListener("click", loadDemoSetup);
+
+    document.getElementById("copyImageBtn").addEventListener("click", () => {
+      copyText("imageOutput", "copyImageBtn", "Image Prompt Copied!");
+    });
+
+    document.getElementById("copyVideoBtn").addEventListener("click", () => {
+      copyText("videoOutput", "copyVideoBtn", "Video Prompt Copied!");
+    });
+
+    document.getElementById("textSubject").addEventListener("input", generatePrompts);
+    document.getElementById("extraNotes").addEventListener("input", generatePrompts);
+
+    dropdownIds.forEach(id => {
+      document.getElementById(id).addEventListener("change", generatePrompts);
+    });
+
+    resetAll();
+  </script>
+</body>
+</html>
