@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billboard AI Art Creator PRO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #050814;
+      --bg2: #0f1530;
+      --bg3: #121f45;
+      --line: rgba(255, 255, 255, .10);
+      --text: #f6f7ff;
+      --muted: #c0c8e8;
+      --accent: #f5cc74;
+      --shadow: 0 10px 35px rgba(0, 0, 0, .45);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; scroll-behavior: smooth; }
+    
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 204, 116, .12), transparent 22%),
+        radial-gradient(circle at top right, rgba(135, 199, 255, .12), transparent 24%),
+        radial-gradient(circle at bottom center, rgba(167, 139, 250, .10), transparent 25%),
+        linear-gradient(160deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    }
+
+    .font-display { font-family: 'Cinzel', serif; }
+    
+    .glass {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .field {
+      width: 100%;
+      background: #0f1733;
+      color: #f6f7ff;
+      border: 1px solid rgba(255, 255, 255, .10);
+      border-radius: 16px;
+      padding: 12px 14px;
+      outline: none;
+      transition: .25s ease;
+      font-size: 0.9rem;
+    }
+
+    .field:focus {
+      border-color: rgba(245, 204, 116, .55);
+      box-shadow: 0 0 0 3px rgba(245, 204, 116, .18);
+    }
+
+    .other-input {
+      margin-top: 8px;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    textarea.field { min-height: 140px; resize: vertical; line-height: 1.5; font-family: monospace; font-size: 0.85rem; }
+
+    .btn {
+      border: none; border-radius: 16px; padding: 12px 16px; font-weight: 700; cursor: pointer;
+      transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); color: white; box-shadow: var(--shadow);
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-gold { background: linear-gradient(135deg, #f2c35f, #c68b2a); color: #1a1a1a; }
+    .btn-blue { background: linear-gradient(135deg, #4ca6ff, #375dff); }
+    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+    .btn-dark { background: linear-gradient(135deg, #1c2648, #0e1732); border: 1px solid var(--line); }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+      background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .09); 
+      color: var(--muted); font-size: .8rem; font-weight: 500;
+    }
+
+    .hero-title {
+      background: linear-gradient(135deg, #fff4d2, #f5cc74, #95cbff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .sparkle {
+      position: fixed; inset: 0; pointer-events: none; opacity: .4; z-index: 0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, .8) 0 1px, transparent 2px),
+        radial-gradient(circle at 80% 30%, rgba(135, 199, 255, .8) 0 1px, transparent 2px);
+      background-size: 240px 240px;
+    }
+
+    .section-title {
+      font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; 
+      color: var(--accent); margin-bottom: 8px; display: block;
+    }
+
+    .subject-header {
+      background: rgba(245, 204, 116, 0.1);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .tiny { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+
+    @media (max-width: 768px) { .stack-mobile { grid-template-columns: 1fr !important; } }
+  </style>
+</head>
+<body>
+  <div class="sparkle"></div>
+  
+  <div class="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-8 relative z-10">
+    <div class="glass p-5 md:p-8 mb-6">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex-1">
+          <div class="chip mb-4">
+            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+            Dual-Output Builder • 3D Pop-Out Effects Included
+          </div>
+          <h1 class="font-display hero-title text-3xl md:text-5xl font-extrabold leading-tight">Billboard AI Art Creator PRO</h1>
+        </div>
+        <div class="grid grid-cols-2 gap-3 lg:w-auto">
+          <button class="btn btn-purple" id="randomBtn">Randomize</button>
+          <button class="btn btn-dark" id="resetBtn">Reset All</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-[1fr_450px] gap-6 stack-mobile">
+      <div class="space-y-6">
+        <div class="glass p-5 md:p-6">
+          <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="section-title">Subject Count</label>
+              <select id="subjectCount" class="field">
+                <option value="Single">Single Subject</option>
+                <option value="Couple">Couple / Two Subjects</option>
+              </select>
+            </div>
+            <div>
+              <label class="section-title">3D Pop-Out Effect</label>
+              <div id="popOutGrid"></div>
+            </div>
+          </div>
+
+          <div id="subjectContainers" class="space-y-8">
+            <div id="subject1Section" class="border-t border-white/5 pt-6">
+              <div class="subject-header">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                Subject 1 Attributes
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="s1Grid"></div>
+            </div>
+
+            <div id="subject2Section" class="border-t border-white/5 pt-6 hidden">
+              <div class="subject-header">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                Subject 2 Attributes
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="s2Grid"></div>
+            </div>
+          </div>
+
+          <div class="border-t border-white/5 pt-6 mt-8">
+            <div class="subject-header !bg-blue-500/10 !text-blue-300">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
+              Global Environment & Art Direction
+            </div>
+            <div id="couplePoseContainer" class="mb-5 hidden">
+              <div id="couplePoseGrid"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="sceneGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="glass p-5 md:p-6 sticky top-6">
+          <div class="flex items-center justify-between mb-2">
+            <label class="section-title !mb-0">Billboard Copy</label>
+            <button id="suggestSlogansBtn" class="text-[10px] text-accent font-bold uppercase tracking-widest hover:text-white transition-colors">✨ AI Suggest Both</button>
+          </div>
+          
+          <div class="space-y-4 mb-6">
+            <div class="relative group">
+              <input id="headline" class="field pr-24" type="text" placeholder="Headline (e.g. THE WORLD IS YOURS)" />
+              <button onclick="suggestSingle('headline')" class="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] bg-white/10 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">✨ AI Suggest</button>
+            </div>
+            <div class="relative group">
+              <input id="subheadline" class="field pr-24" type="text" placeholder="Subheadline (e.g. LUXURY REDEFINED)" />
+              <button onclick="suggestSingle('subheadline')" class="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] bg-white/10 px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">✨ AI Suggest</button>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="section-title !mb-0">Image Prompt Output</label>
+                <button class="text-[10px] text-blue-400 font-bold uppercase tracking-widest hover:text-white transition-colors" onclick="copy('outputImage')">Copy Image</button>
+              </div>
+              <textarea id="outputImage" class="field" spellcheck="false" readonly></textarea>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="section-title !mb-0">Video Prompt Output</label>
+                <button class="text-[10px] text-purple-400 font-bold uppercase tracking-widest hover:text-white transition-colors" onclick="copy('outputVideo')">Copy Video</button>
+              </div>
+              <textarea id="outputVideo" class="field" spellcheck="false" readonly></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const range = (start, end) => Array.from({length:end-start+1}, (_,i)=>String(start+i));
+    const alpha = (arr, hasOther=true) => {
+      const sorted = [...arr.slice().sort((a,b)=>a.localeCompare(b))];
+      return hasOther ? ['None', ...sorted, 'Other'] : ['None', ...sorted];
+    };
+
+    const hairFemale = ['Afro Puff','Bantu Knots','Beach Waves','Blonde Braids','Bob Cut','Boho Braids','Box Braids','Butterfly Locs','Cornrows','Curly Pixie','Finger Waves','French Roll','Glam Curls','Goddess Braids','Half-Up Half-Down','High Bun','High Ponytail','Knotless Braids','Layered Waves','Loose Curls','Long Straight','Micro Braids','Pixie Cut','Silk Press','Sleek Bun','Soft Waves','Space Buns','Twists','Vintage Waves','Waterfall Braids','Wavy Shag','Wet Look Bob','Wolf Cut'];
+    const hairMale = ['Afro Fade','Bald','Box Fade','Braided Top','Buzz Cut','Caesar Cut','Classic Taper','Cornrows','Curly Fade','Curly Top','Dreadlocks','Drop Fade','Fade','Flat Top','Frohawk','High Top Fade','Locs','Low Fade','Man Bun','Mid Fade','Mohawk','Slick Back','Skin Fade','Short Twists','Taper Fade','Temple Fade','Textured Crop','Undercut','Waves','Wolf Cut','Wavy Flow','Z-Pattern Fade'];
+    
+    const wardFemale = ['Avant-Garde Gown','Beaded Evening Gown','Bodycon Dress','Cape Dress','Crystal Corset Gown','Cutout Metallic Dress','Designer Jumpsuit','Draped Silk Gown','Embellished Blazer Dress','Feather Trim Gown','Form-Fitting Knit Dress','Futuristic Catsuit','Gold Embellished Gown','High-Slit Satin Dress','Holographic Gown','Lace Evening Dress','Liquid Metallic Dress','Luxury Pantsuit','Mermaid Gown','Off-Shoulder Gown','Organza Couture Dress','Power Suit','Sequined Gown','Structured Mini Dress','Tailored Blazer Set','Velvet Gown','Vinyl Couture Dress','Wrapped Satin Dress','Zebra Silk Wrap','Puffer Couture','Chainmail Top'];
+    const wardMale = ['Avant-Garde Suit','Beaded Dinner Jacket','Bomber Jacket Set','Classic Tuxedo','Couture Overcoat','Designer Tracksuit','Draped Suit','Embellished Blazer','Fitted Turtleneck Suit','Futuristic Tailored Set','Gold Trim Suit','High-Fashion Streetwear','Layered Leather Look','Luxury Suit','Metallic Suit','Modern Double-Breasted Suit','Monochrome Tailored Fit','Open Collar Suit','Patterned Evening Suit','Satin Dinner Jacket','Sequined Suit','Sharp Blazer Set','Silk Shirt Suit','Structured Street Luxe','Tailored Overcoat Look','Velvet Suit','Vinyl Statement Look','White Tie Formalwear','Leather Trench','Silk Kimono Suit','Tactical Luxe Vest'];
+
+    const races = ['African American','Afro-Caribbean','Arab','Asian','Black British','Brazilian','Caribbean','Central Asian','Chinese','Dominican','East African','East Asian','Egyptian','European','Filipino','French','Greek','Haitian','Hispanic','Indian','Indigenous American','Italian','Japanese','Korean','Latino','Mediterranean','Middle Eastern','Mixed Race','Native American','Nigerian','North African','Pakistani','Puerto Rican','South Asian','Southeast Asian','Spanish','Thai','Trinidadian','Vietnamese','West African'];
+    const expressions = ['Ambitious','Bold','Calm','Captivating','Confident','Contemplative','Dreamy','Elegant','Empowered','Enigmatic','Ethereal','Fearless','Fierce','Graceful','High-Fashion Pout','Intense','Joyful','Luxurious','Magnetic','Majestic','Melancholic','Mysterious','Noble','Poised','Powerful','Radiant','Regal','Seductive','Serene','Smoldering','Sophisticated','Soulful','Statuesque','Stern','Thoughtful','Visionary'];
+    const cities = ['Amsterdam','Atlanta','Bangkok','Barcelona','Berlin','Boston','Chicago','Dallas','Dubai','Hong Kong','Houston','Istanbul','Johannesburg','Lagos','Las Vegas','London','Los Angeles','Madrid','Manila','Melbourne','Mexico City','Miami','Mumbai','New York City','Paris','Rome','San Francisco','Sao Paulo','Seoul','Shanghai','Singapore','Sydney','Tokyo','Toronto','Vancouver'];
+    const atmospheres = ['Aurora Glow','City Lights','Cloud Glow','Cosmic Dust','Crystal Shimmer','Cyberpunk Haze','Distant Fireworks','Electric Atmosphere','Floating Light Orbs','Galaxy Mist','Golden Dust','Holographic Flares','Lens Flare Bokeh','Luxury Window Lights','Magical Particles','Midnight Sky','Moon Glow','Nebula Clouds','Neon Reflections','Night Traffic','Ocean Horizon','Rain Mist','Reflective Streets','Soft Star Glow','Spark Trails','Starfield','Sunset Sky','Twilight Haze','Urban Fog','Vaporwave Aesthetic','Water Reflection','Waterfront Glow','Wet Pavement Shine'];
+    const lightings = ['Ambient Neon Glow','Backlit Halo','Billboard Glow','Blue Hour Lighting','Celestial Rim Light','Cinematic Spotlight','Color Contrast Glow','Dramatic Edge Light','Dreamy Diffused Light','Editorial Beauty Light','Evening Golden Light','Firework Backlight','Glimmering Starlight','Golden Hour Blend','High-Contrast Glam Light','Iridescent Glow','Luminous Night Light','Midnight Luxe Lighting','Moonlit Glow','Neon Blue Light','Ocean Reflection Light','Opulent Chandelier Light','Prism Lighting','Radiant Studio Light','Reflective Wet Light','Soft Portrait Light','Sparkle-Filled Light','Street Light Glow','Sunset Blend Light','Theatrical Lighting','Ultra Luxe Glow','Volumetric Fog Light'];
+    const palettes = ['Amethyst and Gold','Black and Silver','Blue and Silver','Bronze and Sapphire','Champagne and Ivory','Charcoal and Amber','Cobalt and Gold','Copper and Teal','Crimson and Black','Deep Blue and Amber','Emerald and Gold','Gold and Violet','Golden Peach and Indigo','Icy Blue and White','Indigo and Rose Gold','Lavender and Silver','Midnight Blue and Gold','Moonstone and Pearl','Navy and Bronze','Neon Magenta and Blue','Obsidian and Platinum','Ocean Blue and Gold','Onyx and Gold','Pearl and Slate','Platinum and Sapphire','Purple and Gold','Rose Gold and Blue','Ruby and Champagne','Sapphire and Amber','Silver and Indigo','Smoky Quartz and Gold','Sunset Orange and Blue','Ultraviolet and Silver','White Gold and Azure'];
+    const motions = ['Billboard Light Pulsing','Camera Crane Upward','Camera Drift Around Subject','Camera Glide','Camera Push In','Camera Slow Pan','Camera Tilt Up','Camera Zoom Out','Cars Light Trails Moving','Cinematic Orbit','Crowd Recording Motion','Fabric Flowing','Fireworks Blooming','Floating Sparkles','Gentle Hair Movement','Glow Expanding','Halo Pulse','Lens Flares Sweeping','Light Bursting','Light Particles Swirling','Neon Reflection Flicker','Ocean Waves Moving','Particles Rising','Portrait Slowly Breathing','Rain Falling in Light','Shimmering Reflections','Slow Motion Walk','Soft Head Turn','Spark Burst Expanding','Sparkles Cascading Down','Sunset Light Shifting','Traffic Streaming','Water Reflection Rippling','Wind Sweeping Through Hair'];
+    const artStyles = ['80s Synthwave Neon','Abstract Liquid Chrome','Afro-Futuristic Dream','Art Deco Glamour','Bauhaus Geometric','Biomorphic Surrealism','Claymation Aesthetic','Cyberpunk Gritty Realism','Dark Fantasy Gothic','Disney-Inspired 3D Animation','Double Exposure Art','Ethereal Celestial Glow','Film Noir Monochrome','Ghibli-Style Hand-Painted','Glitch Art Distortion','Golden Age Vintage Illustration','Graffiti Urban Street Art','High-Fashion Editorial Gloss','Hyper-Realistic 8K Macro','IMAX Cinematic Wide-Angle','Impressionist Oil Painting','Japanese Ukiyo-e Woodblock','Low Poly Geometric Art','Minimalist Zen Architecture','National Geographic Photography','Neoclassical Marble Statuesque','Papercut Layered Diorama','Polaroid Nostalgia','Pop Art Warhol Style','Psychedelic Kaleidoscopic','Retro-Futurism (Atomic Age)','Solarpunk Lush Greenery','Steampunk Victorian Industrial','Surrealist Salvador Dali Inspired','Vector Flat Illustration'];
+    const relPoses = ['Back-to-Back Stance','Cheek-to-Cheek','Classic Embrace','Dramatic Ballroom Dip','Embracing from Behind','Facing Each Other','Foreheads Touching','Formal Editorial Side-by-Side','Hand on Waist and Shoulder','Hands Interlocked','Holding Hands','Interlocked Arms','Leaning on Shoulder','Looking Deeply at Each Other','One Sitting One Standing','Over-the-Shoulder Side Gaze','Posing for High-Fashion Camera','Power Stance Couple','Profile Silhouette Pose','Promenade Walk','Protective Stance','Romantic Intimate Gaze','Side-by-Side Power Stance','Symmetrical Editorial Stance','Tandem Stance','Tightly Intertwined','Walking Arm-in-Arm','Walking Toward Camera Together','Whispering Secret','Wrapped in Each Other\'s Arms','Wrapped in One Oversized Overcoat'];
+
+    const popOutEffects = [
+      'Entirely Inside Billboard (Flat Display)',
+      '3D Anamorphic Illusion Pop-Out',
+      'Arm Reaching Past Border',
+      'Body Emerging from Surface',
+      'Clothing Fabric Draping Outside',
+      'Dramatic Reach Beyond Boundary',
+      'Dynamic Out-of-Bounds Effect',
+      'Elbow Pointing Out of Frame',
+      'Face Projecting Forward',
+      'Feet Standing on the Outer Frame',
+      'Floating Beyond the Screen Surface',
+      'Fluid Transition Out of Frame',
+      'Full Subject Stepping into Reality',
+      'Hair Blowing Beyond Border',
+      'Hand Gripping the Billboard Edge',
+      'Hand Resting on Outer Bezel',
+      'Hyper-Realistic 3D Protrusion',
+      'Interactive Pop-Out Interaction',
+      'Leaning Outward into Space',
+      'Leg Dangling Over Edge',
+      'Optical Illusion Pop-Out',
+      'Partial Body Out-of-Frame',
+      'Shoulder Breaking the Bezel',
+      'Stepping Foot Out of Screen',
+      'Subject Breaking the Fourth Wall',
+      'Subject Climbing Out of Display',
+      'Subject Half-In and Half-Out',
+      'Subject Leaning Over the street below',
+      'Subject Pushing Against the Screen Edge',
+      'Subject Reaching Toward the Viewer',
+      'Subject Sitting on the Frame Edge',
+      'Subject Stepping onto the Street Below',
+      'Torso Projecting into Reality'
+    ];
+
+    const slogans = {
+      default: { h: ["THE WORLD IS YOURS", "UNPARALLELED", "TIMELESS LUXURY", "BEYOND LIMITS"], s: ["Experience Perfection", "Elevate Your Reality", "The New Standard", "A Legacy in Motion"] },
+      Elegant: { h: ["PURE ELEGANCE", "TIMELESS", "THE ART OF STYLE"], s: ["Sophistication Defined", "Grace in Every Detail", "Refinement Unmatched"] },
+      Fearless: { h: ["NO LIMITS", "UNCONQUERABLE", "OWN THE MOMENT"], s: ["Born to Lead", "Fearless by Design", "The Power of One"] },
+      Bold: { h: ["MAKE YOUR MARK", "LOUDER THAN WORDS", "THE BOLD STANDARD"], s: ["Stand Out", "Command Attention", "Unapologetically You"] },
+      Ethereal: { h: ["CELESTIAL BEAUTY", "BEYOND THE VEIL", "DREAM IN LIGHT"], s: ["Otherworldly Grace", "A Cosmic Connection", "Pure Radiance"] },
+      Regal: { h: ["THE CROWN IS YOURS", "SOVEREIGN STYLE", "MAJESTIC"], s: ["Rule Your World", "Noble Heritage", "Excellence Personified"] },
+      Cyberpunk: { h: ["THE FUTURE IS NOW", "NEON DREAMS", "UPGRADE YOUR REALITY"], s: ["High Tech, High Style", "The Next Dimension", "System Override"] },
+      Couple: { h: ["BETTER TOGETHER", "THE PERFECT MATCH", "POWER COUPLE"], s: ["A Shared Vision", "Connection Redefined", "Together as One"] }
+    };
+
+    const subjectFields = [
+      { id:'gender', label:'Gender', options:alpha(['Female','Male']) },
+      { id:'age', label:'Age', options:['None', ...range(21,99), 'Other'] },
+      { id:'race', label:'Race / Ethnicity', options:alpha(races) },
+      { id:'skinTone', label:'Skin Tone', options:alpha(['Amber','Bronze','Cappuccino','Caramel','Cocoa','Deep Bronze','Deep Ebony','Espresso','Golden Beige','Honey','Mahogany','Mocha','Olive','Peach Beige','Porcelain','Rich Brown','Rose Beige','Umber']) },
+      { id:'hairStyle', label:'Hair Style', type:'dynamic' },
+      { id:'clothing', label:'Wardrobe', type:'dynamic' },
+      { id:'expression', label:'Expression', options:alpha(expressions) }
+    ];
+
+    const sceneFields = [
+      { id:'city', label:'City Location', options:alpha(cities) },
+      { id:'billboardType', label:'Billboard Scale', options:alpha(['Cathedral Scale Billboard','Curved LED Billboard','Digital Monument Billboard','Downtown Hero Billboard','Full Building Billboard','Gigantic Portrait Billboard','Luxury Fashion Billboard','Massive LED Screen','Skyline Dominance Billboard','Urban Spectacle Billboard']) },
+      { id:'backgroundElements', label:'Atmosphere', options:alpha(atmospheres) },
+      { id:'lighting', label:'Lighting Style', options:alpha(lightings) },
+      { id:'colorPalette', label:'Palette', options:alpha(palettes) },
+      { id:'cameraAngle', label:'Camera Angle', options:alpha(['Aerial View','Billboard-Level View','Cinematic Close-Up','Extreme Low Angle','Iconic Street View','Low Angle Hero Shot','Medium Portrait','Vertical Poster View']) },
+      { id:'artStyle', label:'Art Direction', options:alpha(artStyles) },
+      { id:'mood', label:'Campaign Mood', options:alpha(['Awe-Inspiring','Bold','Celestial','Dreamy','Elegant','Heroic','Legendary','Luminous','Majestic','Opulent','Regal','Triumphant']) },
+      { id:'videoMotion', label:'Video Motion', options:alpha(motions) },
+      { id:'quality', label:'Quality Finish', options:alpha(['8K','Billboard Print Quality','Cinematic Post-Production','Crisp Detail','Hyper Detailed','Luxury Campaign Finish','Museum-Grade Polish','Print-Ready','Ultra High Resolution']) }
+    ];
+
+    function createField(field, suffix = '') {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex flex-col';
+      const label = document.createElement('label');
+      label.className = 'section-title';
+      label.textContent = field.label;
+      const select = document.createElement('select');
+      select.id = field.id + suffix;
+      select.className = 'field';
+      const otherInput = document.createElement('input');
+      otherInput.id = field.id + suffix + '_other';
+      otherInput.className = 'field other-input hidden';
+      otherInput.placeholder = `Custom ${field.label}...`;
+      if (field.type === 'dynamic') {
+        const opt = document.createElement('option'); opt.value = 'None'; opt.textContent = 'None';
+        select.appendChild(opt);
+        const optOther = document.createElement('option'); optOther.value = 'Other'; optOther.textContent = 'Other';
+        select.appendChild(optOther);
+      } else {
+        field.options.forEach(o => {
+          const opt = document.createElement('option'); opt.value = o; opt.textContent = o;
+          select.appendChild(opt);
+        });
+      }
+      select.addEventListener('change', () => {
+        if (select.value === 'Other') otherInput.classList.remove('hidden');
+        else otherInput.classList.add('hidden');
+        if (field.id === 'gender') refreshDynamic(suffix);
+        updatePrompt();
+      });
+      otherInput.addEventListener('input', updatePrompt);
+      wrapper.appendChild(label);
+      wrapper.appendChild(select);
+      wrapper.appendChild(otherInput);
+      return wrapper;
+    }
+
+    function refreshDynamic(suffix) {
+      const gender = document.getElementById('gender' + suffix).value;
+      const hairSelect = document.getElementById('hairStyle' + suffix);
+      const clothSelect = document.getElementById('clothing' + suffix);
+      if(!hairSelect || !clothSelect) return;
+      const hOpts = (gender === 'Male') ? alpha(hairMale) : alpha(hairFemale);
+      const cOpts = (gender === 'Male') ? alpha(wardMale) : alpha(wardFemale);
+      const update = (sel, opts) => {
+        const cur = sel.value; sel.innerHTML = '';
+        opts.forEach(o => { const opt = document.createElement('option'); opt.value = o; opt.textContent = o; sel.appendChild(opt); });
+        if (opts.includes(cur)) sel.value = cur;
+      };
+      update(hairSelect, hOpts); update(clothSelect, cOpts);
+    }
+
+    function initGrids() {
+      const s1 = document.getElementById('s1Grid');
+      const s2 = document.getElementById('s2Grid');
+      const scene = document.getElementById('sceneGrid');
+      const coupleGrid = document.getElementById('couplePoseGrid');
+      const popOutGrid = document.getElementById('popOutGrid');
+
+      subjectFields.forEach(f => s1.appendChild(createField(f, '_1')));
+      subjectFields.forEach(f => s2.appendChild(createField(f, '_2')));
+      sceneFields.forEach(f => scene.appendChild(createField(f, '')));
+      coupleGrid.appendChild(createField({ id:'relPose', label:'Relationship Pose', options:alpha(relPoses) }, ''));
+      popOutGrid.appendChild(createField({ id:'popOut', label:'', options:alpha(popOutEffects) }, ''));
+
+      refreshDynamic('_1'); refreshDynamic('_2');
+    }
+
+    function getVal(id) {
+      const sel = document.getElementById(id);
+      if (!sel) return 'None';
+      if (sel.value === 'Other') {
+        const other = document.getElementById(id + '_other');
+        return other ? other.value : 'None';
+      }
+      return sel.value;
+    }
+
+    function suggestSingle(targetId) {
+      const mood = getVal('mood');
+      const style = getVal('artStyle');
+      const count = document.getElementById('subjectCount').value;
+      
+      let category = 'default';
+      if (mood !== 'None' && slogans[mood]) category = mood;
+      else if (style && style.includes('Cyberpunk')) category = 'Cyberpunk';
+      else if (count === 'Couple') category = 'Couple';
+
+      const list = targetId === 'headline' ? slogans[category].h : slogans[category].s;
+      const pick = list[Math.floor(Math.random() * list.length)];
+      document.getElementById(targetId).value = pick;
+      updatePrompt();
+    }
+
+    function buildCharDesc(suffix) {
+      const gender = getVal('gender' + suffix);
+      if (gender === 'None') return null;
+      const traits = [getVal('age' + suffix) !== 'None' ? `${getVal('age' + suffix)}-year-old` : '', getVal('race' + suffix) !== 'None' ? getVal('race' + suffix) : '', gender.toLowerCase()].filter(t => t).join(' ');
+      return `${traits} with ${getVal('skinTone' + suffix).toLowerCase()} skin, ${getVal('hairStyle' + suffix).toLowerCase()} hair, wearing ${getVal('clothing' + suffix).toLowerCase()}, holding a ${getVal('expression' + suffix).toLowerCase()} expression`;
+    }
+
+    function updatePrompt() {
+      const count = document.getElementById('subjectCount').value;
+      const popOut = getVal('popOut');
+      const h1 = document.getElementById('headline').value.trim();
+      const h2 = document.getElementById('subheadline').value.trim();
+      
+      let subStr = "";
+      if (count === 'Single') {
+        const desc = buildCharDesc('_1'); subStr = desc ? `portrait of a ${desc}` : 'portrait of a person';
+      } else {
+        const d1 = buildCharDesc('_1') || 'first subject'; const d2 = buildCharDesc('_2') || 'second subject';
+        const pose = getVal('relPose'); const poseP = (pose !== 'None') ? ` in a ${pose.toLowerCase()} relationship pose` : '';
+        subStr = `portrait of a couple featuring a ${d1} and a ${d2}${poseP}`;
+      }
+
+      const popOutPart = (popOut !== 'None' && !popOut.includes('Entirely Inside')) ? `featuring an eye-popping 3D out-of-bounds effect where the subject is ${popOut.toLowerCase()}` : 'the entire subject is contained within the billboard frame';
+
+      const cParts = [
+        `set inside a massive ${getVal('billboardType')} in ${getVal('city')}`,
+        popOutPart,
+        h1 ? `headline reads “${h1}”` : '',
+        h2 ? `subheadline reads “${h2}”` : '',
+        `surrounded by ${getVal('backgroundElements')}`,
+        `lighting: ${getVal('lighting')}`,
+        `palette: ${getVal('colorPalette')}`,
+        `angle: ${getVal('cameraAngle')}`,
+        `art direction: ${getVal('artStyle')}`,
+        `mood: ${getVal('mood')}`,
+        `quality: ${getVal('quality')}, hyper-realistic luxury campaign.`
+      ];
+
+      const bImg = 'Create an ultra-premium vertical billboard fantasy portrait';
+      document.getElementById('outputImage').value = `${bImg} of a ${subStr}, ${cParts.filter(p => p && !p.includes('None')).join(', ')}`.replace(/\s+/g, ' ').trim();
+      
+      const bVid = 'Create a cinematic vertical billboard video';
+      const m = getVal('videoMotion'); const mP = (m !== 'None') ? `, cinematic motion: ${m.toLowerCase()}` : '';
+      document.getElementById('outputVideo').value = `${bVid} of a ${subStr}, ${cParts.filter(p => p && !p.includes('None')).join(', ')}${mP}`.replace(/\s+/g, ' ').trim();
+    }
+
+    function copy(id) {
+      const el = document.getElementById(id); el.select(); document.execCommand('copy');
+      const btn = event.target; const old = btn.textContent; btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = old, 1200);
+    }
+
+    document.getElementById('subjectCount').addEventListener('change', (e) => {
+      const s2 = document.getElementById('subject2Section'); const relC = document.getElementById('couplePoseContainer');
+      if (e.target.value === 'Couple') { s2.classList.remove('hidden'); relC.classList.remove('hidden'); }
+      else { s2.classList.add('hidden'); relC.classList.add('hidden'); }
+      updatePrompt();
+    });
+
+    document.getElementById('headline').addEventListener('input', updatePrompt);
+    document.getElementById('subheadline').addEventListener('input', updatePrompt);
+    document.getElementById('randomBtn').addEventListener('click', () => {
+      document.querySelectorAll('select.field').forEach(s => { if (s.options.length > 2) s.selectedIndex = Math.floor(Math.random() * (s.options.length - 2)) + 1; });
+      refreshDynamic('_1'); refreshDynamic('_2'); updatePrompt();
+    });
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('select.field').forEach(s => s.selectedIndex = 0);
+      document.querySelectorAll('.other-input').forEach(i => i.classList.add('hidden'));
+      document.getElementById('headline').value = ''; document.getElementById('subheadline').value = ''; updatePrompt();
+    });
+    document.getElementById('suggestSlogansBtn').addEventListener('click', () => { suggestSingle('headline'); suggestSingle('subheadline'); });
+
+    initGrids(); updatePrompt();
+  </script>
+</body>
+</html>
