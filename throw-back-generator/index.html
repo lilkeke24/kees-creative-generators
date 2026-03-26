@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Throwback Nostalgia Collage Generator v4</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&amp;family=Rubik+Bubbles&amp;family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+      50% { filter: drop-shadow(0 0 20px currentColor); }
+    }
+    @keyframes rainbow-shift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .float-anim { animation: float 3s ease-in-out infinite; }
+    .glow-pulse { animation: pulse-glow 2s ease-in-out infinite; }
+    .rainbow-anim { animation: rainbow-shift 5s linear infinite; }
+    .slide-down { animation: slideDown 0.3s ease-out; }
+    .retro-title {
+      font-family: 'Bangers', cursive;
+      text-shadow: 4px 4px 0 #ff00ff, 8px 8px 0 #00ffff, -2px -2px 0 #ffff00;
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .retro-subtitle {
+      font-family: 'Rubik Bubbles', cursive;
+      text-shadow: 2px 2px 0 #ff00ff, 4px 4px 0 #00ffff;
+    }
+    .bubble-font { font-family: 'Rubik Bubbles', cursive; }
+    .pixel-font { font-family: 'Press Start 2P', monospace; }
+    .sticker {
+      filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.3));
+      transition: transform 0.2s ease;
+    }
+    .sticker:hover { transform: scale(1.1) rotate(-3deg); }
+    .memphis-bg {
+      background-image: 
+        radial-gradient(circle at 20% 80%, #ff69b4 2px, transparent 2px),
+        radial-gradient(circle at 80% 20%, #00ffff 3px, transparent 3px),
+        radial-gradient(circle at 40% 40%, #ffff00 2px, transparent 2px),
+        radial-gradient(circle at 60% 60%, #ff00ff 2px, transparent 2px);
+      background-size: 100px 100px;
+    }
+    .option-btn {
+      transition: all 0.2s ease;
+      border: 3px solid transparent;
+      cursor: pointer;
+    }
+    .option-btn.selected {
+      transform: scale(0.95);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 0 12px rgba(0,0,0,0.5);
+      border: 3px solid #000;
+    }
+    .layout-option-btn {
+      transition: all 0.2s ease;
+    }
+    .layout-option-btn.selected {
+      transform: scale(0.95);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    #photo-upload {
+      display: none;
+    }
+    .upload-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 3px solid #fde047;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    }
+    .preset-section {
+      background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+      border: 2px solid;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .preset-section-era { border-color: #c084fc; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.1)); }
+    .preset-section-theme { border-color: #22d3ee; background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(6, 182, 212, 0.1)); }
+    .preset-section-typo { border-color: #fbbf24; background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(249, 115, 22, 0.1)); }
+    .preset-section-char { border-color: #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)); }
+    .preset-section-colors { border-color: #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1)); }
+    .preset-label {
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: bold;
+    }
+    .preset-desc {
+      font-size: 0.65rem;
+      margin-bottom: 8px;
+      display: block;
+      opacity: 0.8;
+    }
+    .options-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .image-style-section {
+      background: rgba(0,0,0,0.2);
+      border: 3px solid #06b6d4;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      animation: slideDown 0.3s ease-out;
+    }
+    .category-container {
+      margin-bottom: 14px;
+    }
+    .category-label {
+      font-size: 0.75rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .custom-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.3);
+      border: 2px solid #06b6d4;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.75rem;
+    }
+    .custom-input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    .collapse-btn {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid #06b6d4;
+      color: #06b6d4;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .collapse-btn:hover {
+      background: rgba(6,182,212,0.2);
+    }
+    .collapse-btn.collapsed::after {
+      content: " ▼";
+    }
+    .collapse-btn:not(.collapsed)::after {
+      content: " ▲";
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app-wrapper" class="min-h-full w-full bg-gradient-to-br from-purple-900 via-pink-800 to-indigo-900 memphis-bg p-4 md:p-8">
+   <!-- Header -->
+   <header class="text-center mb-6">
+    <h1 id="main-title" class="retro-title text-4xl md:text-6xl text-yellow-300 tracking-wider rainbow-anim"></h1>
+    <h2 id="main-subtitle" class="retro-subtitle text-xl md:text-3xl text-cyan-300 mt-2"></h2>
+    <p class="bubble-font text-pink-300 text-lg mt-2">Collage Prompt Generator v4</p>
+   </header>
+   <main class="max-w-5xl mx-auto">
+    <!-- Form Container -->
+    <div class="bg-black/40 backdrop-blur-sm rounded-3xl p-6 border-4 border-pink-500 shadow-2xl">
+     <!-- Title & Subtitle Inputs -->
+     <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+       <label class="bubble-font text-cyan-300 text-sm block mb-2">✨ Main Title</label> <input type="text" id="title-input" value="" class="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold text-lg placeholder-pink-200 border-2 border-yellow-400 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30" placeholder="Leave blank for no title...">
+      </div>
+      <div>
+       <label class="bubble-font text-cyan-300 text-sm block mb-2">💫 Subtitle/Tagline</label> <input type="text" id="subtitle-input" value="" class="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg placeholder-blue-200 border-2 border-yellow-400 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/30" placeholder="Add a fun tagline...">
+      </div>
+     </div><!-- Layout Selection -->
+     <div class="mb-6">
+      <label class="bubble-font text-cyan-300 text-sm block mb-3">🖼️ Collage Layout</label>
+      <div id="layout-options" class="flex flex-wrap gap-2">
+       <button type="button" class="layout-option-btn px-4 py-2 text-sm font-bold rounded-full bg-gradient-to-r from-pink-500 to-pink-600 text-white border-2 border-pink-300 hover:scale-105 transition-all shadow-md" data-layout="single"> 📸 Single Style </button> <button type="button" class="layout-option-btn px-4 py-2 text-sm font-bold rounded-full bg-gradient-to-r from-cyan-500 to-cyan-600 text-white border-2 border-cyan-300 hover:scale-105 transition-all shadow-md" data-layout="double"> 📷 2 Styles Mixed </button> <button type="button" class="layout-option-btn px-4 py-2 text-sm font-bold rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white border-2 border-yellow-300 hover:scale-105 transition-all shadow-md" data-layout="collage"> 🎨 4+ Styles Mixed </button>
+      </div>
+      <p id="layout-description" class="text-pink-200 text-xs mt-2 italic"></p>
+     </div><!-- Photo Upload -->
+     <div class="mb-6">
+      <label class="bubble-font text-cyan-300 text-sm block mb-3">📸 Upload Your Photo (Optional)</label>
+      <div class="flex items-center gap-4 flex-wrap">
+       <div class="file-input-wrapper">
+        <input type="file" id="photo-upload" accept="image/*"> <button type="button" id="upload-btn" class="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-full text-sm hover:scale-105 transition-transform shadow-lg border-2 border-white sticker"> 🖼️ Choose Photo </button>
+       </div><img id="photo-preview" class="upload-preview hidden" alt="Your photo"> <button type="button" id="remove-photo-btn" class="px-3 py-2 bg-red-500 text-white font-bold rounded-full text-xs hover:scale-105 transition-transform shadow-lg border-2 border-white hidden"> ✕ Remove </button>
+      </div>
+     </div><!-- PRESET SECTIONS --> <!-- Era/Decade Blend Section -->
+     <div class="preset-section preset-section-era">
+      <label class="preset-label bubble-font text-purple-300">⏰ Era/Decade Blend</label> <span class="preset-desc text-purple-200">Quick-pick decade combinations:</span>
+      <div id="era-blend-options" class="options-grid"></div>
+     </div><!-- Theme + Vibe Section -->
+     <div class="preset-section preset-section-theme">
+      <label class="preset-label bubble-font text-cyan-300">🎭 Theme + Vibe</label> <span class="preset-desc text-cyan-200">Pick an overall mood/theme:</span>
+      <div id="theme-options" class="options-grid"></div>
+     </div><!-- Typography Style Section -->
+     <div class="preset-section preset-section-typo">
+      <label class="preset-label bubble-font text-yellow-300">✏️ Typography/Text Style</label> <span class="preset-desc text-yellow-200">Choose text appearance (pick one or mix):</span>
+      <div id="typography-options" class="options-grid"></div>
+     </div><!-- Character Mix Section -->
+     <div class="preset-section preset-section-char">
+      <label class="preset-label bubble-font text-green-300">👥 Character Mix</label> <span class="preset-desc text-green-200">Character types to include:</span>
+      <div id="character-mix-options" class="options-grid"></div>
+     </div><!-- Colors + Props + Finish Section -->
+     <div class="preset-section preset-section-colors">
+      <label class="preset-label bubble-font text-red-300">🎨 Colors + Props + Finish</label> <span class="preset-desc text-red-200">Color palette and visual elements:</span>
+      <div id="colors-props-options" class="options-grid"></div>
+     </div><!-- Background Selection (Single) -->
+     <div class="mb-6">
+      <label class="bubble-font text-cyan-300 text-sm block mb-3">🎨 Background Color / Finish (Pick One)</label>
+      <div id="background-options" class="options-grid">
+      </div>
+     </div><!-- Image Style Sections (Dynamic) -->
+     <div id="image-styles-container" class="mb-6">
+      <!-- Image style sections will be added here dynamically -->
+     </div><!-- Action Buttons -->
+     <div class="flex flex-wrap gap-3 justify-center mt-8">
+      <button id="randomize-btn" class="px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full text-lg hover:scale-105 transition-transform shadow-lg border-2 border-white sticker"> 🎲 Randomize ✨ </button> <button id="generate-btn" class="px-8 py-3 bg-gradient-to-r from-cyan-400 to-pink-500 text-white font-bold rounded-full text-lg hover:scale-105 transition-transform shadow-lg border-2 border-white sticker glow-pulse"> 🚀 Generate Prompt </button> <button id="clear-btn" class="px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-800 text-white font-bold rounded-full text-lg hover:scale-105 transition-transform shadow-lg border-2 border-gray-400 sticker"> 🗑️ Clear All </button>
+     </div>
+    </div><!-- Output Section -->
+    <div id="output-section" class="mt-8 hidden">
+     <div class="bg-gradient-to-br from-pink-600/90 to-purple-700/90 backdrop-blur-sm rounded-3xl p-6 border-4 border-cyan-400 shadow-2xl">
+      <h2 class="bubble-font text-yellow-300 text-2xl mb-4 text-center glow-pulse">📋 Your Prompt</h2>
+      <div id="prompt-output" class="bg-black/50 rounded-xl p-4 text-pink-100 font-mono text-sm leading-relaxed border-2 border-pink-400 max-h-96 overflow-auto">
+      </div>
+      <div class="flex flex-col items-center mt-4 gap-2">
+       <button id="copy-btn" class="px-6 py-2 bg-gradient-to-r from-green-400 to-teal-500 text-black font-bold rounded-full hover:scale-105 transition-transform shadow-lg border-2 border-white sticker"> 📋 Copy to Clipboard </button>
+       <p id="copy-feedback" class="text-center text-green-300 hidden bubble-font text-sm">✅ Copied to clipboard!</p>
+      </div>
+     </div>
+    </div><!-- Preview Decoration -->
+    <div class="mt-8 flex justify-center gap-4 flex-wrap">
+     <div class="sticker float-anim" style="animation-delay: 0s;">
+      <svg width="60" height="60" viewbox="0 0 60 60" class="text-pink-400 glow-pulse">
+       <polygon points="30,5 35,22 53,22 39,33 44,50 30,40 16,50 21,33 7,22 25,22" fill="currentColor" />
+      </svg>
+     </div>
+     <div class="sticker float-anim" style="animation-delay: 0.5s;">
+      <svg width="50" height="50" viewbox="0 0 50 50" class="text-cyan-400">
+       <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4" /> <circle cx="25" cy="25" r="10" fill="currentColor" />
+      </svg>
+     </div>
+     <div class="sticker float-anim" style="animation-delay: 1s;">
+      <svg width="55" height="55" viewbox="0 0 55 55" class="text-yellow-400 glow-pulse">
+       <rect x="10" y="10" width="35" height="35" rx="5" fill="currentColor" transform="rotate(15 27.5 27.5)" />
+      </svg>
+     </div>
+     <div class="sticker float-anim" style="animation-delay: 1.5s;">
+      <svg width="50" height="50" viewbox="0 0 50 50" class="text-purple-400">
+       <polygon points="25,5 45,45 5,45" fill="currentColor" />
+      </svg>
+     </div>
+    </div>
+   </main><!-- Footer -->
+   <footer class="text-center mt-8 pb-4">
+    <p class="pixel-font text-pink-300 text-xs">RADICAL VIBES ONLY 🤙</p>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      title_text: "",
+      subtitle_text: "",
+      primary_color: "#ec4899",
+      secondary_color: "#06b6d4",
+      text_color: "#fde047",
+      background_color: "#581c87",
+      accent_color: "#a855f7",
+      font_family: "Bangers"
+    };
+
+    let selectedLayout = null;
+    let uploadedPhotoURL = null;
+
+    const layoutDescriptions = {
+      single: "One unified image with one character/subject style",
+      double: "Two different character/subject styles blended together in one frame",
+      collage: "4+ different character/subject styles packed into one vibrant frame"
+    };
+
+    const optionsData = {
+      background: [
+        "Hot pink + teal + electric blue + neon yellow + purple gradient",
+        "Pastel rainbow + cotton-candy pink + baby blue + mint gradient",
+        "Black background with neon glow highlights",
+        "White background with crisp sticker cutouts",
+        "VHS analog scan lines + color distortion",
+        "Memphis pattern collage background",
+        "Glossy poster finish + high saturation",
+        "Bold black outlines + cel-shaded look",
+        "Holographic shimmer effect",
+        "Retro newspaper print + halftone dots",
+        "Marble texture + swirly pastels",
+        "Comic book pop-art dots",
+        "Retro sun rays + starburst pattern",
+        "Polka dot party background",
+        "Psychedelic spiral + wavy patterns",
+        "Retro film strip border design",
+        "Glitter + sparkle full coverage"
+      ],
+      eraBlend: [
+        "Pure 80s nostalgia",
+        "Pure 90s nostalgia",
+        "80s meets 90s mashup",
+        "90s meets Y2K blend",
+        "Retro toy-store 80s",
+        "Saturday-morning 90s cartoon",
+        "VHS rental store vibes",
+        "Arcade + synthwave mix",
+        "Early 2000s mall culture",
+        "Totally rad 80s totally tubular",
+        "90s grunge meets pop",
+        "Teen magazine 90s aesthetic",
+        "80s music video aesthetic",
+        "90s Nickelodeon slime era",
+        "Vintage arcade 1980s",
+        "Peak 90s accessories + vibes"
+      ],
+      theme: [
+        "Girly + cute aesthetic",
+        "Cool dude attitude",
+        "Chaotic energy",
+        "Glam + glamorous",
+        "Funny + goofy",
+        "Dark + edgy mood",
+        "Rainbow + pastel dream",
+        "Neon punk vibe",
+        "Sporty + athletic energy",
+        "Totally rad + awesome",
+        "Mystical + magical feel",
+        "Party + celebration mode",
+        "Chill + laid-back vibes",
+        "Bold + confident swagger",
+        "Sweet + romantic mood",
+        "Retro + vintage nostalgic"
+      ],
+      typography: [
+        "Bubble letters + rounded",
+        "3D chrome gradient",
+        "Graffiti bubble tag",
+        "Comic book style",
+        "Retro pixel/8-bit",
+        "Psychedelic warped",
+        "Neon glow tube",
+        "Airbrushed mall tee",
+        "Sticker-outline chunky",
+        "Holographic gradient letters",
+        "Y2K gel pen style",
+        "Graffiti spray-paint style",
+        "Retro arcade game font",
+        "Bubbly rounded sans-serif",
+        "Italic script + elegant",
+        "All caps bold block letters"
+      ],
+      characterMix: [
+        "Cute chibis",
+        "Cartoon animals",
+        "Action heroes",
+        "Pop-star vibes",
+        "Retro toys + mascots",
+        "Robots + tech",
+        "Magical characters",
+        "Funny creatures + monsters",
+        "Video game characters",
+        "Anime-style characters",
+        "Fashion models + poses",
+        "Superheroes + powers",
+        "Fantasy creatures",
+        "Celebrity lookalikes",
+        "School friends + groups",
+        "Retro storybook characters"
+      ],
+      colorsProps: [
+        "Hot pink + cyan + neon + glitter",
+        "Pastel rainbow + soft + dreamy",
+        "Black + white + bold contrast",
+        "80s synthwave + purple + pink",
+        "90s toys + bright saturated",
+        "VHS + retro + distorted colors",
+        "Gold + holographic + shimmer",
+        "Neon + glow + electric vibes",
+        "Lime green + hot pink + purple",
+        "Baby blue + bubblegum + yellow",
+        "Teal + orange + high contrast",
+        "Soft pastels + muted tones",
+        "Retro jewel tones + rich colors",
+        "Fluorescent neon everywhere",
+        "Metallic silver + chrome effects",
+        "Rainbow gradient + color-shifting"
+      ],
+      character: [
+        "Cute chibi character",
+        "Saturday-morning cartoon animal",
+        "Glam rock pop-star diva",
+        "Action hero with attitude",
+        "Retro toy mascot",
+        "Robot sidekick character",
+        "Fantasy magical girl",
+        "Cool dude with style",
+        "Funny goofy sidekick",
+        "Tough warrior character",
+        "Cute pastel mascot",
+        "Cartoon villain character",
+        "Retro superhero",
+        "Anime-inspired character",
+        "Funny monster creature"
+      ],
+      era: [
+        "80s pastel fantasy vibe",
+        "80s Saturday-morning animation style",
+        "80s toy-commercial aesthetic",
+        "80s synthwave neon glow",
+        "80s Memphis pattern era",
+        "90s Cartoon Chaos style",
+        "90s Baby nostalgia aesthetic",
+        "90s Nickelodeon energy",
+        "90s Cartoon Network vibe",
+        "90s mall-core airbrush style",
+        "90s VHS rental store vibe",
+        "90s arcade culture",
+        "Y2K glitter pop",
+        "Retro toy-store nostalgia",
+        "Early 2000s nostalgia"
+      ],
+      props: [
+        "VHS tapes + cassette tapes",
+        "Tamagotchi + handheld game device",
+        "Arcade machines + tokens",
+        "Roller skates + boombox",
+        "Rubik cube + retro toys",
+        "Comic POW shapes + speech bubbles",
+        "Rainbow arcs + star shapes",
+        "Memphis squiggles + triangles",
+        "Starburst + confetti explosion",
+        "Geometric shape clusters",
+        "Holographic stickers + decals",
+        "Glitter + sparkle effects",
+        "Neon tube lights",
+        "Retro ice cream cones + popsicles",
+        "Vinyl records + album covers"
+      ],
+      typo: [
+        "Neon bubble letters",
+        "3D gradient arcade font",
+        "Pastel rainbow chrome letters",
+        "Comic-book block font",
+        "Y2K glitter gel letters",
+        "Airbrushed mall tee lettering",
+        "Sticker-outline chunky type",
+        "Chrome bevel + shine",
+        "Glow neon tube text",
+        "Graffiti bubble tag style",
+        "Retro pixel/8-bit font",
+        "Holographic gradient type",
+        "Bubbly rounded sans-serif",
+        "Retro italic script",
+        "Psychedelic warped text"
+      ]
+    };
+
+    const imageSelections = {};
+    let backgroundSelection = null;
+    let presetSelections = {
+      eraBlend: new Set(),
+      theme: new Set(),
+      typography: new Set(),
+      characterMix: new Set(),
+      colorsProps: new Set()
+    };
+
+    const colorClasses = [
+      { bg: "from-pink-500 to-pink-600", border: "border-pink-300", selectedBg: "from-pink-700 to-pink-800" },
+      { bg: "from-cyan-500 to-cyan-600", border: "border-cyan-300", selectedBg: "from-cyan-700 to-cyan-800" },
+      { bg: "from-yellow-500 to-yellow-600", border: "border-yellow-300", selectedBg: "from-yellow-700 to-yellow-800" },
+      { bg: "from-purple-500 to-purple-600", border: "border-purple-300", selectedBg: "from-purple-700 to-purple-800" },
+      { bg: "from-green-500 to-green-600", border: "border-green-300", selectedBg: "from-green-700 to-green-800" },
+      { bg: "from-orange-500 to-orange-600", border: "border-orange-300", selectedBg: "from-orange-700 to-orange-800" },
+      { bg: "from-indigo-500 to-indigo-600", border: "border-indigo-300", selectedBg: "from-indigo-700 to-indigo-800" },
+      { bg: "from-red-500 to-red-600", border: "border-red-300", selectedBg: "from-red-700 to-red-800" }
+    ];
+
+    function createOptionButton(text, category, index) {
+      const colorSet = colorClasses[index % colorClasses.length];
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `option-btn px-3 py-2 text-xs font-bold rounded-full bg-gradient-to-r ${colorSet.bg} text-white border-2 ${colorSet.border} hover:scale-105 transition-all shadow-md`;
+      btn.textContent = text;
+      btn.dataset.value = text;
+      btn.dataset.category = category;
+      btn.dataset.colorIndex = index;
+      
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        toggleSelection(btn, text, category);
+      });
+      
+      return btn;
+    }
+
+    function toggleSelection(btn, text, category) {
+      const isSelected = btn.classList.contains("selected");
+      const colorSet = colorClasses[parseInt(btn.dataset.colorIndex) % colorClasses.length];
+
+      if (category === "background") {
+        // Background is single selection
+        document.querySelectorAll("[data-category='background']").forEach(b => {
+          b.classList.remove("selected");
+          const idx = parseInt(b.dataset.colorIndex) % colorClasses.length;
+          const cs = colorClasses[idx];
+          b.classList.remove(cs.selectedBg.split(" ")[0], cs.selectedBg.split(" ")[1]);
+          b.classList.add(cs.bg.split(" ")[0], cs.bg.split(" ")[1]);
+          b.style.borderColor = "transparent";
+        });
+        
+        if (!isSelected) {
+          btn.classList.add("selected");
+          btn.classList.remove(colorSet.bg.split(" ")[0], colorSet.bg.split(" ")[1]);
+          btn.classList.add(colorSet.selectedBg.split(" ")[0], colorSet.selectedBg.split(" ")[1]);
+          backgroundSelection = text;
+        } else {
+          backgroundSelection = null;
+        }
+      } else {
+        // Multi-select for other categories including presets
+        if (isSelected) {
+          btn.classList.remove("selected");
+          btn.classList.remove(colorSet.selectedBg.split(" ")[0], colorSet.selectedBg.split(" ")[1]);
+          btn.classList.add(colorSet.bg.split(" ")[0], colorSet.bg.split(" ")[1]);
+          btn.style.borderColor = "transparent";
+          if (presetSelections[category]) {
+            presetSelections[category].delete(text);
+          }
+          if (imageSelections[`image${btn.dataset.imageNum}`] && imageSelections[`image${btn.dataset.imageNum}`][category]) {
+            imageSelections[`image${btn.dataset.imageNum}`][category].delete(text);
+          }
+        } else {
+          btn.classList.add("selected");
+          btn.classList.remove(colorSet.bg.split(" ")[0], colorSet.bg.split(" ")[1]);
+          btn.classList.add(colorSet.selectedBg.split(" ")[0], colorSet.selectedBg.split(" ")[1]);
+          btn.style.borderColor = "#000";
+          if (presetSelections[category]) {
+            presetSelections[category].add(text);
+          }
+          if (imageSelections[`image${btn.dataset.imageNum}`] && imageSelections[`image${btn.dataset.imageNum}`][category]) {
+            imageSelections[`image${btn.dataset.imageNum}`][category].add(text);
+          }
+        }
+      }
+    }
+
+    function populatePresets() {
+      // Era/Decade Blend
+      const eraContainer = document.getElementById("era-blend-options");
+      optionsData.eraBlend.forEach((opt, i) => {
+        const btn = createOptionButton(opt, "eraBlend", i);
+        btn.dataset.category = "eraBlend";
+        eraContainer.appendChild(btn);
+      });
+
+      // Theme
+      const themeContainer = document.getElementById("theme-options");
+      optionsData.theme.forEach((opt, i) => {
+        const btn = createOptionButton(opt, "theme", i);
+        btn.dataset.category = "theme";
+        themeContainer.appendChild(btn);
+      });
+
+      // Typography
+      const typoContainer = document.getElementById("typography-options");
+      optionsData.typography.forEach((opt, i) => {
+        const btn = createOptionButton(opt, "typography", i);
+        btn.dataset.category = "typography";
+        typoContainer.appendChild(btn);
+      });
+
+      // Character Mix
+      const charMixContainer = document.getElementById("character-mix-options");
+      optionsData.characterMix.forEach((opt, i) => {
+        const btn = createOptionButton(opt, "characterMix", i);
+        btn.dataset.category = "characterMix";
+        charMixContainer.appendChild(btn);
+      });
+
+      // Colors + Props
+      const colorPropsContainer = document.getElementById("colors-props-options");
+      optionsData.colorsProps.forEach((opt, i) => {
+        const btn = createOptionButton(opt, "colorsProps", i);
+        btn.dataset.category = "colorsProps";
+        colorPropsContainer.appendChild(btn);
+      });
+
+      // Background
+      const bgContainer = document.getElementById("background-options");
+      optionsData.background.forEach((opt, i) => {
+        bgContainer.appendChild(createOptionButton(opt, "background", i));
+      });
+    }
+
+    function setupLayoutButtons() {
+      document.querySelectorAll("[data-layout]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const layout = btn.dataset.layout;
+          
+          document.querySelectorAll("[data-layout]").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          
+          selectedLayout = layout;
+          document.getElementById("layout-description").textContent = layoutDescriptions[layout];
+          
+          updateImageStyleSections();
+        });
+      });
+    }
+
+    function updateImageStyleSections() {
+      const container = document.getElementById("image-styles-container");
+      container.innerHTML = "";
+      imageSelections = {};
+
+      let numSections = 1;
+      if (selectedLayout === "double") numSections = 2;
+      if (selectedLayout === "collage") numSections = 4;
+
+      for (let i = 1; i <= numSections; i++) {
+        imageSelections[`image${i}`] = {
+          character: new Set(),
+          era: new Set(),
+          props: new Set(),
+          typo: new Set(),
+          custom: ""
+        };
+
+        const section = document.createElement("div");
+        section.className = "image-style-section";
+        section.innerHTML = `<h3 class="bubble-font text-yellow-300 text-sm mb-4 flex items-center justify-between">
+          <span>🎬 Image ${i} Style</span>
+          <button class="collapse-btn collapsed" data-image="${i}" type="button">Collapse</button>
+        </h3>`;
+
+        const collapseBtn = section.querySelector(".collapse-btn");
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "image-content";
+        contentDiv.dataset.imageNum = i;
+
+        // Character selection
+        const charLabel = document.createElement("label");
+        charLabel.className = "category-label bubble-font text-cyan-300";
+        charLabel.textContent = "👥 Character / Subject (select multiple)";
+        contentDiv.appendChild(charLabel);
+
+        const charOptions = document.createElement("div");
+        charOptions.className = "options-grid";
+        charOptions.id = `char-options-${i}`;
+        optionsData.character.forEach((opt, idx) => {
+          const btn = createOptionButton(opt, `char-${i}`, idx);
+          btn.dataset.imageNum = i;
+          btn.dataset.original = opt;
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const key = `image${i}`;
+            if (imageSelections[key].character.has(opt)) {
+              imageSelections[key].character.delete(opt);
+              btn.classList.remove("selected");
+            } else {
+              imageSelections[key].character.add(opt);
+              btn.classList.add("selected");
+            }
+          });
+          charOptions.appendChild(btn);
+        });
+        contentDiv.appendChild(charOptions);
+
+        // Era selection
+        const eraLabel = document.createElement("label");
+        eraLabel.className = "category-label bubble-font text-cyan-300";
+        eraLabel.textContent = "⏰ Era / Decade (select multiple)";
+        contentDiv.appendChild(eraLabel);
+
+        const eraOptions = document.createElement("div");
+        eraOptions.className = "options-grid";
+        eraOptions.id = `era-options-${i}`;
+        optionsData.era.forEach((opt, idx) => {
+          const btn = createOptionButton(opt, `era-${i}`, idx);
+          btn.dataset.imageNum = i;
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const key = `image${i}`;
+            if (imageSelections[key].era.has(opt)) {
+              imageSelections[key].era.delete(opt);
+              btn.classList.remove("selected");
+            } else {
+              imageSelections[key].era.add(opt);
+              btn.classList.add("selected");
+            }
+          });
+          eraOptions.appendChild(btn);
+        });
+        contentDiv.appendChild(eraOptions);
+
+        // Props selection
+        const propsLabel = document.createElement("label");
+        propsLabel.className = "category-label bubble-font text-cyan-300";
+        propsLabel.textContent = "🎪 Props / Elements (select multiple)";
+        contentDiv.appendChild(propsLabel);
+
+        const propsOptions = document.createElement("div");
+        propsOptions.className = "options-grid";
+        propsOptions.id = `props-options-${i}`;
+        optionsData.props.forEach((opt, idx) => {
+          const btn = createOptionButton(opt, `props-${i}`, idx);
+          btn.dataset.imageNum = i;
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const key = `image${i}`;
+            if (imageSelections[key].props.has(opt)) {
+              imageSelections[key].props.delete(opt);
+              btn.classList.remove("selected");
+            } else {
+              imageSelections[key].props.add(opt);
+              btn.classList.add("selected");
+            }
+          });
+          propsOptions.appendChild(btn);
+        });
+        contentDiv.appendChild(propsOptions);
+
+        // Typography selection
+        const typoLabel = document.createElement("label");
+        typoLabel.className = "category-label bubble-font text-cyan-300";
+        typoLabel.textContent = "✏️ Typography Style (select multiple)";
+        contentDiv.appendChild(typoLabel);
+
+        const typoOptions = document.createElement("div");
+        typoOptions.className = "options-grid";
+        typoOptions.id = `typo-options-${i}`;
+        optionsData.typo.forEach((opt, idx) => {
+          const btn = createOptionButton(opt, `typo-${i}`, idx);
+          btn.dataset.imageNum = i;
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const key = `image${i}`;
+            if (imageSelections[key].typo.has(opt)) {
+              imageSelections[key].typo.delete(opt);
+              btn.classList.remove("selected");
+            } else {
+              imageSelections[key].typo.add(opt);
+              btn.classList.add("selected");
+            }
+          });
+          typoOptions.appendChild(btn);
+        });
+        contentDiv.appendChild(typoOptions);
+
+        // Custom input
+        const customLabel = document.createElement("label");
+        customLabel.className = "category-label bubble-font text-cyan-300";
+        customLabel.textContent = "💡 Other (add custom ideas)";
+        contentDiv.appendChild(customLabel);
+
+        const customInput = document.createElement("input");
+        customInput.type = "text";
+        customInput.className = "custom-input";
+        customInput.placeholder = "Add any other ideas for this image...";
+        customInput.id = `custom-input-${i}`;
+        customInput.addEventListener("input", (e) => {
+          imageSelections[`image${i}`].custom = e.target.value;
+        });
+        contentDiv.appendChild(customInput);
+
+        section.appendChild(contentDiv);
+
+        collapseBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          contentDiv.classList.toggle("hidden");
+          collapseBtn.classList.toggle("collapsed");
+        });
+
+        container.appendChild(section);
+      }
+    }
+
+    function setupPhotoUpload() {
+      const uploadBtn = document.getElementById("upload-btn");
+      const photoInput = document.getElementById("photo-upload");
+      const photoPreview = document.getElementById("photo-preview");
+      const removePhotoBtn = document.getElementById("remove-photo-btn");
+
+      uploadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        photoInput.click();
+      });
+
+      photoInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            uploadedPhotoURL = event.target.result;
+            photoPreview.src = uploadedPhotoURL;
+            photoPreview.classList.remove("hidden");
+            removePhotoBtn.classList.remove("hidden");
+            uploadBtn.textContent = "🖼️ Change Photo";
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      removePhotoBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        uploadedPhotoURL = null;
+        photoInput.value = "";
+        photoPreview.classList.add("hidden");
+        removePhotoBtn.classList.add("hidden");
+        uploadBtn.textContent = "🖼️ Choose Photo";
+      });
+    }
+
+    function randomizeSelections() {
+      clearAllSelections();
+      
+      // Randomize background
+      const bgOptions = document.querySelectorAll("[data-category='background']");
+      const randomBg = bgOptions[Math.floor(Math.random() * bgOptions.length)];
+      randomBg.click();
+
+      // Randomize layout
+      const layouts = ["single", "double", "collage"];
+      const randomLayout = layouts[Math.floor(Math.random() * layouts.length)];
+      document.querySelector(`[data-layout="${randomLayout}"]`).click();
+
+      // Randomize presets immediately (they exist now)
+      Array.from(document.querySelectorAll("#era-blend-options button")).forEach(btn => { if (Math.random() < 0.5) btn.click(); });
+      Array.from(document.querySelectorAll("#theme-options button")).forEach(btn => { if (Math.random() < 0.4) btn.click(); });
+      Array.from(document.querySelectorAll("#typography-options button")).forEach(btn => { if (Math.random() < 0.4) btn.click(); });
+      Array.from(document.querySelectorAll("#character-mix-options button")).forEach(btn => { if (Math.random() < 0.5) btn.click(); });
+      Array.from(document.querySelectorAll("#colors-props-options button")).forEach(btn => { if (Math.random() < 0.5) btn.click(); });
+
+      // Random image styles after layout creates sections
+      setTimeout(() => {
+        Object.keys(imageSelections).forEach(imageKey => {
+          const imageNum = imageKey.replace("image", "");
+          
+          const charBtns = document.querySelectorAll(`#char-options-${imageNum} button`);
+          charBtns.forEach(btn => { if (Math.random() < 0.6) btn.click(); });
+
+          const eraBtns = document.querySelectorAll(`#era-options-${imageNum} button`);
+          eraBtns.forEach(btn => { if (Math.random() < 0.5) btn.click(); });
+
+          const propsBtns = document.querySelectorAll(`#props-options-${imageNum} button`);
+          propsBtns.forEach(btn => { if (Math.random() < 0.4) btn.click(); });
+
+          const typoBtns = document.querySelectorAll(`#typo-options-${imageNum} button`);
+          typoBtns.forEach(btn => { if (Math.random() < 0.3) btn.click(); });
+        });
+      }, 50);
+    }
+
+    function clearAllSelections() {
+      imageSelections = {};
+      backgroundSelection = null;
+      presetSelections = {
+        eraBlend: new Set(),
+        theme: new Set(),
+        typography: new Set(),
+        characterMix: new Set(),
+        colorsProps: new Set()
+      };
+      
+      document.querySelectorAll(".option-btn").forEach(btn => {
+        btn.classList.remove("selected");
+        const colorSet = colorClasses[parseInt(btn.dataset.colorIndex) % colorClasses.length];
+        btn.classList.remove(colorSet.selectedBg.split(" ")[0], colorSet.selectedBg.split(" ")[1]);
+        btn.classList.add(colorSet.bg.split(" ")[0], colorSet.bg.split(" ")[1]);
+        btn.style.borderColor = "transparent";
+      });
+
+      document.querySelectorAll("[data-layout]").forEach(btn => btn.classList.remove("selected"));
+      selectedLayout = null;
+      document.getElementById("layout-description").textContent = "";
+      
+      document.querySelectorAll(".custom-input").forEach(input => input.value = "");
+      
+      document.getElementById("output-section").classList.add("hidden");
+    }
+
+    function generatePrompt() {
+      const title = document.getElementById("title-input").value.trim();
+      const subtitle = document.getElementById("subtitle-input").value.trim();
+      
+      let prompt = "";
+      
+      if (title || subtitle) {
+        prompt = `Create a throwback nostalgia collage image`;
+        if (title) prompt += ` with the title "${title}"`;
+        if (subtitle) prompt += ` and subtitle "${subtitle}"`;
+        prompt += `.\n\n`;
+      } else {
+        prompt = `Create a throwback nostalgia collage image (no text/title).\n\n`;
+      }
+
+      if (selectedLayout) {
+        prompt += `**Layout Type:** ${selectedLayout.charAt(0).toUpperCase() + selectedLayout.slice(1)} (${layoutDescriptions[selectedLayout]})\n\n`;
+      }
+
+      if (backgroundSelection) {
+        prompt += `**Shared Background:** ${backgroundSelection}\n\n`;
+      }
+
+      // Preset selections
+      if (presetSelections.eraBlend.size > 0) {
+        prompt += `**Era/Decade Blend:** ${[...presetSelections.eraBlend].join(", ")}\n`;
+      }
+      if (presetSelections.theme.size > 0) {
+        prompt += `**Theme/Vibe:** ${[...presetSelections.theme].join(", ")}\n`;
+      }
+      if (presetSelections.typography.size > 0) {
+        prompt += `**Typography Style:** ${[...presetSelections.typography].join(", ")}\n`;
+      }
+      if (presetSelections.characterMix.size > 0) {
+        prompt += `**Character Mix:** ${[...presetSelections.characterMix].join(", ")}\n`;
+      }
+      if (presetSelections.colorsProps.size > 0) {
+        prompt += `**Colors + Props + Finish:** ${[...presetSelections.colorsProps].join(", ")}\n`;
+      }
+      if (presetSelections.eraBlend.size > 0 || presetSelections.theme.size > 0 || presetSelections.typography.size > 0 || presetSelections.characterMix.size > 0 || presetSelections.colorsProps.size > 0) {
+        prompt += "\n";
+      }
+
+      if (uploadedPhotoURL) {
+        prompt += `**Include:** A user-uploaded photo integrated stylishly into the composition\n\n`;
+      }
+
+      // Image-specific styles
+      Object.keys(imageSelections).forEach((imageKey, idx) => {
+        const imageNum = idx + 1;
+        const selection = imageSelections[imageKey];
+        
+        if (selection.character.size > 0 || selection.era.size > 0 || selection.props.size > 0 || selection.typo.size > 0 || selection.custom) {
+          prompt += `**Image ${imageNum} Style:**\n`;
+          
+          if (selection.character.size > 0) {
+            prompt += `- Characters: ${[...selection.character].join(", ")}\n`;
+          }
+          if (selection.era.size > 0) {
+            prompt += `- Era: ${[...selection.era].join(", ")}\n`;
+          }
+          if (selection.props.size > 0) {
+            prompt += `- Props/Elements: ${[...selection.props].join(", ")}\n`;
+          }
+          if (selection.typo.size > 0) {
+            prompt += `- Typography: ${[...selection.typo].join(", ")}\n`;
+          }
+          if (selection.custom) {
+            prompt += `- Custom: ${selection.custom}\n`;
+          }
+          
+          prompt += "\n";
+        }
+      });
+      
+      prompt += `Style: High-quality digital illustration, vibrant colors, retro nostalgic aesthetic, all styles blended together in one unified frame, suitable for poster or collage artwork.`;
+      
+      document.getElementById("prompt-output").textContent = prompt;
+      document.getElementById("output-section").classList.remove("hidden");
+      document.getElementById("output-section").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function copyToClipboard() {
+      const promptText = document.getElementById("prompt-output").textContent;
+      const textarea = document.createElement("textarea");
+      textarea.value = promptText;
+      textarea.style.position = "fixed";
+      textarea.style.top = "-999px";
+      textarea.style.left = "-999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        showCopyFeedback();
+      } catch (err) {
+        console.error("Copy failed:", err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showCopyFeedback() {
+      const feedback = document.getElementById("copy-feedback");
+      feedback.classList.remove("hidden");
+      setTimeout(() => feedback.classList.add("hidden"), 2000);
+    }
+
+    document.getElementById("randomize-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      randomizeSelections();
+    });
+
+    document.getElementById("generate-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      generatePrompt();
+    });
+
+    document.getElementById("clear-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      clearAllSelections();
+    });
+
+    document.getElementById("copy-btn").addEventListener("click", (e) => {
+      e.preventDefault();
+      copyToClipboard();
+    });
+
+    document.getElementById("title-input").addEventListener("input", (e) => {
+      const title = e.target.value;
+      document.getElementById("main-title").textContent = title || " ";
+      if (window.elementSdk) {
+        window.elementSdk.setConfig({ title_text: title });
+      }
+    });
+
+    document.getElementById("subtitle-input").addEventListener("input", (e) => {
+      const subtitle = e.target.value;
+      document.getElementById("main-subtitle").textContent = subtitle;
+      if (window.elementSdk) {
+        window.elementSdk.setConfig({ subtitle_text: subtitle });
+      }
+    });
+
+    populatePresets();
+    setupLayoutButtons();
+    setupPhotoUpload();
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const title = config.title_text || defaultConfig.title_text;
+          document.getElementById("main-title").textContent = title || " ";
+          document.getElementById("title-input").value = title;
+          
+          const subtitle = config.subtitle_text || defaultConfig.subtitle_text;
+          document.getElementById("main-subtitle").textContent = subtitle;
+          document.getElementById("subtitle-input").value = subtitle;
+          
+          const fontFamily = config.font_family || defaultConfig.font_family;
+          document.querySelectorAll(".retro-title").forEach(el => {
+            el.style.fontFamily = `${fontFamily}, cursive`;
+          });
+          
+          const primaryColor = config.primary_color || defaultConfig.primary_color;
+          const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+          const textColor = config.text_color || defaultConfig.text_color;
+          const bgColor = config.background_color || defaultConfig.background_color;
+          const accentColor = config.accent_color || defaultConfig.accent_color;
+          
+          document.documentElement.style.setProperty("--primary", primaryColor);
+          document.documentElement.style.setProperty("--secondary", secondaryColor);
+          document.documentElement.style.setProperty("--text", textColor);
+          document.documentElement.style.setProperty("--bg", bgColor);
+          document.documentElement.style.setProperty("--accent", accentColor);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+          },
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["title_text", config.title_text || defaultConfig.title_text],
+          ["subtitle_text", config.subtitle_text || defaultConfig.subtitle_text]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dcc90de36a601f2',t:'MTc3MzU4ODY5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
