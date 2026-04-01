@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kee's Creative | Visionary Ad Studio PRO</title>
+  <style>
+    :root {
+      --bg: #06070c;
+      --panel: rgba(17, 20, 33, 0.92);
+      --panel-2: rgba(28, 33, 56, 0.88);
+      --line: rgba(170, 185, 220, 0.18);
+      --text: #eef3ff;
+      --muted: #aeb9d9;
+      --purple: #8b5cf6;
+      --teal: #18c7c0;
+      --silver: #cfd6e6;
+      --silver-2: #94a3b8;
+      --danger: #ff6b93;
+      --shadow: 0 20px 55px rgba(0, 0, 0, 0.55);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(24, 199, 192, 0.18), transparent 22%),
+        radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.20), transparent 24%),
+        radial-gradient(circle at 70% 85%, rgba(207, 214, 230, 0.12), transparent 26%),
+        linear-gradient(145deg, #04050a 0%, #090b15 48%, #05060b 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100%;
+    }
+
+    body { padding: 24px; }
+
+    .shell {
+      max-width: 1700px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .studio {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(14, 18, 30, 0.96), rgba(9, 12, 22, 0.98));
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.95), rgba(24, 199, 192, 0.9));
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(24, 199, 192, 0.22);
+      flex-shrink: 0;
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-copy p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .kees {
+      background: linear-gradient(90deg, var(--silver), #fff, var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--silver);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .studio-grid {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 18px 18px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.08), rgba(24, 199, 192, 0.03));
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .panel-head span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .panel-body { padding: 18px; }
+
+    .helper {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .section {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(10, 13, 23, 0.86), rgba(13, 17, 29, 0.98));
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .section summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 16px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      user-select: none;
+    }
+
+    .section summary::-webkit-details-marker { display: none; }
+
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .summary-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(139,92,246,0.25), rgba(24,199,192,0.25));
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--silver);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .chev {
+      transition: transform 0.22s ease;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    details[open] .chev { transform: rotate(180deg); }
+
+    .section-content {
+      padding: 0 16px 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field,
+    .field-full {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.84rem;
+      color: var(--silver);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .subhelp {
+      font-size: 0.75rem;
+      color: var(--silver-2);
+      margin-top: -2px;
+      line-height: 1.45;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 13px 14px;
+      font: inherit;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+      min-width: 0;
+    }
+
+    textarea {
+      min-height: 108px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #98a6c9;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: rgba(24, 199, 192, 0.7);
+      box-shadow: 0 0 0 4px rgba(24, 199, 192, 0.12), 0 0 20px rgba(139, 92, 246, 0.08);
+      transform: translateY(-1px);
+    }
+
+    select option {
+      background: #111523;
+      color: var(--text);
+      padding: 8px;
+    }
+
+    .upload-box {
+      border: 1px dashed rgba(24, 199, 192, 0.35);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(24,199,192,0.08), rgba(139,92,246,0.05));
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .upload-box input[type="file"] {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .preview {
+      display: none;
+      width: 100%;
+      max-height: 230px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section-voice-btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      box-shadow: 0 8px 18px rgba(24, 199, 192, 0.14);
+    }
+
+    .section-voice-btn.listening {
+      background: linear-gradient(135deg, var(--danger), var(--purple));
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    button.action-btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    button.action-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    button.action-btn:active {
+      transform: translateY(0);
+    }
+
+    .primary {
+      color: white;
+      background: linear-gradient(135deg, var(--purple), var(--teal));
+      box-shadow: 0 14px 30px rgba(24, 199, 192, 0.18);
+      flex: 1 1 220px;
+    }
+
+    .secondary {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(207,214,230,0.14), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.09);
+      flex: 1 1 160px;
+    }
+
+    .ghost {
+      color: var(--silver);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      flex: 1 1 140px;
+    }
+
+    .danger {
+      color: white;
+      background: linear-gradient(135deg, var(--danger), var(--purple));
+      flex: 1 1 140px;
+    }
+
+    .outputs-wrap {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .result-card,
+    .business-card {
+      background: linear-gradient(180deg, rgba(8, 10, 18, 0.96), rgba(16, 20, 33, 0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .result-head {
+      padding: 16px 16px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(139,92,246,0.10), rgba(24,199,192,0.05));
+    }
+
+    .result-head h3 {
+      margin: 0;
+      font-size: 0.97rem;
+    }
+
+    .copy-btn {
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-width: 90px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .copy-btn.copied {
+      background: linear-gradient(135deg, rgba(24,199,192,0.24), rgba(139,92,246,0.24));
+      border-color: rgba(24,199,192,0.45);
+    }
+
+    .result-box {
+      width: 100%;
+      min-height: 180px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 18px 18px 20px;
+      resize: vertical;
+      line-height: 1.65;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+    }
+
+    .business-card {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card-mockups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card-face {
+      min-height: 220px;
+      border-radius: 22px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(24, 199, 192, 0.25), transparent 26%),
+        radial-gradient(circle at 80% 10%, rgba(139, 92, 246, 0.28), transparent 30%),
+        linear-gradient(145deg, #080912 0%, #111528 54%, #0a0c14 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .card-shine {
+      position: absolute;
+      inset: auto -30% 20% auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(207,214,230,0.2), transparent 65%);
+      filter: blur(12px);
+      pointer-events: none;
+    }
+
+    .card-brand {
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: var(--silver);
+    }
+
+    .card-accent {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 12px;
+    }
+
+    .card-large {
+      font-size: 1.42rem;
+      line-height: 1.15;
+      font-weight: 900;
+      max-width: 90%;
+      margin-bottom: 14px;
+    }
+
+    .card-small,
+    .card-list {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    .card-list {
+      white-space: pre-wrap;
+    }
+
+    .business-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .mini-stat {
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .mini-stat .label {
+      color: var(--silver-2);
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-stat .value {
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .footer-note {
+      padding: 0 18px 18px;
+      color: var(--silver-2);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .small-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(24,199,192,0.10);
+      border: 1px solid rgba(24,199,192,0.18);
+      color: #dffffd;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    @media (max-width: 1300px) {
+      .outputs-wrap { max-height: none; }
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .topbar { padding: 18px; }
+      .studio-grid,
+      .panel-body,
+      .outputs-wrap { padding: 14px; }
+      .section-content,
+      .business-summary,
+      .card-mockups {
+        grid-template-columns: 1fr;
+      }
+      .pill-row { justify-content: flex-start; }
+      .summary-right { flex-wrap: wrap; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="studio">
+      <div class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-badge">KC</div>
+          <div class="brand-copy">
+            <h1><span class="kees">Kee's Creative</span> Visionary Ad Studio PRO</h1>
+            <p>Luxury entrepreneur ad generator for startups, small business owners, and self-made brands.</p>
+          </div>
+        </div>
+        <div class="pill-row">
+          <div class="pill">HELP ME BUILD IT</div>
+          <div class="pill">SURPRISE ME (DO YOUR THING 😏)</div>
+          <div class="pill">Image · Video · Song · Business Card</div>
+        </div>
+      </div>
+
+      <div class="studio-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Ad Builder Inputs</h2>
+              <span>Now full-width across the page.</span>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <p class="helper">This generator creates a complete starter ad package for entrepreneurs who need strong ad direction without hiring a marketing team. You can type, upload inspiration, or use the voice button inside each section.</p>
+
+            <form id="adForm">
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">1</span> Business Foundation</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_business">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field">
+                    <label for="businessName">Business Name</label>
+                    <input id="businessName" type="text" placeholder="Example: Kee's Creative" />
+                  </div>
+                  <div class="field">
+                    <label for="slogan">Business Slogan / Tagline</label>
+                    <input id="slogan" type="text" placeholder="Example: Luxury custom designs that make moments unforgettable" />
+                  </div>
+                  <div class="field-full">
+                    <label for="product">Product or Service</label>
+                    <textarea id="product" placeholder="Describe what the business sells or offers."></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="businessType">Business Type</label>
+                    <select id="businessType"></select>
+                  </div>
+                  <div class="field">
+                    <label for="industry">Industry / Niche</label>
+                    <select id="industry"></select>
+                  </div>
+                  <div class="field">
+                    <label for="businessStage">Business Stage</label>
+                    <select id="businessStage"></select>
+                  </div>
+                  <div class="field">
+                    <label for="location">Service Area / Location</label>
+                    <select id="location"></select>
+                  </div>
+                  <div class="field">
+                    <label for="serviceModel">Business Model</label>
+                    <select id="serviceModel"></select>
+                  </div>
+                  <div class="field">
+                    <label for="priceRange">Price Range</label>
+                    <select id="priceRange"></select>
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_business">Section Voice Notes</label>
+                    <textarea id="voice_business" placeholder="Use the Voice Fill button above if the user wants to speak business foundation details instead of typing."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">2</span> Audience, Goal & Offer</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_audience">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field">
+                    <label for="audience">Target Audience</label>
+                    <select id="audience"></select>
+                  </div>
+                  <div class="field">
+                    <label for="painPoint">Customer Pain Point</label>
+                    <select id="painPoint"></select>
+                  </div>
+                  <div class="field">
+                    <label for="benefit">Main Customer Benefit</label>
+                    <select id="benefit"></select>
+                  </div>
+                  <div class="field">
+                    <label for="campaignGoal">Campaign Goal</label>
+                    <select id="campaignGoal"></select>
+                  </div>
+                  <div class="field">
+                    <label for="offerType">Offer Type</label>
+                    <select id="offerType"></select>
+                  </div>
+                  <div class="field">
+                    <label for="urgency">Urgency / Hook</label>
+                    <select id="urgency"></select>
+                  </div>
+                  <div class="field">
+                    <label for="ctaStyle">Call to Action Style</label>
+                    <select id="ctaStyle"></select>
+                  </div>
+                  <div class="field">
+                    <label for="brandDifference">What Makes the Brand Different?</label>
+                    <select id="brandDifference"></select>
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_audience">Section Voice Notes</label>
+                    <textarea id="voice_audience" placeholder="Speak audience, goal, offer, and CTA details here if the user does not want to type."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">3</span> Platform & Creative Direction</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_creative">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field">
+                    <label for="platform">Main Platform</label>
+                    <select id="platform"></select>
+                  </div>
+                  <div class="field">
+                    <label for="secondaryPlatform">Secondary Platform</label>
+                    <select id="secondaryPlatform"></select>
+                  </div>
+                  <div class="field">
+                    <label for="adStyle">Ad Style</label>
+                    <select id="adStyle"></select>
+                  </div>
+                  <div class="field">
+                    <label for="brandVibe">Brand Vibe</label>
+                    <select id="brandVibe"></select>
+                  </div>
+                  <div class="field">
+                    <label for="mood">Mood</label>
+                    <select id="mood"></select>
+                  </div>
+                  <div class="field">
+                    <label for="visualFinish">Visual Finish</label>
+                    <select id="visualFinish"></select>
+                  </div>
+                  <div class="field">
+                    <label for="sceneType">Scene / Setting</label>
+                    <select id="sceneType"></select>
+                  </div>
+                  <div class="field">
+                    <label for="background">Background Style</label>
+                    <select id="background"></select>
+                  </div>
+                  <div class="field">
+                    <label for="lighting">Lighting</label>
+                    <select id="lighting"></select>
+                  </div>
+                  <div class="field">
+                    <label for="cameraAngle">Camera Angle</label>
+                    <select id="cameraAngle"></select>
+                  </div>
+                  <div class="field">
+                    <label for="shotType">Shot Type</label>
+                    <select id="shotType"></select>
+                  </div>
+                  <div class="field">
+                    <label for="visualGoal">Visual Goal</label>
+                    <select id="visualGoal"></select>
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_creative">Section Voice Notes</label>
+                    <textarea id="voice_creative" placeholder="Speak ad style, platform, colors, mood, and creative direction here."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">4</span> Music / Jingle Studio</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_music">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field">
+                    <label for="musicGenre">Music Genre</label>
+                    <select id="musicGenre"></select>
+                    <div class="subhelp">If the user wants something else, use the custom field below.</div>
+                  </div>
+                  <div class="field">
+                    <label for="customMusicGenre">Custom Music Genre</label>
+                    <input id="customMusicGenre" type="text" placeholder="Only use if needed" />
+                  </div>
+                  <div class="field">
+                    <label for="songMood">Song Mood</label>
+                    <select id="songMood"></select>
+                  </div>
+                  <div class="field">
+                    <label for="tempo">Tempo</label>
+                    <select id="tempo"></select>
+                  </div>
+                  <div class="field">
+                    <label for="vocalStyle">Vocal Style</label>
+                    <select id="vocalStyle"></select>
+                  </div>
+                  <div class="field">
+                    <label for="songType">Song Purpose</label>
+                    <select id="songType"></select>
+                  </div>
+                  <div class="field-full">
+                    <label for="brandHook">Catchy Hook / Phrase for Song</label>
+                    <input id="brandHook" type="text" placeholder="Example: Step into luxury, one detail at a time" />
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_music">Section Voice Notes</label>
+                    <textarea id="voice_music" placeholder="Speak the jingle, music vibe, vocal references, and hook ideas here."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">5</span> Upload & Extra Details</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_extra">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field-full">
+                    <label for="extraNotes">Extra Notes / Special Requests</label>
+                    <textarea id="extraNotes" placeholder="Add product details, desired colors, props, words to avoid, aesthetic references, or anything else."></textarea>
+                  </div>
+                  <div class="field-full">
+                    <label>Upload Reference Image (Optional)</label>
+                    <div class="upload-box">
+                      <div class="subhelp">Upload a product photo, flyer, logo, or brand reference image if you want the outputs to reference it.</div>
+                      <input id="referenceImage" type="file" accept="image/*" />
+                      <img id="imagePreview" class="preview" alt="Reference Preview" />
+                    </div>
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_extra">Section Voice Notes</label>
+                    <textarea id="voice_extra" placeholder="Speak extra instructions, logo ideas, uploaded image notes, or special requests here."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <details class="section" open>
+                <summary>
+                  <span class="summary-left"><span class="num">6</span> Startup Bonus Tools</span>
+                  <span class="summary-right">
+                    <button type="button" class="section-voice-btn" data-voice-target="voice_bonus">🎤 Voice Fill</button>
+                    <span class="chev">▼</span>
+                  </span>
+                </summary>
+                <div class="section-content">
+                  <div class="field">
+                    <label for="businessCardStyle">Business Card Style</label>
+                    <select id="businessCardStyle"></select>
+                  </div>
+                  <div class="field">
+                    <label for="cardFrontFocus">Business Card Front Focus</label>
+                    <select id="cardFrontFocus"></select>
+                  </div>
+                  <div class="field">
+                    <label for="cardBackFocus">Business Card Back Focus</label>
+                    <select id="cardBackFocus"></select>
+                  </div>
+                  <div class="field">
+                    <label for="contentNeed">Extra Content Need</label>
+                    <select id="contentNeed"></select>
+                  </div>
+                  <div class="field-full">
+                    <label for="voice_bonus">Section Voice Notes</label>
+                    <textarea id="voice_bonus" placeholder="Speak business card ideas, bonus content needs, or startup support requests here."></textarea>
+                  </div>
+                </div>
+              </details>
+
+              <div class="actions">
+                <button class="action-btn primary" type="button" id="generateBtn">Create Luxury Ad Studio Outputs</button>
+                <button class="action-btn secondary" type="button" id="smartFillBtn">HELP ME BUILD IT</button>
+                <button class="action-btn secondary" type="button" id="surpriseBtn">SURPRISE ME (DO YOUR THING 😏)</button>
+                <button class="action-btn ghost" type="button" id="randomBtn">Mix It Up</button>
+                <button class="action-btn ghost" type="button" id="downloadBtn">Download Results</button>
+                <button class="action-btn danger" type="button" id="resetBtn">Reset</button>
+              </div>
+
+              <div class="status" id="statusBox"></div>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Generated Outputs</h2>
+              <span>Copy by section or download everything.</span>
+            </div>
+          </div>
+
+          <div class="outputs-wrap" id="outputsWrap">
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Main Ad Strategy Output</h3>
+                <button class="copy-btn" data-copy-target="mainAdOutput">Copy</button>
+              </div>
+              <textarea id="mainAdOutput" class="result-box" readonly placeholder="Your main ad strategy will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Commercial Ad Copy Output</h3>
+                <button class="copy-btn" data-copy-target="adCopyOutput">Copy</button>
+              </div>
+              <textarea id="adCopyOutput" class="result-box" readonly placeholder="Your commercial ad copy will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Image Prompt Output</h3>
+                <button class="copy-btn" data-copy-target="imagePromptOutput">Copy</button>
+              </div>
+              <textarea id="imagePromptOutput" class="result-box" readonly placeholder="Your image ad prompt will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Video Prompt Output</h3>
+                <button class="copy-btn" data-copy-target="videoPromptOutput">Copy</button>
+              </div>
+              <textarea id="videoPromptOutput" class="result-box" readonly placeholder="Your video prompt will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Suno Song / Jingle Prompt Output</h3>
+                <button class="copy-btn" data-copy-target="sunoPromptOutput">Copy</button>
+              </div>
+              <textarea id="sunoPromptOutput" class="result-box" readonly placeholder="Your Suno jingle prompt will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Business Card Prompt Output</h3>
+                <button class="copy-btn" data-copy-target="businessCardPromptOutput">Copy</button>
+              </div>
+              <textarea id="businessCardPromptOutput" class="result-box" readonly placeholder="Your business card concept prompt will appear here."></textarea>
+            </div>
+
+            <div class="result-card">
+              <div class="result-head">
+                <h3>Bonus CTA / Slogan Output</h3>
+                <button class="copy-btn" data-copy-target="bonusOutput">Copy</button>
+              </div>
+              <textarea id="bonusOutput" class="result-box" readonly placeholder="Extra CTA and slogan ideas will appear here."></textarea>
+            </div>
+
+            <div class="business-card">
+              <div class="result-head" style="padding:0; border:none; background:none;">
+                <h3 style="margin:0;">Business Card Concept Preview</h3>
+                <div class="small-actions">
+                  <button class="copy-btn" data-copy-target="cardSummaryOutput">Copy Summary</button>
+                </div>
+              </div>
+
+              <div class="card-mockups">
+                <div class="card-face" id="frontCard">
+                  <div class="card-shine"></div>
+                  <div class="card-brand" id="frontBrand">Kee's Creative</div>
+                  <div class="card-accent" id="frontAccent">Luxury brand identity</div>
+                  <div class="card-large" id="frontLarge">Elevated visuals. Clear message. Premium results.</div>
+                  <div class="card-small" id="frontSmall">Front card concept preview</div>
+                </div>
+                <div class="card-face" id="backCard">
+                  <div class="card-shine"></div>
+                  <div class="card-brand">Connect</div>
+                  <div class="card-list" id="backList">Services, QR code prompt, social links, booking line, website placement, and CTA ideas will appear here.</div>
+                </div>
+              </div>
+
+              <div class="business-summary">
+                <div class="mini-stat">
+                  <div class="label">Brand Vibe</div>
+                  <div class="value" id="summaryVibe">—</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="label">Campaign Goal</div>
+                  <div class="value" id="summaryGoal">—</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="label">Music Direction</div>
+                  <div class="value" id="summaryMusic">—</div>
+                </div>
+                <div class="mini-stat">
+                  <div class="label">Best Platform Focus</div>
+                  <div class="value" id="summaryPlatform">—</div>
+                </div>
+              </div>
+
+              <textarea id="cardSummaryOutput" class="result-box" readonly placeholder="Business card summary will appear here."></textarea>
+            </div>
+
+            <div class="footer-note">
+              <strong>Kee's Creative Note:</strong> This generator is designed to help entrepreneurs create polished ad direction even if they are just getting started and do not have a budget for a marketing team.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const dropdownData = {
+      businessType: [
+        "None","Bakery","Beauty Brand","Beauty Service","Boutique","Brand Designer","Business Consultant","Candle Brand","Catering Business","Cleaning Service","Coaching Business","Content Creator Brand","Custom Gift Business","Daycare","Digital Product Brand","Event Planner","Fashion Brand","Fitness Coach","Food Truck","Graphic Design Studio","Hair Brand","Hair Stylist","Home Decor Brand","Home Service Business","Jewelry Brand","Makeup Artist","Massage Therapist","Medical Spa","Mobile Service Business","Online Store","Other","Party Favor Business","Photographer","Podcast Brand","Print-on-Demand Shop","Restaurant","Skincare Brand","Tumbler Business","Virtual Assistant Business","Wedding Vendor"
+      ],
+      industry: [
+        "None","Arts & Crafts","Automotive","Beauty","Business Services","Children & Family","Coaching","Construction","Creative Services","Digital Education","E-commerce","Events","Fashion","Finance","Fitness","Food & Beverage","Gifts & Custom Products","Health & Wellness","Home Decor","Home Services","Hospitality","Jewelry & Accessories","Lifestyle Brand","Local Services","Luxury Goods","Marketing","Other","Personal Branding","Photography & Video","Print-on-Demand","Real Estate","Retail","Self-Care","Stationery & Paper Goods","Travel","Wedding & Celebration"
+      ],
+      businessStage: [
+        "None","Brand New Startup","Building Awareness","Growing Brand","Holiday Push","Pre-Launch","Rebrand","Relaunch","Seasonal Campaign","Soft Launch","Special Event Promotion","Trying to Increase Sales"
+      ],
+      location: [
+        "None","Atlanta","Dallas","Houston","Local City Only","Nationwide USA","Oklahoma City","Online Only","Other","Regional Service Area","Tulsa","USA or Worldwide","Worldwide"
+      ],
+      serviceModel: [
+        "None","Digital Only","In-Person Only","Local Delivery","Online and Local","Online Only","Product-Based","Service-Based","Subscription-Based"
+      ],
+      priceRange: [
+        "None","$1-$15","$16-$30","$31-$50","$51-$100","$101-$250","$251-$500","$500+","Budget-Friendly","Luxury","Mid-Range","Premium"
+      ],
+      audience: [
+        "None","All audiences","Beauty lovers","Busy moms","Church communities","College students","Corporate professionals","Creatives and entrepreneurs","Event hosts","First-time buyers","Gift shoppers","Graduates and families","Homeowners","Luxury shoppers","Moms and daughters","New business owners","Other","Party planners","Small business owners","Social media shoppers","Women 18-24","Women 25-40","Women 35+"
+      ],
+      painPoint: [
+        "None","Brand looks inconsistent","Business is overlooked","Customers need convenience","Customers want luxury without confusion","Hard to find custom options","Needs a memorable first impression","No time to create content","Offer does not stand out","People do not understand the value","Poor social media engagement","Struggles to attract paying customers","Wants better presentation","Wants premium branding on a budget"
+      ],
+      benefit: [
+        "None","Affordable customization","Bold eye-catching branding","Convenient done-for-you feel","Fast turnaround","High-quality craftsmanship","Luxury presentation","Personalized experience","Premium visual impact","Professional appearance","Simple ordering process","Social-media-ready content","Stress-free gifting"
+      ],
+      campaignGoal: [
+        "None","Book appointments","Boost brand awareness","Drive clicks to website","Get direct sales","Grand opening promotion","Grow followers","Increase inquiries","Launch a new product","Promote a seasonal offer","Promote an event","Push a bundle offer"
+      ],
+      offerType: [
+        "None","BOGO","Bundle deal","Custom order callout","Early bird special","Free consultation","Limited drop","Limited-time discount","New customer offer","No current offer","Pre-order now","Seasonal promotion"
+      ],
+      urgency: [
+        "None","Book now","Do not miss out","Ends soon","Limited availability","Limited spots","Now booking","Order today","Seasonal only","Selling fast","While supplies last"
+      ],
+      ctaStyle: [
+        "None","Book your spot","Click the link","DM to order","Grab yours now","Message for details","Order now","Reserve today","Shop the collection","Start your custom order","Tap to learn more"
+      ],
+      brandDifference: [
+        "None","Custom handmade quality","Fast and friendly service","Faith-centered brand personality","Luxury aesthetic","Memorable customer experience","Premium visual storytelling","Small business care","Unique product design","Versatile for many occasions"
+      ],
+      platform: [
+        "None","Amazon storefront","Billboard","Business card","Email campaign","Etsy","Facebook","Flyer","Instagram","Multiple platforms","Pinterest","Print ad","Shopify store","TikTok","Website","YouTube"
+      ],
+      secondaryPlatform: [
+        "None","Business card","Email campaign","Facebook","Flyer","Instagram","No secondary platform","Pinterest","TikTok","Website","YouTube"
+      ],
+      adStyle: [
+        "None","Bold commercial","Cinematic luxury","Clean modern promo","Elegant editorial","High-energy social ad","Minimal premium","Soft feminine ad","Story-driven lifestyle ad","Street luxury","Warm community-focused ad"
+      ],
+      brandVibe: [
+        "None","Bold and bossy","Calm and polished","Classy and clean","Edgy and modern","Faith-centered and warm","Fun and colorful","High-end and luxe","Minimal and elevated","Soft and feminine","Vibrant and energetic"
+      ],
+      mood: [
+        "None","Aspirational","Boss energy","Calm luxury","Celebratory","Confident","Empowering","Fresh and inviting","Glamorous","Motivating","Playful","Sophisticated","Warm and welcoming"
+      ],
+      visualFinish: [
+        "None","4K polished finish","Airbrushed glow","Cinematic contrast","Crisp studio lighting","Glossy ad finish","Hyper-real luxury","Premium retouching","Social media ready","Soft glow finish"
+      ],
+      sceneType: [
+        "None","Boutique shelf display","Clean studio setup","Editorial backdrop","Home lifestyle scene","Luxury bathroom scene","Outdoor lifestyle setting","Product in hand","Retail-inspired display","Social media content room","Vision board workspace"
+      ],
+      background: [
+        "None","Black velvet luxury backdrop","Clean white studio","Colorful modern gradient","Dark dramatic backdrop","Elegant marble setting","Moody purple glow","Silver shimmer background","Soft teal lighting","Warm home interior"
+      ],
+      lighting: [
+        "None","Bright commercial lighting","Cinematic spotlight","Cool studio lighting","Luxury soft glow","Moody rim light","Natural window light","Soft beauty lighting"
+      ],
+      cameraAngle: [
+        "None","Close-up","Eye level","Front facing","Low angle","Overhead view","Three-quarter angle","Wide shot"
+      ],
+      shotType: [
+        "None","Before-and-after style","Brand hero shot","Flat lay","In-use demo shot","Lifestyle product shot","Product detail close-up","Talking-head ad frame","Unboxing style"
+      ],
+      visualGoal: [
+        "None","Build trust fast","Feel expensive","Get immediate attention","Highlight convenience","Highlight craftsmanship","Inspire clicks","Make people stop scrolling","Show premium value","Show transformation"
+      ],
+      musicGenre: [
+        "None","Afrobeats","Ambient cinematic","Choir / gospel-inspired","Corporate pop","Dance pop","Drill","Feel-good acoustic","Funk","Gospel","Hip-Hop","House","Jazz lounge","Lo-fi","Luxury cinematic","Neo-soul","Other","Pop","R&B","Reggae","Soulful inspirational","Trap"
+      ],
+      songMood: [
+        "None","Bold and catchy","Bossy and confident","Calm and classy","Celebratory","Dreamy and luxe","Energetic and fun","Faith-filled and uplifting","Motivational","Smooth and polished","Warm and welcoming"
+      ],
+      tempo: [
+        "None","Fast upbeat","Medium bounce","Midtempo smooth","Slow and soulful","Soft ambient"
+      ],
+      vocalStyle: [
+        "None","Female lead","Group vocals","Male lead","No vocals / instrumental only","Rap verse + sung hook","Soft airy vocals","Soulful lead vocals","Talk-sung commercial style"
+      ],
+      songType: [
+        "None","Brand anthem","Catchy commercial jingle","Closing credits vibe","Product promo song","Social media sound","Storytelling promo track","Voiceover background track"
+      ],
+      businessCardStyle: [
+        "None","Bold luxury","Clean minimalist","Creative modern","Dark moody premium","Elegant feminine","High-end editorial","Playful colorful","Professional sleek"
+      ],
+      cardFrontFocus: [
+        "None","Big brand name","Elegant logo emphasis","Hero service statement","Luxury visual impression","Quick niche clarity","Simple clean identity"
+      ],
+      cardBackFocus: [
+        "None","Booking details","Call to action","Contact and social handles","QR code placement","Services list","Website + contact summary"
+      ],
+      contentNeed: [
+        "None","30-second commercial idea","Billboard prompt","Business card concept","Launch week content ideas","Mini video storyline","Promo caption ideas","Social media starter pack","Tagline ideas"
+      ]
+    };
+
+    function populateSelect(id, values) {
+      const select = document.getElementById(id);
+      if (!select) return;
+      select.innerHTML = "";
+      values.forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.appendChild(option);
+      });
+    }
+
+    Object.entries(dropdownData).forEach(([id, values]) => populateSelect(id, values));
+
+    const imageInput = document.getElementById("referenceImage");
+    const preview = document.getElementById("imagePreview");
+
+    imageInput.addEventListener("change", e => {
+      const file = e.target.files?.[0];
+      if (!file) {
+        preview.style.display = "none";
+        preview.removeAttribute("src");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = evt => {
+        preview.src = evt.target.result;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function getVal(id) {
+      const el = document.getElementById(id);
+      if (!el) return "";
+      return (el.value || "").trim();
+    }
+
+    function cleanVal(value, fallback = "Not specified") {
+      return value && value !== "None" ? value : fallback;
+    }
+
+    function musicGenreResolved() {
+      const main = getVal("musicGenre");
+      const custom = getVal("customMusicGenre");
+      if (main === "Other" && custom) return custom;
+      return cleanVal(main, "Catchy commercial music");
+    }
+
+    function getImageLine() {
+      const file = imageInput.files?.[0];
+      return file
+        ? `Reference image uploaded: ${file.name}. Use the image as visual inspiration for styling, framing, color harmony, product treatment, logo influence, and brand consistency.`
+        : `No uploaded reference image provided. Build the visuals from the written brief.`;
+    }
+
+    function getVoiceNotesBlock() {
+      const notes = [
+        getVal("voice_business"),
+        getVal("voice_audience"),
+        getVal("voice_creative"),
+        getVal("voice_music"),
+        getVal("voice_extra"),
+        getVal("voice_bonus")
+      ].filter(Boolean);
+
+      if (!notes.length) return "No section voice notes were added.";
+      return notes.map((n, i) => `${i + 1}. ${n}`).join("\n");
+    }
+
+    function showStatus(message) {
+      const statusBox = document.getElementById("statusBox");
+      statusBox.textContent = message;
+      statusBox.style.display = "block";
+    }
+
+    function pickRandomOption(select) {
+      const usable = Array.from(select.options).filter(opt => opt.value !== "None" && opt.value !== "No secondary platform");
+      if (!usable.length) return;
+      const chosen = usable[Math.floor(Math.random() * usable.length)];
+      select.value = chosen.value;
+    }
+
+    const fieldsToRandomize = [
+      "businessType","industry","businessStage","location","serviceModel","priceRange",
+      "audience","painPoint","benefit","campaignGoal","offerType","urgency","ctaStyle","brandDifference",
+      "platform","secondaryPlatform","adStyle","brandVibe","mood","visualFinish","sceneType","background","lighting","cameraAngle","shotType","visualGoal",
+      "musicGenre","songMood","tempo","vocalStyle","songType","businessCardStyle","cardFrontFocus","cardBackFocus","contentNeed"
+    ];
+
+    document.getElementById("randomBtn").addEventListener("click", () => {
+      fieldsToRandomize.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) pickRandomOption(select);
+      });
+
+      const randomText = {
+        businessName: ["Kee's Creative", "Visionary Luxe Studio", "Glow House Collective", "Elite Custom Moments"],
+        slogan: ["Luxury visuals for brands that deserve attention", "Where your business starts looking like the main event", "Polished promotion for powerful brands", "Turn your idea into a premium moment"],
+        product: ["Custom tumbler collection for stylish customers who love standout drinkware.", "Luxury bathroom accessory set designed to make everyday spaces feel polished and elevated.", "Personalized gift items for birthdays, celebrations, and unforgettable milestones.", "Small business branding package that helps a startup look premium online and in person."],
+        brandHook: ["Turn everyday moments into luxury moments.", "Make your brand impossible to ignore.", "Your business deserves a premium sound.", "From scroll-stopping visuals to catchy sound."],
+        extraNotes: ["Need content that feels polished, premium, and beginner-friendly for a new business owner.", "Want an ad that feels luxurious, modern, and social-media-ready.", "Please make the campaign bold but welcoming, with a clean premium finish.", "Need startup-friendly promo direction that feels expensive without feeling fake."],
+        customMusicGenre: ["", "Inspirational luxe soul", "Modern pop-gospel blend", "Cinematic R&B ad groove"]
+      };
+
+      Object.entries(randomText).forEach(([id, arr]) => {
+        const input = document.getElementById(id);
+        if (input) input.value = arr[Math.floor(Math.random() * arr.length)];
+      });
+
+      showStatus("Smart picks added. Generate when you're ready.");
+    });
+
+    document.getElementById("smartFillBtn").addEventListener("click", () => {
+      if (!getVal("businessName")) document.getElementById("businessName").value = "Kee's Creative";
+      if (!getVal("slogan")) document.getElementById("slogan").value = "Luxury visuals for brands that deserve attention";
+      if (!getVal("product")) document.getElementById("product").value = "A premium product or service designed to help customers feel confident in their purchase.";
+      if (getVal("businessType") === "None" || !getVal("businessType")) document.getElementById("businessType").value = "Digital Product Brand";
+      if (getVal("industry") === "None" || !getVal("industry")) document.getElementById("industry").value = "Marketing";
+      if (getVal("campaignGoal") === "None" || !getVal("campaignGoal")) document.getElementById("campaignGoal").value = "Boost brand awareness";
+      if (getVal("platform") === "None" || !getVal("platform")) document.getElementById("platform").value = "Instagram";
+      if (getVal("brandVibe") === "None" || !getVal("brandVibe")) document.getElementById("brandVibe").value = "High-end and luxe";
+      if (getVal("adStyle") === "None" || !getVal("adStyle")) document.getElementById("adStyle").value = "Cinematic luxury";
+      if (getVal("musicGenre") === "None" || !getVal("musicGenre")) document.getElementById("musicGenre").value = "R&B";
+      if (getVal("songMood") === "None" || !getVal("songMood")) document.getElementById("songMood").value = "Smooth and polished";
+      if (getVal("businessCardStyle") === "None" || !getVal("businessCardStyle")) document.getElementById("businessCardStyle").value = "Bold luxury";
+      showStatus("Starter ideas added. Now tweak anything you want.");
+    });
+
+    document.getElementById("surpriseBtn").addEventListener("click", () => {
+      const businessType = getVal("businessType");
+      const industry = getVal("industry");
+      const platform = getVal("platform");
+      const audience = getVal("audience");
+      const product = getVal("product").toLowerCase();
+      const vibe = getVal("brandVibe");
+
+      const isBeauty = /beauty|hair|skincare|makeup|spa/.test(`${businessType} ${industry} ${product}`.toLowerCase());
+      const isFood = /food|bakery|restaurant|catering|drink/.test(`${businessType} ${industry} ${product}`.toLowerCase());
+      const isDigital = /digital|marketing|design|content|branding|online/.test(`${businessType} ${industry} ${product}`.toLowerCase());
+      const isEvent = /event|party|wedding|graduation|celebration/.test(`${businessType} ${industry} ${product}`.toLowerCase());
+      const isFaith = /faith|church|gospel/.test(`${businessType} ${industry} ${product}`.toLowerCase());
+
+      if (getVal("brandVibe") === "None" || !getVal("brandVibe")) {
+        if (isBeauty) document.getElementById("brandVibe").value = "Soft and feminine";
+        else if (isFood) document.getElementById("brandVibe").value = "Fun and colorful";
+        else if (isDigital) document.getElementById("brandVibe").value = "High-end and luxe";
+        else if (isEvent) document.getElementById("brandVibe").value = "Celebratory";
+        else if (isFaith) document.getElementById("brandVibe").value = "Faith-centered and warm";
+        else document.getElementById("brandVibe").value = "High-end and luxe";
+      }
+
+      if (getVal("adStyle") === "None" || !getVal("adStyle")) {
+        if (platform === "TikTok" || platform === "Instagram") document.getElementById("adStyle").value = "High-energy social ad";
+        else if (platform === "Billboard") document.getElementById("adStyle").value = "Bold commercial";
+        else if (platform === "Website") document.getElementById("adStyle").value = "Clean modern promo";
+        else document.getElementById("adStyle").value = "Cinematic luxury";
+      }
+
+      if (getVal("mood") === "None" || !getVal("mood")) {
+        if (vibe.includes("luxe") || vibe.includes("High-end")) document.getElementById("mood").value = "Sophisticated";
+        else if (isFood) document.getElementById("mood").value = "Playful";
+        else if (isFaith) document.getElementById("mood").value = "Warm and welcoming";
+        else document.getElementById("mood").value = "Confident";
+      }
+
+      if (getVal("musicGenre") === "None" || !getVal("musicGenre")) {
+        if (isBeauty) document.getElementById("musicGenre").value = "R&B";
+        else if (isFood) document.getElementById("musicGenre").value = "Pop";
+        else if (isDigital) document.getElementById("musicGenre").value = "Corporate pop";
+        else if (isFaith) document.getElementById("musicGenre").value = "Gospel";
+        else document.getElementById("musicGenre").value = "Luxury cinematic";
+      }
+
+      if (getVal("songMood") === "None" || !getVal("songMood")) {
+        if (isBeauty) document.getElementById("songMood").value = "Smooth and polished";
+        else if (isFood) document.getElementById("songMood").value = "Energetic and fun";
+        else if (isFaith) document.getElementById("songMood").value = "Faith-filled and uplifting";
+        else document.getElementById("songMood").value = "Bold and catchy";
+      }
+
+      if (getVal("tempo") === "None" || !getVal("tempo")) {
+        if (isFood || platform === "TikTok") document.getElementById("tempo").value = "Fast upbeat";
+        else document.getElementById("tempo").value = "Medium bounce";
+      }
+
+      if (getVal("vocalStyle") === "None" || !getVal("vocalStyle")) {
+        if (isFaith) document.getElementById("vocalStyle").value = "Soulful lead vocals";
+        else if (audience.includes("Women")) document.getElementById("vocalStyle").value = "Female lead";
+        else document.getElementById("vocalStyle").value = "Talk-sung commercial style";
+      }
+
+      if (!getVal("brandHook")) {
+        if (isBeauty) document.getElementById("brandHook").value = "Glow louder. Shine smarter.";
+        else if (isFood) document.getElementById("brandHook").value = "Taste it once. Want it again.";
+        else if (isFaith) document.getElementById("brandHook").value = "Purpose with polish.";
+        else if (isDigital) document.getElementById("brandHook").value = "Show up bold. Sell with style.";
+        else document.getElementById("brandHook").value = "Make your brand impossible to ignore.";
+      }
+
+      if (getVal("businessCardStyle") === "None" || !getVal("businessCardStyle")) {
+        document.getElementById("businessCardStyle").value = isBeauty || isDigital ? "Bold luxury" : "Professional sleek";
+      }
+
+      if (getVal("cardFrontFocus") === "None" || !getVal("cardFrontFocus")) {
+        document.getElementById("cardFrontFocus").value = "Big brand name";
+      }
+
+      if (getVal("cardBackFocus") === "None" || !getVal("cardBackFocus")) {
+        document.getElementById("cardBackFocus").value = "Contact and social handles";
+      }
+
+      showStatus("Smart Surprise Me filled in the missing pieces with stronger matching logic.");
+    });
+
+    function generateOutputs() {
+      const businessName = cleanVal(getVal("businessName"), "Kee's Creative");
+      const slogan = cleanVal(getVal("slogan"), "A premium entrepreneur-ready brand experience");
+      const product = cleanVal(getVal("product"), "A premium product or service offering");
+      const businessType = cleanVal(getVal("businessType"), "Business brand");
+      const industry = cleanVal(getVal("industry"), "general lifestyle brand");
+      const businessStage = cleanVal(getVal("businessStage"), "growing business");
+      const location = cleanVal(getVal("location"), "USA or Worldwide");
+      const serviceModel = cleanVal(getVal("serviceModel"), "online and local");
+      const priceRange = cleanVal(getVal("priceRange"), "mid-range to premium");
+      const audience = cleanVal(getVal("audience"), "target customers");
+      const painPoint = cleanVal(getVal("painPoint"), "the audience needs a brand that stands out and feels trustworthy");
+      const benefit = cleanVal(getVal("benefit"), "clear premium value and a polished customer experience");
+      const campaignGoal = cleanVal(getVal("campaignGoal"), "boost brand awareness and drive sales");
+      const offerType = cleanVal(getVal("offerType"), "a compelling featured offer");
+      const urgency = cleanVal(getVal("urgency"), "order now");
+      const ctaStyle = cleanVal(getVal("ctaStyle"), "click the link");
+      const brandDifference = cleanVal(getVal("brandDifference"), "the brand brings custom, quality-driven presentation");
+      const platform = cleanVal(getVal("platform"), "social media");
+      const secondaryPlatform = cleanVal(getVal("secondaryPlatform"), "no secondary platform");
+      const adStyle = cleanVal(getVal("adStyle"), "clean modern promo");
+      const brandVibe = cleanVal(getVal("brandVibe"), "high-end and luxe");
+      const mood = cleanVal(getVal("mood"), "confident");
+      const visualFinish = cleanVal(getVal("visualFinish"), "premium retouching");
+      const sceneType = cleanVal(getVal("sceneType"), "clean studio setup");
+      const background = cleanVal(getVal("background"), "dark dramatic backdrop");
+      const lighting = cleanVal(getVal("lighting"), "luxury soft glow");
+      const cameraAngle = cleanVal(getVal("cameraAngle"), "front facing");
+      const shotType = cleanVal(getVal("shotType"), "brand hero shot");
+      const visualGoal = cleanVal(getVal("visualGoal"), "make people stop scrolling");
+      const musicGenre = musicGenreResolved();
+      const songMood = cleanVal(getVal("songMood"), "bold and catchy");
+      const tempo = cleanVal(getVal("tempo"), "medium bounce");
+      const vocalStyle = cleanVal(getVal("vocalStyle"), "soulful lead vocals");
+      const songType = cleanVal(getVal("songType"), "catchy commercial jingle");
+      const brandHook = cleanVal(getVal("brandHook"), slogan);
+      const businessCardStyle = cleanVal(getVal("businessCardStyle"), "bold luxury");
+      const cardFrontFocus = cleanVal(getVal("cardFrontFocus"), "big brand name");
+      const cardBackFocus = cleanVal(getVal("cardBackFocus"), "contact and social handles");
+      const contentNeed = cleanVal(getVal("contentNeed"), "promo caption ideas");
+      const extraNotes = cleanVal(getVal("extraNotes"), "No extra notes provided.");
+      const imageLine = getImageLine();
+      const voiceNotesBlock = getVoiceNotesBlock();
+
+      const coreSummary = `${businessName} is a ${businessStage.toLowerCase()} ${businessType.toLowerCase()} in the ${industry.toLowerCase()} space, serving ${audience.toLowerCase()} with ${product.toLowerCase()}. The brand operates as ${serviceModel.toLowerCase()} in ${location}, with a ${brandVibe.toLowerCase()} feel and a ${priceRange.toLowerCase()} offer positioning.`;
+
+      const mainAd = `KEE'S CREATIVE | MAIN AD STRATEGY
+
+Business: ${businessName}
+Slogan: ${slogan}
+Product / Service: ${product}
+Business Type: ${businessType}
+Industry: ${industry}
+Stage: ${businessStage}
+Location: ${location}
+Model: ${serviceModel}
+Price Range: ${priceRange}
+Audience: ${audience}
+Main Platform: ${platform}
+Secondary Platform: ${secondaryPlatform}
+Campaign Goal: ${campaignGoal}
+Offer Type: ${offerType}
+Urgency: ${urgency}
+Brand Difference: ${brandDifference}
+Visual Style: ${adStyle}
+Mood: ${mood}
+Brand Vibe: ${brandVibe}
+
+Strategy Summary:
+${coreSummary}
+
+Positioning Angle:
+Lead with the problem that ${painPoint.toLowerCase()}, then quickly present ${businessName} as the premium answer through ${benefit.toLowerCase()}. Keep the message clear, warm, and action-driven while making the offer feel polished and trustworthy.
+
+Suggested Content Focus:
+• Hook the viewer in the first 1-2 seconds
+• Highlight the premium value or convenience
+• Show why the brand feels different from ordinary options
+• Make the CTA direct and easy to follow
+• Tie every visual and line of copy back to the desired result: ${campaignGoal.toLowerCase()}
+
+Voice Notes to Also Consider:
+${voiceNotesBlock}`;
+
+      const adCopy = `COMMERCIAL AD COPY | KEE'S CREATIVE
+
+Commercial Hook:
+${businessName} was made for people who want ${benefit.toLowerCase()} without settling for basic presentation.
+
+15-30 Second Commercial Script:
+"Need ${painPoint.toLowerCase()} solved with style? Meet ${businessName}. We offer ${product.toLowerCase()} for ${audience.toLowerCase()} who want ${benefit.toLowerCase()}. This is your sign to choose a brand that feels polished, premium, and worth every glance. ${offerType !== "a compelling featured offer" ? `Right now, enjoy ${offerType.toLowerCase()}. ` : ""}${ctaStyle.charAt(0).toUpperCase() + ctaStyle.slice(1)} and let ${businessName} help you stand out with confidence."
+
+Scene-by-Scene Ad Idea:
+1. Open with a bold, scroll-stopping shot in a ${background.toLowerCase()} with ${lighting.toLowerCase()}.
+2. Show the product or service in a ${sceneType.toLowerCase()} using a ${shotType.toLowerCase()} and ${cameraAngle.toLowerCase()} angle.
+3. Overlay fast text calling out the benefit: ${benefit}.
+4. End with urgency: ${urgency}.
+5. CTA: ${ctaStyle}.`;
+
+      const imagePrompt = `IMAGE PROMPT | KEE'S CREATIVE
+
+Create a ${adStyle.toLowerCase()} ad for ${businessName}, a ${businessType.toLowerCase()} in the ${industry.toLowerCase()} space. The visual should feel ${brandVibe.toLowerCase()}, ${mood.toLowerCase()}, and premium enough to make people stop scrolling.
+
+Product / Offer to Feature:
+${product}
+
+Target Audience:
+${audience}
+
+Visual Direction:
+• Scene: ${sceneType}
+• Background: ${background}
+• Lighting: ${lighting}
+• Camera Angle: ${cameraAngle}
+• Shot Type: ${shotType}
+• Finish: ${visualFinish}
+• Goal: ${visualGoal}
+
+Text Direction:
+Include short, clean promotional copy built around "${slogan}" and a CTA that reflects "${ctaStyle}."
+
+Reference Handling:
+${imageLine}
+
+Extra Notes:
+${extraNotes}`;
+
+      const videoPrompt = `VIDEO PROMPT | KEE'S CREATIVE
+
+Create a ${platform.toLowerCase()} video ad for ${businessName}. The video should feel ${brandVibe.toLowerCase()}, ${mood.toLowerCase()}, and made for ${audience.toLowerCase()}.
+
+Use this flow:
+1. Start with the problem: ${painPoint}
+2. Introduce the offer: ${product}
+3. Reinforce the value: ${benefit}
+4. Add the hook: ${slogan}
+5. End with urgency: ${urgency}
+6. CTA: ${ctaStyle}
+
+Visual Notes:
+• Ad style: ${adStyle}
+• Scene: ${sceneType}
+• Lighting: ${lighting}
+• Camera angle: ${cameraAngle}
+• Shot type: ${shotType}
+• Finish: ${visualFinish}
+
+Reference Handling:
+${imageLine}
+
+Extra Notes:
+${extraNotes}`;
+
+      const sunoPrompt = `SUNO SONG / JINGLE PROMPT | KEE'S CREATIVE
+
+Create a ${songType.toLowerCase()} for ${businessName}.
+The sound should match a ${brandVibe.toLowerCase()}, ${mood.toLowerCase()} campaign for ${audience.toLowerCase()}.
+
+Music Direction:
+• Genre: ${musicGenre}
+• Mood: ${songMood}
+• Tempo: ${tempo}
+• Vocal style: ${vocalStyle}
+
+Hook Phrase:
+"${brandHook}"
+
+Song Purpose:
+Make this feel like a premium branded sound that helps ${businessName} feel memorable, polished, and emotionally connected to the customer.
+
+Lyrics / Theme Guidance:
+• Mention the transformation: ${benefit}
+• Echo the emotional promise of the brand
+• Keep it catchy enough for ads and social clips
+• Make it feel tied to this offer: ${product}
+
+Extra Voice Notes:
+${voiceNotesBlock}`;
+
+      const cardPrompt = `BUSINESS CARD PROMPT | KEE'S CREATIVE
+
+Design a ${businessCardStyle.toLowerCase()} business card concept for ${businessName}.
+
+Front Focus:
+${cardFrontFocus}
+
+Back Focus:
+${cardBackFocus}
+
+Business Details to Reflect:
+• Brand: ${businessName}
+• Slogan: ${slogan}
+• Offer: ${product}
+• Vibe: ${brandVibe}
+• Industry: ${industry}
+• Main CTA: ${ctaStyle}
+
+Design Notes:
+Use a premium look that feels ${mood.toLowerCase()}, polished, and memorable. Keep it visually strong enough to look like a brand someone takes seriously at first glance.`;
+
+      const bonus = `BONUS CTA / SLOGAN IDEAS | KEE'S CREATIVE
+
+Starter CTA Ideas:
+1. ${ctaStyle}
+2. Shop the look now
+3. Tap in and make it yours
+4. Book now before spots fill up
+5. Experience the premium difference
+
+Extra Slogan Ideas:
+1. ${slogan}
+2. Where your brand starts looking premium
+3. Elevate the way people see your business
+4. Bold visuals. Clear message. Better results.
+5. From ordinary to unforgettable
+
+Bonus Content Need:
+${contentNeed}`;
+
+      document.getElementById("mainAdOutput").value = mainAd;
+      document.getElementById("adCopyOutput").value = adCopy;
+      document.getElementById("imagePromptOutput").value = imagePrompt;
+      document.getElementById("videoPromptOutput").value = videoPrompt;
+      document.getElementById("sunoPromptOutput").value = sunoPrompt;
+      document.getElementById("businessCardPromptOutput").value = cardPrompt;
+      document.getElementById("bonusOutput").value = bonus;
+
+      document.getElementById("frontBrand").textContent = businessName;
+      document.getElementById("frontAccent").textContent = brandVibe;
+      document.getElementById("frontLarge").textContent = slogan;
+      document.getElementById("frontSmall").textContent = `${cardFrontFocus} • ${industry}`;
+      document.getElementById("backList").textContent =
+`Offer: ${product}
+CTA: ${ctaStyle}
+Card Back Focus: ${cardBackFocus}
+Platform Priority: ${platform}
+Support Goal: ${campaignGoal}`;
+
+      document.getElementById("summaryVibe").textContent = brandVibe;
+      document.getElementById("summaryGoal").textContent = campaignGoal;
+      document.getElementById("summaryMusic").textContent = `${musicGenre} • ${songMood}`;
+      document.getElementById("summaryPlatform").textContent = `${platform}${secondaryPlatform !== "no secondary platform" && secondaryPlatform !== "Not specified" ? ` + ${secondaryPlatform}` : ""}`;
+
+      document.getElementById("cardSummaryOutput").value =
+`Business Card Summary
+
+Brand: ${businessName}
+Front Focus: ${cardFrontFocus}
+Back Focus: ${cardBackFocus}
+Style: ${businessCardStyle}
+Vibe: ${brandVibe}
+Main CTA: ${ctaStyle}
+Primary Platform Tie-In: ${platform}`;
+
+      showStatus("Luxury ad studio outputs created successfully.");
+      document.getElementById("outputsWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", generateOutputs);
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      document.getElementById("adForm").reset();
+      preview.style.display = "none";
+      preview.removeAttribute("src");
+
+      [
+        "mainAdOutput","adCopyOutput","imagePromptOutput","videoPromptOutput",
+        "sunoPromptOutput","businessCardPromptOutput","bonusOutput","cardSummaryOutput"
+      ].forEach(id => document.getElementById(id).value = "");
+
+      document.getElementById("frontBrand").textContent = "Kee's Creative";
+      document.getElementById("frontAccent").textContent = "Luxury brand identity";
+      document.getElementById("frontLarge").textContent = "Elevated visuals. Clear message. Premium results.";
+      document.getElementById("frontSmall").textContent = "Front card concept preview";
+      document.getElementById("backList").textContent = "Services, QR code prompt, social links, booking line, website placement, and CTA ideas will appear here.";
+      document.getElementById("summaryVibe").textContent = "—";
+      document.getElementById("summaryGoal").textContent = "—";
+      document.getElementById("summaryMusic").textContent = "—";
+      document.getElementById("summaryPlatform").textContent = "—";
+      showStatus("Everything has been reset.");
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const sections = [
+        ["Main Ad Strategy Output", document.getElementById("mainAdOutput").value],
+        ["Commercial Ad Copy Output", document.getElementById("adCopyOutput").value],
+        ["Image Prompt Output", document.getElementById("imagePromptOutput").value],
+        ["Video Prompt Output", document.getElementById("videoPromptOutput").value],
+        ["Suno Song / Jingle Prompt Output", document.getElementById("sunoPromptOutput").value],
+        ["Business Card Prompt Output", document.getElementById("businessCardPromptOutput").value],
+        ["Bonus CTA / Slogan Output", document.getElementById("bonusOutput").value],
+        ["Business Card Summary", document.getElementById("cardSummaryOutput").value]
+      ];
+
+      const content = sections
+        .map(([title, value]) => `=== ${title} ===\n\n${value || "(No content generated yet.)"}`)
+        .join("\n\n----------------------------------------\n\n");
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kees-creative-ad-studio-results.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showStatus("Results downloaded.");
+    });
+
+    document.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const targetId = btn.getAttribute("data-copy-target");
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        try {
+          await navigator.clipboard.writeText(target.value || target.textContent || "");
+          btn.classList.add("copied");
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.textContent = "Copy";
+          }, 1400);
+        } catch {
+          showStatus("Copy failed in this browser. Please copy manually.");
+        }
+      });
+    });
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    document.querySelectorAll(".section-voice-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-voice-target");
+        const target = document.getElementById(targetId);
+        if (!SpeechRecognition) {
+          showStatus("Voice input is not supported in this browser.");
+          return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        btn.classList.add("listening");
+        showStatus("Listening... speak now.");
+
+        recognition.start();
+
+        recognition.onresult = event => {
+          const transcript = event.results[0][0].transcript;
+          target.value = target.value ? `${target.value} ${transcript}` : transcript;
+          showStatus("Voice notes added to the section.");
+        };
+
+        recognition.onerror = () => {
+          showStatus("Voice input did not come through. Please try again.");
+        };
+
+        recognition.onend = () => {
+          btn.classList.remove("listening");
+        };
+      });
+    });
+  </script>
+</body<!-- 🔥 Visionary Studio PRO Banner -->
+<div style="width:100%; text-align:center; margin-bottom:20px;">
+  <img src="visionary-banner.png" alt="Visionary Studio PRO Banner"
+       style="width:100%; max-height:320px; object-fit:cover; border-radius:14px; box-shadow:0 8px 25px rgba(0,0,0,0.4);">
+</div>
+</html>
